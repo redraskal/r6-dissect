@@ -5,6 +5,9 @@
 *.so
 *.dylib
 
+# Dissect replay files
+*.rec
+
 # Test binary, built with `go test -c`
 *.test
 
