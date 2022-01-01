@@ -11,7 +11,7 @@ func PrintHead(r io.Reader) error {
 		return err
 	}
 	log.Println("Game Version:     ", h.GameVersion)
-	log.Println("Recording Player: ", lookupPlayer(h.RecordingPlayerID, h), " [", h.RecordingPlayerID, "]")
+	log.Println("Recording Player: ", lookupUsername(h.RecordingPlayerID, h), " [", h.RecordingPlayerID, "]")
 	log.Println("Match ID:         ", h.MatchID)
 	log.Println("Timestamp:        ", h.Timestamp)
 	log.Println("Match Type:       ", h.MatchType)
@@ -20,9 +20,9 @@ func PrintHead(r io.Reader) error {
 	return nil
 }
 
-func lookupPlayer(p string, h Header) string {
+func lookupUsername(ID string, h Header) string {
 	for _, val := range h.Players {
-		if val.ID == p {
+		if val.ID == ID {
 			return val.Username
 		}
 	}
