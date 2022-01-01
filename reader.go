@@ -12,12 +12,38 @@ import (
 )
 
 type Header struct {
-	GameVersion       int
-	Timestamp         time.Time
-	MatchType         MatchType
-	Map               Map
-	RecordingPlayerID string
-	GameMode          GameMode
+	GameVersion            int
+	Timestamp              time.Time
+	MatchType              MatchType
+	Map                    Map
+	RecordingPlayerID      string
+	AdditionalTags         string
+	GameMode               GameMode
+	RoundsPerMatch         int
+	RoundsPerMatchOvertime int
+	RoundNumber            int
+	OvertimeRoundNumber    int
+	Teams                  [2]Team
+	Players                []Player
+	GMSettings             []string
+	PlaylistCategory       string
+	MatchID                string
+}
+
+type Team struct {
+	Name  string
+	Score int
+}
+
+type Player struct {
+	ID           string
+	Username     string
+	TeamIndex    int
+	HeroName     string
+	Alliance     int
+	RoleImage    string
+	RoleName     string
+	RolePortrait string
 }
 
 type MatchType int
@@ -126,7 +152,11 @@ func ReadHeaderStr(r io.Reader) (string, error) {
 
 func ReadHeader(r io.Reader) (Header, error) {
 	props := make(map[string]string)
+	gmSettings := make([]string, 0)
+	players := make([]Player, 0)
 	// Loops until the last property is mapped.
+	currentPlayer := Player{}
+	playerData := false
 	for exists := false; !exists; {
 		k, err := ReadHeaderStr(r)
 		if err != nil {
@@ -136,10 +166,58 @@ func ReadHeader(r io.Reader) (Header, error) {
 		if err != nil {
 			return Header{}, err
 		}
-		props[k] = v
+		if k == "playerid" {
+			if playerData {
+				players = append(players, currentPlayer)
+			}
+			playerData = true
+			currentPlayer = Player{}
+		}
+		if k == "playlistcategory" {
+			players = append(players, currentPlayer)
+			playerData = false
+		}
+		if !playerData {
+			if k != "gmsetting" {
+				props[k] = v
+			} else {
+				gmSettings = append(gmSettings, v)
+			}
+		} else {
+			switch k {
+			case "playerid":
+				currentPlayer.ID = v
+			case "playername":
+				currentPlayer.Username = v
+			case "team":
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return Header{}, err
+				}
+				currentPlayer.TeamIndex = n
+			case "heroname":
+				currentPlayer.HeroName = v
+			case "allilance":
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return Header{}, err
+				}
+				currentPlayer.Alliance = n
+			case "roleimage":
+				currentPlayer.RoleImage = v
+			case "rolename":
+				currentPlayer.RoleName = v
+			case "roleportrait":
+				currentPlayer.RolePortrait = v
+			}
+		}
 		_, exists = props["teamscore1"]
 	}
-	h := Header{}
+	h := Header{
+		Teams:      [2]Team{},
+		Players:    players,
+		GMSettings: gmSettings,
+	}
 	// Parse game version
 	n, err := strconv.Atoi(props["version"])
 	if err != nil {
@@ -164,14 +242,57 @@ func ReadHeader(r io.Reader) (Header, error) {
 		return h, err
 	}
 	h.Map = Map(n)
-	// Parse recording player id
+	// Add recording player id
 	h.RecordingPlayerID = props["recordingplayerid"]
+	// Add additional tags
+	h.AdditionalTags = props["additionaltags"]
 	// Parse game mode
 	n, err = strconv.Atoi(props["gamemodeid"])
 	if err != nil {
 		return h, err
 	}
 	h.GameMode = GameMode(n)
+	// Parse rounds per match
+	n, err = strconv.Atoi(props["roundspermatch"])
+	if err != nil {
+		return h, err
+	}
+	h.RoundsPerMatch = n
+	// Parse rounds per match overtime
+	n, err = strconv.Atoi(props["roundspermatchovertime"])
+	if err != nil {
+		return h, err
+	}
+	h.RoundsPerMatchOvertime = n
+	// Parse round number
+	n, err = strconv.Atoi(props["roundnumber"])
+	if err != nil {
+		return h, err
+	}
+	h.RoundNumber = n
+	// Parse overtime round number
+	n, err = strconv.Atoi(props["overtimeroundnumber"])
+	if err != nil {
+		return h, err
+	}
+	h.OvertimeRoundNumber = n
+	// Add team names
+	h.Teams[0].Name = props["teamname0"]
+	h.Teams[1].Name = props["teamname1"]
+	// Add match id
+	h.PlaylistCategory = props["playlistcategory"]
+	h.MatchID = props["id"]
+	// Parse team scores
+	n, err = strconv.Atoi(props["teamscore0"])
+	if err != nil {
+		return h, err
+	}
+	h.Teams[0].Score = n
+	n, err = strconv.Atoi(props["teamscore1"])
+	if err != nil {
+		return h, err
+	}
+	h.Teams[1].Score = n
 	return h, nil
 }
 
