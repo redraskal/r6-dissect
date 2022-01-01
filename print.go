@@ -12,6 +12,7 @@ func PrintHead(r io.Reader) error {
 	}
 	log.Println("Game Version:     ", h.GameVersion)
 	log.Println("Recording Player: ", lookupPlayer(h.RecordingPlayerID, h), " [", h.RecordingPlayerID, "]")
+	log.Println("Match ID:         ", h.MatchID)
 	log.Println("Timestamp:        ", h.Timestamp)
 	log.Println("Match Type:       ", h.MatchType)
 	log.Println("Game Mode:        ", h.GameMode)
