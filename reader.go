@@ -17,7 +17,7 @@ type Header struct {
 	Timestamp         time.Time
 	MatchType         MatchType
 	Map               Map
-	RecordingPlayerId int
+	RecordingPlayerID string
 	GameMode          GameMode
 }
 
@@ -34,7 +34,8 @@ const (
 
 	BOMB GameMode = 327933806
 
-	OREGON Map = 231702797556
+	KAFE_DOSTOYEVSKY Map = 1378191338
+	OREGON           Map = 231702797556
 )
 
 var ErrInvalidFile = errors.New("dissect: not a dissect file")
@@ -49,8 +50,11 @@ func PrintHead(r io.Reader) error {
 		return err
 	}
 	log.Println("Game Version: ", h.GameVersion)
-	log.Println("Timestamp: ", h.Timestamp)
-	log.Println("Match Type: ", h.MatchType)
+	log.Println("Player ID:    ", h.RecordingPlayerID)
+	log.Println("Timestamp:    ", h.Timestamp)
+	log.Println("Match Type:   ", h.MatchType)
+	log.Println("Game Mode:    ", h.GameMode)
+	log.Println("Map:          ", h.Map)
 	return nil
 }
 
@@ -169,6 +173,20 @@ func ReadHeader(r io.Reader) (Header, error) {
 		return h, err
 	}
 	h.MatchType = MatchType(n)
+	// Parse map
+	n, err = strconv.Atoi(props["worldid"])
+	if err != nil {
+		return h, err
+	}
+	h.Map = Map(n)
+	// Parse recording player id
+	h.RecordingPlayerID = props["recordingplayerid"]
+	// Parse game mode
+	n, err = strconv.Atoi(props["gamemodeid"])
+	if err != nil {
+		return h, err
+	}
+	h.GameMode = GameMode(n)
 	return h, nil
 }
 

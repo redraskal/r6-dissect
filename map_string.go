@@ -8,17 +8,22 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
+	_ = x[KAFE_DOSTOYEVSKY-1378191338]
 	_ = x[OREGON-231702797556]
 }
 
-const _Map_name = "OREGON"
-
-var _Map_index = [...]uint8{0, 6}
+const (
+	_Map_name_0 = "KAFE_DOSTOYEVSKY"
+	_Map_name_1 = "OREGON"
+)
 
 func (i Map) String() string {
-	i -= 231702797556
-	if i < 0 || i >= Map(len(_Map_index)-1) {
-		return "Map(" + strconv.FormatInt(int64(i+231702797556), 10) + ")"
+	switch {
+	case i == 1378191338:
+		return _Map_name_0
+	case i == 231702797556:
+		return _Map_name_1
+	default:
+		return "Map(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _Map_name[_Map_index[i]:_Map_index[i+1]]
 }
