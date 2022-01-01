@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"io"
-	"log"
 	"os"
 	"strconv"
 	"time"
@@ -43,20 +42,6 @@ var ErrInvalidLength = errors.New("dissect: received an invalid length of bytes"
 var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-
-func PrintHead(r io.Reader) error {
-	h, err := ReadHeader(r)
-	if err != nil {
-		return err
-	}
-	log.Println("Game Version: ", h.GameVersion)
-	log.Println("Player ID:    ", h.RecordingPlayerID)
-	log.Println("Timestamp:    ", h.Timestamp)
-	log.Println("Match Type:   ", h.MatchType)
-	log.Println("Game Mode:    ", h.GameMode)
-	log.Println("Map:          ", h.Map)
-	return nil
-}
 
 // Open opens the named compressed file for reading with the dissect format.
 func Open(name string) (*io.Reader, error) {
