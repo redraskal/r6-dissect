@@ -9,16 +9,25 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[BOMB-327933806]
+	_ = x[SECURE_AREA-1983085217]
+	_ = x[HOSTAGE-2838806006]
 }
 
-const _GameMode_name = "BOMB"
-
-var _GameMode_index = [...]uint8{0, 4}
+const (
+	_GameMode_name_0 = "BOMB"
+	_GameMode_name_1 = "SECURE_AREA"
+	_GameMode_name_2 = "HOSTAGE"
+)
 
 func (i GameMode) String() string {
-	i -= 327933806
-	if i < 0 || i >= GameMode(len(_GameMode_index)-1) {
-		return "GameMode(" + strconv.FormatInt(int64(i+327933806), 10) + ")"
+	switch {
+	case i == 327933806:
+		return _GameMode_name_0
+	case i == 1983085217:
+		return _GameMode_name_1
+	case i == 2838806006:
+		return _GameMode_name_2
+	default:
+		return "GameMode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _GameMode_name[_GameMode_index[i]:_GameMode_index[i+1]]
 }

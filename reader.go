@@ -57,10 +57,31 @@ const (
 	CUSTOM_GAME MatchType = 7
 	UNRANKED    MatchType = 12
 
-	BOMB GameMode = 327933806
+	BOMB        GameMode = 327933806
+	SECURE_AREA GameMode = 1983085217
+	HOSTAGE     GameMode = 2838806006
 
-	KAFE_DOSTOYEVSKY Map = 1378191338
-	OREGON           Map = 231702797556
+	CLUB_HOUSE         Map = 837214085
+	KAFE_DOSTOYEVSKY   Map = 1378191338
+	KANAL              Map = 1460220617
+	YACHT              Map = 1767965020
+	PRESIDENTIAL_PLANE Map = 2609218856
+	CONSULATE          Map = 2609221242
+	BARTLETT_U         Map = 2697268122
+	COASTLINE          Map = 42090092951
+	TOWER              Map = 53627213396
+	VILLA              Map = 88107330328
+	FORTRESS           Map = 126196841359
+	HEREFORD_BASE      Map = 127951053400
+	THEME_PARK         Map = 199824623654
+	OREGON             Map = 231702797556
+	HOUSE              Map = 237873412352
+	CHALET             Map = 259816839773
+	SKYSCRAPER         Map = 276279025182
+	BORDER             Map = 305979357167
+	FAVELA             Map = 329867321446
+	BANK               Map = 355496559878
+	OUTBACK            Map = 362605108559
 )
 
 var ErrInvalidFile = errors.New("dissect: not a dissect file")
@@ -157,7 +178,7 @@ func ReadHeader(r io.Reader) (Header, error) {
 	// Loops until the last property is mapped.
 	currentPlayer := Player{}
 	playerData := false
-	for exists := false; !exists; {
+	for lastProp := false; !lastProp; {
 		k, err := ReadHeaderStr(r)
 		if err != nil {
 			return Header{}, err
@@ -173,7 +194,7 @@ func ReadHeader(r io.Reader) (Header, error) {
 			playerData = true
 			currentPlayer = Player{}
 		}
-		if k == "playlistcategory" {
+		if (k == "playlistcategory" || k == "id") && playerData {
 			players = append(players, currentPlayer)
 			playerData = false
 		}
@@ -211,7 +232,7 @@ func ReadHeader(r io.Reader) (Header, error) {
 				currentPlayer.RolePortrait = v
 			}
 		}
-		_, exists = props["teamscore1"]
+		_, lastProp = props["teamscore1"]
 	}
 	h := Header{
 		Teams:      [2]Team{},
