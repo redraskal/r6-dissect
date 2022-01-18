@@ -3,13 +3,15 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/redraskal/r6-dissect/reader"
 )
 
 func main() {
 	if len(os.Args) < 2 {
 		log.Fatal("Specify a match replay file path (*.rec)")
 	}
-	r, err := Open(os.Args[1])
+	r, err := reader.Open(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}

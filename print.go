@@ -3,10 +3,13 @@ package main
 import (
 	"io"
 	"log"
+
+	"github.com/redraskal/r6-dissect/reader"
+	"github.com/redraskal/r6-dissect/types"
 )
 
 func PrintHead(r io.Reader) error {
-	h, err := ReadHeader(r)
+	h, err := reader.ReadHeader(r)
 	if err != nil {
 		return err
 	}
@@ -20,7 +23,7 @@ func PrintHead(r io.Reader) error {
 	return nil
 }
 
-func lookupUsername(ID string, h Header) string {
+func lookupUsername(ID string, h types.Header) string {
 	for _, val := range h.Players {
 		if val.ID == ID {
 			return val.Username
