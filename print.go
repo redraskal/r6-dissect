@@ -13,13 +13,13 @@ func PrintHead(r io.Reader) error {
 	if err != nil {
 		return err
 	}
-	log.Info().Msgf("Game Version:     ", h.GameVersion)
-	log.Info().Msgf("Recording Player: ", lookupUsername(h.RecordingPlayerID, h), " [", h.RecordingPlayerID, "]")
-	log.Info().Msgf("Match ID:         ", h.MatchID)
-	log.Info().Msgf("Timestamp:        ", h.Timestamp.Local())
-	log.Info().Msgf("Match Type:       ", h.MatchType)
-	log.Info().Msgf("Game Mode:        ", h.GameMode)
-	log.Info().Msgf("Map:              ", h.Map)
+	log.Info().Msgf("Game Version:     %d", h.GameVersion)
+	log.Info().Msgf("Recording Player: %s [%s]", lookupUsername(h.RecordingPlayerID, h), h.RecordingPlayerID)
+	log.Info().Msgf("Match ID:         %s", h.MatchID)
+	log.Info().Msgf("Timestamp:        %s", h.Timestamp.Local())
+	log.Info().Msgf("Match Type:       %s", h.MatchType)
+	log.Info().Msgf("Game Mode:        %s", h.GameMode)
+	log.Info().Msgf("Map:              %s", h.Map)
 	return nil
 }
 
