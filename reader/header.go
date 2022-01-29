@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/redraskal/r6-dissect/types"
+	"github.com/rs/zerolog/log"
 )
 
 // ReadHeaderStr reads the next string in the header of r.
@@ -33,7 +34,7 @@ func ReadHeaderStr(r io.Reader) (string, error) {
 // ReadHeader reads the header of r.
 func ReadHeader(r io.Reader) (types.Header, error) {
 	props := make(map[string]string)
-	gmSettings := make([]string, 0)
+	gmSettings := make([]int, 0)
 	players := make([]types.Player, 0)
 	// Loops until the last property is mapped.
 	currentPlayer := types.Player{}
@@ -62,7 +63,11 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 			if k != "gmsetting" {
 				props[k] = v
 			} else {
-				gmSettings = append(gmSettings, v)
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return types.Header{}, err
+				}
+				gmSettings = append(gmSettings, n)
 			}
 		} else {
 			switch k {
@@ -77,7 +82,11 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 				}
 				currentPlayer.TeamIndex = n
 			case "heroname":
-				currentPlayer.HeroName = v
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return types.Header{}, err
+				}
+				currentPlayer.HeroName = n
 			case "allilance":
 				n, err := strconv.Atoi(v)
 				if err != nil {
@@ -85,11 +94,19 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 				}
 				currentPlayer.Alliance = n
 			case "roleimage":
-				currentPlayer.RoleImage = v
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return types.Header{}, err
+				}
+				currentPlayer.RoleImage = n
 			case "rolename":
 				currentPlayer.RoleName = v
 			case "roleportrait":
-				currentPlayer.RolePortrait = v
+				n, err := strconv.Atoi(v)
+				if err != nil {
+					return types.Header{}, err
+				}
+				currentPlayer.RolePortrait = n
 			}
 		}
 		_, lastProp = props["teamscore1"]
@@ -160,8 +177,13 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 	// Add team names
 	h.Teams[0].Name = props["teamname0"]
 	h.Teams[1].Name = props["teamname1"]
+	// Add playlist category
+	n, err = strconv.Atoi(props["playlistcategory"])
+	if err != nil {
+		log.Debug().Err(err).Msg("omitting playlistcategory")
+	}
+	h.PlaylistCategory = n
 	// Add match id
-	h.PlaylistCategory = props["playlistcategory"]
 	h.MatchID = props["id"]
 	// Parse team scores
 	n, err = strconv.Atoi(props["teamscore0"])

@@ -1,40 +1,48 @@
 package types
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Header struct {
-	GameVersion            int
-	Timestamp              time.Time
-	MatchType              MatchType
-	Map                    Map
-	RecordingPlayerID      string
-	AdditionalTags         string
-	GameMode               GameMode
-	RoundsPerMatch         int
-	RoundsPerMatchOvertime int
-	RoundNumber            int
-	OvertimeRoundNumber    int
-	Teams                  [2]Team
-	Players                []Player
-	GMSettings             []string
-	PlaylistCategory       string
-	MatchID                string
+	GameVersion            int       `json:"gameVersion"`
+	Timestamp              time.Time `json:"timestamp"`
+	MatchType              MatchType `json:"matchType"`
+	Map                    Map       `json:"map"`
+	RecordingPlayerID      string    `json:"recordingPlayerID"`
+	AdditionalTags         string    `json:"additionalTags"`
+	GameMode               GameMode  `json:"gamemode"`
+	RoundsPerMatch         int       `json:"roundsPerMatch"`
+	RoundsPerMatchOvertime int       `json:"roundsPerMatchOvertime"`
+	RoundNumber            int       `json:"roundNumber"`
+	OvertimeRoundNumber    int       `json:"overtimeRoundNumber"`
+	Teams                  [2]Team   `json:"teams"`
+	Players                []Player  `json:"players"`
+	GMSettings             []int     `json:"gmSettings"`
+	PlaylistCategory       int       `json:"playlistCategory,omitempty"`
+	MatchID                string    `json:"matchID"`
 }
 
 type Team struct {
-	Name  string
-	Score int
+	Name  string `json:"name"`
+	Score int    `json:"score"`
 }
 
 type Player struct {
-	ID           string
-	Username     string
-	TeamIndex    int
-	HeroName     string
-	Alliance     int
-	RoleImage    string
-	RoleName     string
-	RolePortrait string
+	ID           string `json:"id"`
+	Username     string `json:"username"`
+	TeamIndex    int    `json:"teamIndex"`
+	HeroName     int    `json:"heroName"`
+	Alliance     int    `json:"alliance"`
+	RoleImage    int    `json:"roleImage"`
+	RoleName     string `json:"roleName"`
+	RolePortrait int    `json:"rolePortrait"`
+}
+
+type stringerIntMarshal struct {
+	Name string `json:"name"`
+	ID   int    `json:"id"`
 }
 
 type MatchType int
@@ -45,9 +53,10 @@ type Map int
 //go:generate stringer -type=GameMode
 //go:generate stringer -type=Map
 const (
-	QUICK_MATCH MatchType = 1
-	CUSTOM_GAME MatchType = 7
-	UNRANKED    MatchType = 12
+	QUICK_MATCH       MatchType = 1
+	RANKED            MatchType = 2
+	CUSTOM_GAME_LOCAL MatchType = 7
+	UNRANKED          MatchType = 12
 
 	BOMB        GameMode = 327933806
 	SECURE_AREA GameMode = 1983085217
@@ -75,3 +84,24 @@ const (
 	BANK               Map = 355496559878
 	OUTBACK            Map = 362605108559
 )
+
+func (i MatchType) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i GameMode) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i Map) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}

@@ -9,20 +9,26 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[QUICK_MATCH-1]
-	_ = x[CUSTOM_GAME-7]
+	_ = x[RANKED-2]
+	_ = x[CUSTOM_GAME_LOCAL-7]
 	_ = x[UNRANKED-12]
 }
 
 const (
-	_MatchType_name_0 = "QUICK_MATCH"
-	_MatchType_name_1 = "CUSTOM_GAME"
+	_MatchType_name_0 = "QUICK_MATCHRANKED"
+	_MatchType_name_1 = "CUSTOM_GAME_LOCAL"
 	_MatchType_name_2 = "UNRANKED"
+)
+
+var (
+	_MatchType_index_0 = [...]uint8{0, 11, 17}
 )
 
 func (i MatchType) String() string {
 	switch {
-	case i == 1:
-		return _MatchType_name_0
+	case 1 <= i && i <= 2:
+		i -= 1
+		return _MatchType_name_0[_MatchType_index_0[i]:_MatchType_index_0[i+1]]
 	case i == 7:
 		return _MatchType_name_1
 	case i == 12:
