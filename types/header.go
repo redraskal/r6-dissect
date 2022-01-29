@@ -53,10 +53,11 @@ type Map int
 //go:generate stringer -type=GameMode
 //go:generate stringer -type=Map
 const (
-	QUICK_MATCH       MatchType = 1
-	RANKED            MatchType = 2
-	CUSTOM_GAME_LOCAL MatchType = 7
-	UNRANKED          MatchType = 12
+	QUICK_MATCH        MatchType = 1
+	RANKED             MatchType = 2
+	CUSTOM_GAME_LOCAL  MatchType = 7
+	CUSTOM_GAME_ONLINE MatchType = 8
+	UNRANKED           MatchType = 12
 
 	BOMB        GameMode = 327933806
 	SECURE_AREA GameMode = 1983085217

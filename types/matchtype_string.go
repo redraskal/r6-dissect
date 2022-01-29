@@ -11,17 +11,19 @@ func _() {
 	_ = x[QUICK_MATCH-1]
 	_ = x[RANKED-2]
 	_ = x[CUSTOM_GAME_LOCAL-7]
+	_ = x[CUSTOM_GAME_ONLINE-8]
 	_ = x[UNRANKED-12]
 }
 
 const (
 	_MatchType_name_0 = "QUICK_MATCHRANKED"
-	_MatchType_name_1 = "CUSTOM_GAME_LOCAL"
+	_MatchType_name_1 = "CUSTOM_GAME_LOCALCUSTOM_GAME_ONLINE"
 	_MatchType_name_2 = "UNRANKED"
 )
 
 var (
 	_MatchType_index_0 = [...]uint8{0, 11, 17}
+	_MatchType_index_1 = [...]uint8{0, 17, 35}
 )
 
 func (i MatchType) String() string {
@@ -29,8 +31,9 @@ func (i MatchType) String() string {
 	case 1 <= i && i <= 2:
 		i -= 1
 		return _MatchType_name_0[_MatchType_index_0[i]:_MatchType_index_0[i+1]]
-	case i == 7:
-		return _MatchType_name_1
+	case 7 <= i && i <= 8:
+		i -= 7
+		return _MatchType_name_1[_MatchType_index_1[i]:_MatchType_index_1[i+1]]
 	case i == 12:
 		return _MatchType_name_2
 	default:
