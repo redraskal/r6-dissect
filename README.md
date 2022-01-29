@@ -1,4 +1,7 @@
 # r6-dissect
+[![](https://discordapp.com/api/guilds/936737628756271114/widget.png?style=shield)](https://discord.gg/XdEXWQZZAa)
+[![Go Reference](https://pkg.go.dev/badge/github.com/redraskal/r6-dissect.svg)](https://pkg.go.dev/github.com/redraskal/r6-dissect)
+
 Match replay API/CLI for Rainbow Six: Siege's Dissect format.
 
 This is a work in progress. I will be using this resource in an upcoming project :eyes:
