@@ -9,7 +9,7 @@ import (
 )
 
 func PrintHead(c reader.Container) {
-	log.Info().Msgf("Game Version:     %s", c.Header.GameVersion)
+	log.Info().Msgf("Version:          %s/%d", c.Header.GameVersion, c.Header.CodeVersion)
 	log.Info().Msgf("Recording Player: %s [%s]", lookupUsername(c.Header.RecordingPlayerID, c.Header), c.Header.RecordingPlayerID)
 	log.Info().Msgf("Match ID:         %s", c.Header.MatchID)
 	log.Info().Msgf("Timestamp:        %s", c.Header.Timestamp.Local())

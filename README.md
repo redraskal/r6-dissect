@@ -11,6 +11,7 @@ The data format is subject to change until a stable version is released.
 ## Current Features
 - Parsing match info (Game version, map, gamemode, match type, teams, players)
 - Exporting match info to JSON
+- Dumping static data to file
 
 ## Planned Features
 - Player statistics
@@ -19,36 +20,37 @@ The data format is subject to change until a stable version is released.
 ## CLI Usage
 An overview of the file can be printed with the following command:
 ```
-r6-dissect kafe.rec
+r6-dissect house.rec
 ```
 ```
-7:49PM INF Game Version:     6656289
-7:49PM INF Recording Player: JediMasterSoda [8450400598697089250]
-7:49PM INF Match ID:         54c3c485-4032-4477-92d5-c006055679b9
-7:49PM INF Timestamp:        2021-12-26 18:06:17 -0600 CST
-7:49PM INF Match Type:       UNRANKED
-7:49PM INF Game Mode:        BOMB
-7:49PM INF Map:              KAFE_DOSTOYEVSKY
+4:31PM INF Version:          Y7S1/6759805
+4:31PM INF Recording Player: redraskal [6931694198894320741]
+4:31PM INF Match ID:         2eb42844-703c-47cc-a596-a0c7a8506680
+4:31PM INF Timestamp:        2022-02-21 11:14:31 -0600 CST
+4:31PM INF Match Type:       CUSTOM_GAME_LOCAL
+4:31PM INF Game Mode:        BOMB
+4:31PM INF Map:              HOUSE
 ```
 You can also write the match info to a JSON file with one of the following commands:
 ```
-r6-dissect "kafe.rec" -x kafe.json
-r6-dissect "kafe.rec" -x json kafe.json
+r6-dissect "house.rec" -x house.json
+r6-dissect "house.rec" -x json house.json
 ```
 ```
 {
   "header": {
-    "gameVersion": 6656289,
-    "timestamp": "2021-12-27T00:06:17Z",
+    "gameVersion": "Y7S1",
+    "codeVersion": 6759805,
+    "timestamp": "2022-02-21T17:14:31Z",
     "matchType": {
-      "name": "UNRANKED",
-      "id": 12
+      "name": "CUSTOM_GAME_LOCAL",
+      "id": 7
     },
     "map": {
-      "name": "KAFE_DOSTOYEVSKY",
-      "id": 1378191338
+      "name": "HOUSE",
+      "id": 237873412352
     },
-    "recordingPlayerID": "8450400598697089250",
+    "recordingPlayerID": "6931694198894320741",
     "additionalTags": "423855620",
     "gamemode": {
       "name": "BOMB",

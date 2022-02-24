@@ -7,6 +7,7 @@ import (
 
 type Header struct {
 	GameVersion            string    `json:"gameVersion"`
+	CodeVersion            int       `json:"codeVersion"`
 	Timestamp              time.Time `json:"timestamp"`
 	MatchType              MatchType `json:"matchType"`
 	Map                    Map       `json:"map"`

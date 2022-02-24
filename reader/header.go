@@ -117,6 +117,12 @@ func readHeader(r io.Reader) (types.Header, error) {
 	}
 	// Parse game version
 	h.GameVersion = props["version"]
+	// Parse code version
+	n, err := strconv.Atoi(props["code"])
+	if err != nil {
+		return h, err
+	}
+	h.CodeVersion = n
 	// Parse timestamp
 	t, err := time.Parse("2006-01-02-15-04-05", props["datetime"])
 	if err != nil {
@@ -124,7 +130,7 @@ func readHeader(r io.Reader) (types.Header, error) {
 	}
 	h.Timestamp = t
 	// Parse match type
-	n, err := strconv.Atoi(props["matchtype"])
+	n, err = strconv.Atoi(props["matchtype"])
 	if err != nil {
 		return h, err
 	}
