@@ -3,9 +3,9 @@ package reader
 import (
 	"errors"
 	"io"
-	"os"
 
 	"github.com/klauspost/compress/zstd"
+	"github.com/redraskal/r6-dissect/types"
 )
 
 var ErrInvalidFile = errors.New("dissect: not a dissect file")
@@ -14,36 +14,44 @@ var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
-// Open opens the named compressed file for reading with the dissect format.
-func Open(name string) (*io.Reader, error) {
-	r, err := os.Open(name)
-	if err != nil {
-		return nil, err
-	}
-	return NewReader(r)
+type Container struct {
+	reader     *io.Reader
+	compressed *zstd.Decoder
+	static     []byte
+	Header     types.Header `json:"header"`
 }
 
-// NewReader decompresses r using zstd and calls ReadHeader
-// to validate the dissect format.
-func NewReader(r io.Reader) (*io.Reader, error) {
-	r, err := zstd.NewReader(r)
+// NewReader decompresses r using zstd and
+// validates the dissect header.
+func NewReader(r io.Reader) (c Container, err error) {
+	compressed, err := zstd.NewReader(r)
 	if err != nil {
-		return nil, err
+		return
 	}
-	return ReadHeaderMagic(r)
+	c = Container{
+		compressed: compressed,
+		reader:     &r,
+	}
+	if err = readHeaderMagic(compressed); err != nil {
+		return
+	}
+	if h, err := readHeader(compressed); err == nil {
+		c.Header = h
+	}
+	return
 }
 
-// ReadHeaderMagic reads the header magic of r
+// readHeaderMagic reads the header magic of the reader
 // and validates the dissect format.
 // If there is an error, it will be of type *ErrInvalidFile.
-func ReadHeaderMagic(r io.Reader) (*io.Reader, error) {
+func readHeaderMagic(r io.Reader) error {
 	// Checks for the dissect header.
 	b, err := readBytes(7, r)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if string(b[:7]) != "dissect" {
-		return nil, ErrInvalidFile
+		return ErrInvalidFile
 	}
 	// Skips to the end of the unknown dissect versioning scheme.
 	// Probably will be replaced later when more info is uncovered.
@@ -55,10 +63,10 @@ func ReadHeaderMagic(r io.Reader) (*io.Reader, error) {
 	for t != 2 {
 		len, err := r.Read(b)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if len != 1 {
-			return nil, ErrInvalidFile
+			return ErrInvalidFile
 		}
 		if b[0] == 0x00 {
 			if n != 6 {
@@ -71,5 +79,5 @@ func ReadHeaderMagic(r io.Reader) (*io.Reader, error) {
 			n = 0
 		}
 	}
-	return &r, nil
+	return nil
 }

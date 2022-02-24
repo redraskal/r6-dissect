@@ -13,9 +13,13 @@ import (
 )
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	setupFlags()
-	setupLogging()
-	r, err := reader.Open(viper.GetString("input"))
+	r, err := os.Open(viper.GetString("input"))
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+	c, err := reader.NewReader(r)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
@@ -23,7 +27,6 @@ func main() {
 		type output struct {
 			Header types.Header `json:"header"`
 		}
-		h, err := reader.ReadHeader(*r)
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
@@ -31,11 +34,15 @@ func main() {
 		defer file.Close()
 		encoder := json.NewEncoder(file)
 		encoder.Encode(output{
-			h,
+			c.Header,
 		})
 		log.Info().Msg("Output saved.")
 	} else {
-		if err = PrintHead(*r); err != nil {
+		PrintHead(c)
+		if !viper.GetBool("static") {
+			return
+		}
+		if err = DumpStatic(c); err != nil {
 			log.Fatal().Err(err).Send()
 		}
 	}
@@ -43,7 +50,8 @@ func main() {
 
 func setupFlags() {
 	pflag.StringP("export", "x", "", "specifies the export format (json)")
-	pflag.BoolP("debug", "D", false, "sets log level to debug")
+	pflag.BoolP("debug", "d", false, "sets log level to debug")
+	pflag.BoolP("static", "s", false, "dumps static data to static.bin")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 	extra := len(pflag.Args())
@@ -61,10 +69,6 @@ func setupFlags() {
 	if export != "" && viper.GetString("output") == "" {
 		log.Fatal().Msg("Specify a valid output file path")
 	}
-}
-
-func setupLogging() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	if viper.GetBool("debug") {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	} else {

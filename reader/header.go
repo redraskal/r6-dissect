@@ -10,8 +10,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// ReadHeaderStr reads the next string in the header of r.
-func ReadHeaderStr(r io.Reader) (string, error) {
+// readHeaderStr reads the next string in the header.
+func readHeaderStr(r io.Reader) (string, error) {
 	b, err := readBytes(1, r)
 	if err != nil {
 		return "", err
@@ -31,8 +31,7 @@ func ReadHeaderStr(r io.Reader) (string, error) {
 	return string(b), nil
 }
 
-// ReadHeader reads the header of r.
-func ReadHeader(r io.Reader) (types.Header, error) {
+func readHeader(r io.Reader) (types.Header, error) {
 	props := make(map[string]string)
 	gmSettings := make([]int, 0)
 	players := make([]types.Player, 0)
@@ -40,11 +39,11 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 	currentPlayer := types.Player{}
 	playerData := false
 	for lastProp := false; !lastProp; {
-		k, err := ReadHeaderStr(r)
+		k, err := readHeaderStr(r)
 		if err != nil {
 			return types.Header{}, err
 		}
-		v, err := ReadHeaderStr(r)
+		v, err := readHeaderStr(r)
 		if err != nil {
 			return types.Header{}, err
 		}
@@ -117,11 +116,7 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 		GMSettings: gmSettings,
 	}
 	// Parse game version
-	n, err := strconv.Atoi(props["version"])
-	if err != nil {
-		return h, err
-	}
-	h.GameVersion = n
+	h.GameVersion = props["version"]
 	// Parse timestamp
 	t, err := time.Parse("2006-01-02-15-04-05", props["datetime"])
 	if err != nil {
@@ -129,7 +124,7 @@ func ReadHeader(r io.Reader) (types.Header, error) {
 	}
 	h.Timestamp = t
 	// Parse match type
-	n, err = strconv.Atoi(props["matchtype"])
+	n, err := strconv.Atoi(props["matchtype"])
 	if err != nil {
 		return h, err
 	}

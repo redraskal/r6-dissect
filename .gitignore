@@ -9,6 +9,9 @@
 *.rec
 # Dissect output files
 *.json
+*.bin
+# Memory dumps
+*.dmp
 
 # Test binary, built with `go test -c`
 *.test
