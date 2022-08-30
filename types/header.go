@@ -32,6 +32,7 @@ type Team struct {
 
 type Player struct {
 	ID           string `json:"id"`
+	ProfileId    string `json:"profileId"`
 	Username     string `json:"username"`
 	TeamIndex    int    `json:"teamIndex"`
 	HeroName     int    `json:"heroName"`
