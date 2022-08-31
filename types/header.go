@@ -86,6 +86,7 @@ const (
 	FAVELA             Map = 329867321446
 	BANK               Map = 355496559878
 	OUTBACK            Map = 362605108559
+	EMERALD_PLAINS     Map = 365284490964
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {
