@@ -108,3 +108,12 @@ func (i Map) MarshalJSON() (text []byte, err error) {
 		ID:   int(i),
 	})
 }
+
+func (h Header) RecordingPlayer() Player {
+	for _, val := range h.Players {
+		if val.ID == h.RecordingPlayerID {
+			return val
+		}
+	}
+	return Player{}
+}

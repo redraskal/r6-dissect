@@ -1,0 +1,145 @@
+{
+  "header": {
+    "gameVersion": "Y7S2",
+    "codeVersion": 7040830,
+    "timestamp": "2022-08-28T23:45:22Z",
+    "matchType": {
+      "name": "RANKED",
+      "id": 2
+    },
+    "map": {
+      "name": "KAFE_DOSTOYEVSKY",
+      "id": 1378191338
+    },
+    "recordingPlayerID": "865512328110930947",
+    "additionalTags": "423855620",
+    "gamemode": {
+      "name": "BOMB",
+      "id": 327933806
+    },
+    "roundsPerMatch": 6,
+    "roundsPerMatchOvertime": 3,
+    "roundNumber": 0,
+    "overtimeRoundNumber": 0,
+    "teams": [
+      {
+        "name": "OPPONENTS",
+        "score": 0
+      },
+      {
+        "name": "YOUR TEAM",
+        "score": 1
+      }
+    ],
+    "players": [
+      {
+        "id": "13148708254715499262",
+        "profileId": "86be279d-e699-46ce-83b8-7715a1a4dd13",
+        "username": "artistic",
+        "teamIndex": 1,
+        "heroName": 423855893,
+        "alliance": 4,
+        "roleImage": 1326495635,
+        "roleName": "KAPKAN",
+        "rolePortrait": 27880706822
+      },
+      {
+        "id": "865512328110930947",
+        "profileId": "1f63af29-7ebe-48e7-b570-e820632d9565",
+        "username": "redraskal",
+        "teamIndex": 1,
+        "heroName": 423855917,
+        "alliance": 4,
+        "roleImage": 1494825824,
+        "roleName": "CASTLE",
+        "rolePortrait": 27880706756
+      },
+      {
+        "id": "12889660843949418648",
+        "profileId": "0d63a57c-8040-4ee1-a066-c3bdf23fdb16",
+        "username": "BULLY_HUNTER_40",
+        "teamIndex": 1,
+        "heroName": 357187762301,
+        "alliance": 4,
+        "roleImage": 288200867313,
+        "roleName": "THUNDERBIRD",
+        "rolePortrait": 362035202835
+      },
+      {
+        "id": "1797489976126663095",
+        "profileId": "f1ef316d-f32c-484c-9dea-a40258343612",
+        "username": "holo_54",
+        "teamIndex": 1,
+        "heroName": 38576459494,
+        "alliance": 4,
+        "roleImage": 39149215517,
+        "roleName": "LESION",
+        "rolePortrait": 39149215541
+      },
+      {
+        "id": "14954859179266683139",
+        "profileId": "d6dba413-9a34-41f9-941d-dc92d424ad2a",
+        "username": "ReithYT",
+        "teamIndex": 1,
+        "heroName": 423855853,
+        "alliance": 4,
+        "roleImage": 1494825833,
+        "roleName": "SMOKE",
+        "rolePortrait": 27880743670
+      }
+    ],
+    "gmSettings": [
+      245225394751,
+      245225394752,
+      245225394901
+    ],
+    "playlistCategory": 245225348570,
+    "matchID": "caf4a075-ceb7-406e-ae82-234bef5c00f7"
+  },
+  "activityFeed": [
+    {
+      "type": "KILL",
+      "username": "ReithYT",
+      "target": "Zonalbuzzard",
+      "headshot": true
+    },
+    {
+      "type": "KILL",
+      "username": "redraskal",
+      "target": "Moyete",
+      "headshot": false
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "exoticindo"
+    },
+    {
+      "type": "KILL",
+      "username": "exoticindo",
+      "target": "ReithYT",
+      "headshot": false
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "exoticindo"
+    },
+    {
+      "type": "KILL",
+      "username": "holo_54",
+      "target": "chicken.1087",
+      "headshot": true
+    },
+    {
+      "type": "KILL",
+      "username": "holo_54",
+      "target": "exoticindo",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "artistic1519",
+      "target": "miIfsIayer",
+      "headshot": false
+    }
+  ]
+}

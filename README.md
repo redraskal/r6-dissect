@@ -10,53 +10,75 @@ The data format is subject to change until a stable version is released.
 
 ## Current Features
 - Parsing match info (Game version, map, gamemode, match type, teams, players)
+- Parsing activities (Kills, headshot kills, objective locates)
 - Exporting match info to JSON
 - Dumping static data to file
 
 ## Planned Features
-- Player statistics
-- Movement packet reading
+- Track plants/disables
+- Track bullet hits/misses
+- Track movement packets
+- Track other player statistics
 
 ## CLI Usage
 An overview of the file can be printed with the following command:
 ```
-r6-dissect house.rec
+r6-dissect "Match-2022-08-28_23-43-24-133-R01.rec"
 ```
 ```
-4:31PM INF Version:          Y7S1/6759805
-4:31PM INF Recording Player: redraskal [6931694198894320741]
-4:31PM INF Match ID:         2eb42844-703c-47cc-a596-a0c7a8506680
-4:31PM INF Timestamp:        2022-02-21 11:14:31 -0600 CST
-4:31PM INF Match Type:       CUSTOM_GAME_LOCAL
-4:31PM INF Game Mode:        BOMB
-4:31PM INF Map:              HOUSE
+5:37PM INF Version:          Y7S2/7040830
+5:37PM INF Recording Player: redraskal [1f63af29-7ebe-48e7-b570-e820632d9565]
+5:37PM INF Match ID:         caf4a075-ceb7-406e-ae82-234bef5c00f7
+5:37PM INF Timestamp:        2022-08-28 18:45:22 -0500 CDT
+5:37PM INF Match Type:       RANKED
+5:37PM INF Game Mode:        BOMB
+5:37PM INF Map:              KAFE_DOSTOYEVSKY
 ```
 You can also write the match info to a JSON file with one of the following commands:
 ```
-r6-dissect "house.rec" -x house.json
-r6-dissect "house.rec" -x json house.json
+r6-dissect "Match-2022-08-28_23-43-24-133-R01.rec" -x kafe.json
+r6-dissect "Match-2022-08-28_23-43-24-133-R01.rec" -x json kafe.json
 ```
 ```
 {
   "header": {
-    "gameVersion": "Y7S1",
-    "codeVersion": 6759805,
-    "timestamp": "2022-02-21T17:14:31Z",
+    "gameVersion": "Y7S2",
+    "codeVersion": 7040830,
+    "timestamp": "2022-08-28T23:45:22Z",
     "matchType": {
-      "name": "CUSTOM_GAME_LOCAL",
-      "id": 7
+      "name": "RANKED",
+      "id": 2
     },
     "map": {
-      "name": "HOUSE",
-      "id": 237873412352
+      "name": "KAFE_DOSTOYEVSKY",
+      "id": 1378191338
     },
-    "recordingPlayerID": "6931694198894320741",
+    "recordingPlayerID": "865512328110930947",
     "additionalTags": "423855620",
     "gamemode": {
       "name": "BOMB",
       "id": 327933806
     },
 ...
+  "activityFeed": [
+    {
+      "type": "KILL",
+      "username": "ReithYT",
+      "target": "Zonalbuzzard",
+      "headshot": true
+    },
+    {
+      "type": "KILL",
+      "username": "redraskal",
+      "target": "Moyete",
+      "headshot": false
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "exoticindo"
+    },
+...
 ```
+See example outputs in [/examples](https://github.com/redraskal/r6-dissect/tree/main/examples).
 #
 I would like to credit [draguve](https://github.com/draguve) & other contributors at [draguve/R6-Replays](https://github.com/draguve/R6-Replays) for their additional work on reverse engineering the dissect format.
