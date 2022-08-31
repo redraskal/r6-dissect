@@ -72,6 +72,8 @@ func readHeader(r io.Reader) (types.Header, error) {
 			switch k {
 			case "playerid":
 				currentPlayer.ID = v
+			case "profileid":
+				currentPlayer.ProfileId = v
 			case "playername":
 				currentPlayer.Username = v
 			case "team":
@@ -86,7 +88,7 @@ func readHeader(r io.Reader) (types.Header, error) {
 					return types.Header{}, err
 				}
 				currentPlayer.HeroName = n
-			case "allilance":
+			case "alliance":
 				n, err := strconv.Atoi(v)
 				if err != nil {
 					return types.Header{}, err

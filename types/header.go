@@ -32,6 +32,7 @@ type Team struct {
 
 type Player struct {
 	ID           string `json:"id"`
+	ProfileId    string `json:"profileId"`
 	Username     string `json:"username"`
 	TeamIndex    int    `json:"teamIndex"`
 	HeroName     int    `json:"heroName"`
@@ -85,6 +86,7 @@ const (
 	FAVELA             Map = 329867321446
 	BANK               Map = 355496559878
 	OUTBACK            Map = 362605108559
+	EMERALD_PLAINS     Map = 365284490964
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {
@@ -106,4 +108,13 @@ func (i Map) MarshalJSON() (text []byte, err error) {
 		Name: i.String(),
 		ID:   int(i),
 	})
+}
+
+func (h Header) RecordingPlayer() Player {
+	for _, val := range h.Players {
+		if val.ID == h.RecordingPlayerID {
+			return val
+		}
+	}
+	return Player{}
 }

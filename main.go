@@ -25,8 +25,13 @@ func main() {
 	}
 	if viper.GetString("export") != "" {
 		type output struct {
-			Header types.Header `json:"header"`
+			Header       types.Header     `json:"header"`
+			ActivityFeed []types.Activity `json:"activityFeed"`
 		}
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
+		activityFeed, err := c.ReadActivities()
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
@@ -35,6 +40,7 @@ func main() {
 		encoder := json.NewEncoder(file)
 		encoder.Encode(output{
 			c.Header,
+			activityFeed,
 		})
 		log.Info().Msg("Output saved.")
 	} else {
