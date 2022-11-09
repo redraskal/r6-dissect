@@ -12,6 +12,7 @@ type Header struct {
 	MatchType              MatchType `json:"matchType"`
 	Map                    Map       `json:"map"`
 	RecordingPlayerID      string    `json:"recordingPlayerID"`
+	RecordingProfileID     string    `json:"recordingProfileID""`
 	AdditionalTags         string    `json:"additionalTags"`
 	GameMode               GameMode  `json:"gamemode"`
 	RoundsPerMatch         int       `json:"roundsPerMatch"`
@@ -32,7 +33,6 @@ type Team struct {
 
 type Player struct {
 	ID           string `json:"id"`
-	ProfileId    string `json:"profileId"`
 	Username     string `json:"username"`
 	TeamIndex    int    `json:"teamIndex"`
 	HeroName     int    `json:"heroName"`
@@ -87,6 +87,7 @@ const (
 	BANK               Map = 355496559878
 	OUTBACK            Map = 362605108559
 	EMERALD_PLAINS     Map = 365284490964
+	STADIUM_BRAVO      Map = 270063334510
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {

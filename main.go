@@ -35,7 +35,10 @@ func main() {
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
-		file, _ := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC, os.ModePerm)
+		file, err := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC, os.ModePerm)
+		if err != nil {
+			log.Fatal().Err(err).Send()
+		}
 		defer file.Close()
 		encoder := json.NewEncoder(file)
 		encoder.Encode(output{
