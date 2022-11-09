@@ -8,6 +8,8 @@ type ActivityType int
 const (
 	KILL ActivityType = iota
 	DEATH
+	PLANT
+	DEFUSE
 	LOCATE_OBJECTIVE
 )
 

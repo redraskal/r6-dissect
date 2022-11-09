@@ -10,12 +10,14 @@ func _() {
 	var x [1]struct{}
 	_ = x[KILL-0]
 	_ = x[DEATH-1]
-	_ = x[LOCATE_OBJECTIVE-2]
+	_ = x[PLANT-2]
+	_ = x[DEFUSE-3]
+	_ = x[LOCATE_OBJECTIVE-4]
 }
 
-const _ActivityType_name = "KILLDEATHLOCATE_OBJECTIVE"
+const _ActivityType_name = "KILLDEATHPLANTDEFUSELOCATE_OBJECTIVE"
 
-var _ActivityType_index = [...]uint8{0, 4, 9, 25}
+var _ActivityType_index = [...]uint8{0, 4, 9, 14, 20, 36}
 
 func (i ActivityType) String() string {
 	if i < 0 || i >= ActivityType(len(_ActivityType_index)-1) {

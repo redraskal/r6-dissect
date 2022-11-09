@@ -72,8 +72,6 @@ func readHeader(r io.Reader) (types.Header, error) {
 			switch k {
 			case "playerid":
 				currentPlayer.ID = v
-			case "profileid":
-				currentPlayer.ProfileId = v
 			case "playername":
 				currentPlayer.Username = v
 			case "team":
@@ -145,6 +143,7 @@ func readHeader(r io.Reader) (types.Header, error) {
 	h.Map = types.Map(n)
 	// Add recording player id
 	h.RecordingPlayerID = props["recordingplayerid"]
+	h.RecordingProfileID = props["recordingprofileid"]
 	// Add additional tags
 	h.AdditionalTags = props["additionaltags"]
 	// Parse game mode

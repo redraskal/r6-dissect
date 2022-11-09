@@ -12,11 +12,11 @@ func PrintHead(c reader.Container) {
 	if player.Username == "" {
 		player.Username = "UNKNOWN"
 	}
-	if player.ProfileId == "" {
-		player.ProfileId = "--"
+	if player.ID == "" {
+		player.ID = "--"
 	}
 	log.Info().Msgf("Version:          %s/%d", c.Header.GameVersion, c.Header.CodeVersion)
-	log.Info().Msgf("Recording Player: %s [%s]", player.Username, player.ProfileId)
+	log.Info().Msgf("Recording Player: %s [%s]", player.Username, player.ID)
 	log.Info().Msgf("Match ID:         %s", c.Header.MatchID)
 	log.Info().Msgf("Timestamp:        %s", c.Header.Timestamp.Local())
 	log.Info().Msgf("Match Type:       %s", c.Header.MatchType)
