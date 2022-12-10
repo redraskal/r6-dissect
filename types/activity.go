@@ -6,16 +6,18 @@ type ActivityType int
 
 //go:generate stringer -type=ActivityType
 const (
-	KILL ActivityType = iota
-	DEATH
-	PLANT
-	DEFUSE
+	KILL   ActivityType = iota
+	DEATH               // TODO
+	PLANT               // TODO
+	DEFUSE              // TODO
 	LOCATE_OBJECTIVE
+	BATTLEYE
+	PLAYER_LEAVE
 )
 
 type Activity struct {
 	Type     ActivityType `json:"type"`
-	Username string       `json:"username"`
+	Username string       `json:"username,omitempty"`
 	Target   string       `json:"target,omitempty"`
 	Headshot *bool        `json:"headshot,omitempty"`
 }

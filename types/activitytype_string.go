@@ -13,11 +13,13 @@ func _() {
 	_ = x[PLANT-2]
 	_ = x[DEFUSE-3]
 	_ = x[LOCATE_OBJECTIVE-4]
+	_ = x[BATTLEYE-5]
+	_ = x[PLAYER_LEAVE-6]
 }
 
-const _ActivityType_name = "KILLDEATHPLANTDEFUSELOCATE_OBJECTIVE"
+const _ActivityType_name = "KILLDEATHPLANTDEFUSELOCATE_OBJECTIVEBATTLEYEPLAYER_LEAVE"
 
-var _ActivityType_index = [...]uint8{0, 4, 9, 14, 20, 36}
+var _ActivityType_index = [...]uint8{0, 4, 9, 14, 20, 36, 44, 56}
 
 func (i ActivityType) String() string {
 	if i < 0 || i >= ActivityType(len(_ActivityType_index)-1) {
