@@ -37,7 +37,7 @@ func main() {
 		if err != nil && (err != io.EOF && err != zstd.ErrMagicMismatch) {
 			log.Fatal().Err(err).Send()
 		}
-		file, err := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC, os.ModePerm)
+		file, err := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
 		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
