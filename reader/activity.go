@@ -2,42 +2,30 @@ package reader
 
 import (
 	"bytes"
-	"github.com/klauspost/compress/zstd"
-	"github.com/redraskal/r6-dissect/types"
-	"github.com/rs/zerolog/log"
 	"io"
 	"strings"
+
+	"github.com/redraskal/r6-dissect/types"
+	"github.com/rs/zerolog/log"
 )
 
-var activity = []byte{0x2b, 0x9d, 0x69, 0x47, 0x23}
-var someOtherActivityIndicator = []byte{0x0b, 0xf0}
+var activity = []byte{0x59, 0x34, 0xe5, 0x8b, 0x04}
+var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
 func (c *Container) ReadActivities() ([]types.Activity, error) {
 	activities := make([]types.Activity, 0)
 	for {
 		err := locate(activity, c.compressed)
-		if err == io.EOF || err == zstd.ErrMagicMismatch {
-			return activities, nil
-		}
 		if err != nil {
 			return activities, err
 		}
-		// No idea what these 2 bytes mean
-		_, err = readBytes(2, c.compressed)
+		bombIndicator, err := readBytes(1, c.compressed)
 		if err != nil {
 			return activities, err
 		}
-		indicator, err := readBytes(2, c.compressed)
-		if err != nil {
-			return activities, err
-		}
-		log.Debug().Hex("indicator", indicator).Send()
-		if !bytes.Equal(indicator, someOtherActivityIndicator) {
-			continue
-		}
-		// No idea what the first 18 bytes mean
-		_, err = readBytes(18, c.compressed)
+		_ = bytes.Equal(bombIndicator, []byte{0x01}) // TODO, figure out meaning
+		err = locate(activity2, c.compressed)
 		if err != nil {
 			return activities, err
 		}
@@ -45,63 +33,82 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 		if err != nil {
 			return activities, err
 		}
-		// Activity is finding objective if size is not 0
-		if size != 0 {
-			b, err := readBytes(size, c.compressed)
+		if size == 0 { // kill or an unknown indicator at start of match
+			killTrace, err := readBytes(5, c.compressed)
 			if err != nil {
 				return activities, err
 			}
-			username := strings.Split(string(b), " ")[0]
-			activity := types.Activity{
-				Type:     types.LOCATE_OBJECTIVE,
-				Username: username,
-				Target:   "",
+			if !bytes.Equal(killTrace, killIndicator) {
+				log.Debug().Hex("killTrace", killTrace).Send()
+				continue
 			}
+			username, err := readString(c.compressed)
+			if err != nil {
+				return activities, err
+			}
+			if len(username) == 0 {
+				log.Debug().Str("warn", "kill username empty").Send()
+				continue
+			}
+			// No idea what these 15 bytes mean (kill type?)
+			_, err = readBytes(15, c.compressed)
+			if err != nil {
+				return activities, err
+			}
+			target, err := readString(c.compressed)
+			if err != nil {
+				return activities, err
+			}
+			activity := types.Activity{
+				Type:     types.KILL,
+				Username: username,
+				Target:   target,
+			}
+			_, err = readBytes(56, c.compressed)
+			if err != nil {
+				return activities, err
+			}
+			headshot, err := readByteAsInt(c.compressed)
+			if err != nil {
+				return activities, err
+			}
+			headshotPtr := new(bool)
+			if headshot == 1 {
+				*headshotPtr = true
+			}
+			activity.Headshot = headshotPtr
 			activities = append(activities, activity)
 			log.Debug().Interface("activity", activity).Send()
 			continue
 		}
-		secondIndicator, err := readBytes(5, c.compressed)
+		b, err := readBytes(size, c.compressed)
 		if err != nil {
 			return activities, err
 		}
-		log.Debug().Hex("second_indicator", secondIndicator).Send()
-		// Objective found indicator seems to happen when the last 6 bytes are missing
-		// Kills seem to happen when these last 6 bytes are present
-		if !bytes.Equal(secondIndicator, killIndicator) {
+		activityMessage := string(b)
+		activityType := types.KILL
+		if strings.HasPrefix(activityMessage, "Friendly Fire") {
 			continue
 		}
-		username, err := readString(c.compressed)
-		if err != nil {
-			return activities, err
+		if strings.Contains(activityMessage, "bombs") {
+			activityType = types.LOCATE_OBJECTIVE
 		}
-		// No idea what these 15 bytes mean (kill type?)
-		_, err = readBytes(15, c.compressed)
-		if err != nil {
-			return activities, err
+		if strings.Contains(activityMessage, "BattlEye") {
+			activityType = types.BATTLEYE
 		}
-		target, err := readString(c.compressed)
-		if err != nil {
-			return activities, err
+		if strings.Contains(activityMessage, "left") {
+			activityType = types.PLAYER_LEAVE
+		}
+		username := strings.Split(activityMessage, " ")[0]
+		log.Debug().Str("activity_msg", activityMessage).Send()
+		if activityType == types.KILL {
+			continue
 		}
 		activity := types.Activity{
-			Type:     types.KILL,
+			Type:     activityType,
 			Username: username,
-			Target:   target,
+			Target:   "",
 		}
-		_, err = readBytes(56, c.compressed)
-		if err != nil {
-			return activities, err
-		}
-		headshot, err := readByteAsInt(c.compressed)
-		if err != nil {
-			return activities, err
-		}
-		headshotPtr := new(bool)
-		if headshot == 1 {
-			*headshotPtr = true
-		}
-		activity.Headshot = headshotPtr
 		activities = append(activities, activity)
 		log.Debug().Interface("activity", activity).Send()
 	}

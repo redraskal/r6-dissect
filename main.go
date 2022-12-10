@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"os"
 
+	"github.com/klauspost/compress/zstd"
 	"github.com/redraskal/r6-dissect/reader"
 	"github.com/redraskal/r6-dissect/types"
 	"github.com/rs/zerolog"
@@ -32,7 +34,7 @@ func main() {
 			log.Fatal().Err(err).Send()
 		}
 		activityFeed, err := c.ReadActivities()
-		if err != nil {
+		if err != nil && (err != io.EOF && err != zstd.ErrMagicMismatch) {
 			log.Fatal().Err(err).Send()
 		}
 		file, err := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC, os.ModePerm)
