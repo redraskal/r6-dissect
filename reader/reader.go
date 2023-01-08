@@ -14,70 +14,83 @@ var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
-type Container struct {
+type DissectReader struct {
 	reader     *io.Reader
 	compressed *zstd.Decoder
 	static     []byte
 	Header     types.Header `json:"header"`
 }
 
-// NewReader decompresses r using zstd and
+// NewReader decompresses in using zstd and
 // validates the dissect header.
-func NewReader(r io.Reader) (c Container, err error) {
-	compressed, err := zstd.NewReader(r)
+func NewReader(in io.Reader) (r DissectReader, err error) {
+	compressed, err := zstd.NewReader(in)
 	if err != nil {
 		return
 	}
-	c = Container{
+	r = DissectReader{
 		compressed: compressed,
-		reader:     &r,
+		reader:     &in,
 	}
-	if err = readHeaderMagic(compressed); err != nil {
+	if err = r.readHeaderMagic(); err != nil {
 		return
 	}
-	if h, err := readHeader(compressed); err == nil {
-		c.Header = h
+	if h, err := r.readHeader(); err == nil {
+		r.Header = h
+	}
+	if err = r.readPlayers(); err != nil {
+		return
 	}
 	return
 }
 
-// readHeaderMagic reads the header magic of the reader
-// and validates the dissect format.
-// If there is an error, it will be of type *ErrInvalidFile.
-func readHeaderMagic(r io.Reader) error {
-	// Checks for the dissect header.
-	b, err := readBytes(7, r)
+func (r *DissectReader) Read(n int) ([]byte, error) {
+	b := make([]byte, n)
+	len, err := r.compressed.Read(b)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	if string(b[:7]) != "dissect" {
-		return ErrInvalidFile
+	if len != n {
+		return nil, ErrInvalidLength
 	}
-	// Skips to the end of the unknown dissect versioning scheme.
-	// Probably will be replaced later when more info is uncovered.
-	// We are skipping to the end of the second sequence of 7 0x00 bytes
-	// where the string values are stored.
-	b = make([]byte, 1)
-	n := 0
-	t := 0
-	for t != 2 {
-		len, err := r.Read(b)
+	return b, nil
+}
+
+func (r *DissectReader) Seek(query []byte) error {
+	b := make([]byte, 1)
+	i := 0
+	for {
+		_, err := r.compressed.Read(b)
 		if err != nil {
 			return err
 		}
-		if len != 1 {
-			return ErrInvalidFile
+		if b[0] != query[i] {
+			i = 0
+			continue
 		}
-		if b[0] == 0x00 {
-			if n != 6 {
-				n++
-			} else {
-				n = 0
-				t++
-			}
-		} else if n > 0 {
-			n = 0
+		i++
+		if i == len(query) {
+			return nil
 		}
 	}
-	return nil
+}
+
+func (r *DissectReader) ReadInt() (int, error) {
+	b, err := r.Read(1)
+	if err != nil {
+		return -1, err
+	}
+	return int(b[0]), nil
+}
+
+func (r *DissectReader) ReadString() (string, error) {
+	size, err := r.ReadInt()
+	if err != nil {
+		return "", err
+	}
+	b, err := r.Read(size)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }

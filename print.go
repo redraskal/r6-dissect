@@ -7,25 +7,25 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func PrintHead(c reader.Container) {
-	player := c.Header.RecordingPlayer()
+func PrintHead(r reader.DissectReader) {
+	player := r.Header.RecordingPlayer()
 	if player.Username == "" {
 		player.Username = "UNKNOWN"
 	}
 	if player.ID == "" {
 		player.ID = "--"
 	}
-	log.Info().Msgf("Version:          %s/%d", c.Header.GameVersion, c.Header.CodeVersion)
+	log.Info().Msgf("Version:          %s/%d", r.Header.GameVersion, r.Header.CodeVersion)
 	log.Info().Msgf("Recording Player: %s [%s]", player.Username, player.ID)
-	log.Info().Msgf("Match ID:         %s", c.Header.MatchID)
-	log.Info().Msgf("Timestamp:        %s", c.Header.Timestamp.Local())
-	log.Info().Msgf("Match Type:       %s", c.Header.MatchType)
-	log.Info().Msgf("Game Mode:        %s", c.Header.GameMode)
-	log.Info().Msgf("Map:              %s", c.Header.Map)
+	log.Info().Msgf("Match ID:         %s", r.Header.MatchID)
+	log.Info().Msgf("Timestamp:        %s", r.Header.Timestamp.Local())
+	log.Info().Msgf("Match Type:       %s", r.Header.MatchType)
+	log.Info().Msgf("Game Mode:        %s", r.Header.GameMode)
+	log.Info().Msgf("Map:              %s", r.Header.Map)
 }
 
-func DumpStatic(c reader.Container) error {
-	static, err := c.ReadStatic()
+func DumpStatic(r reader.DissectReader) error {
+	static, err := r.ReadStatic()
 	if err != nil {
 		return err
 	}

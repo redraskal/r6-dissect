@@ -2,7 +2,6 @@ package reader
 
 import (
 	"bytes"
-	"io"
 	"strings"
 
 	"github.com/redraskal/r6-dissect/types"
@@ -13,28 +12,28 @@ var activity = []byte{0x59, 0x34, 0xe5, 0x8b, 0x04}
 var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
-func (c *Container) ReadActivities() ([]types.Activity, error) {
+func (r *DissectReader) ReadActivities() ([]types.Activity, error) {
 	activities := make([]types.Activity, 0)
 	for {
-		err := locate(activity, c.compressed)
+		err := r.Seek(activity)
 		if err != nil {
 			return activities, err
 		}
-		bombIndicator, err := readBytes(1, c.compressed)
+		bombIndicator, err := r.Read(1)
 		if err != nil {
 			return activities, err
 		}
 		_ = bytes.Equal(bombIndicator, []byte{0x01}) // TODO, figure out meaning
-		err = locate(activity2, c.compressed)
+		err = r.Seek(activity2)
 		if err != nil {
 			return activities, err
 		}
-		size, err := readByteAsInt(c.compressed)
+		size, err := r.ReadInt()
 		if err != nil {
 			return activities, err
 		}
 		if size == 0 { // kill or an unknown indicator at start of match
-			killTrace, err := readBytes(5, c.compressed)
+			killTrace, err := r.Read(5)
 			if err != nil {
 				return activities, err
 			}
@@ -42,7 +41,7 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 				log.Debug().Hex("killTrace", killTrace).Send()
 				continue
 			}
-			username, err := readString(c.compressed)
+			username, err := r.ReadString()
 			if err != nil {
 				return activities, err
 			}
@@ -51,11 +50,11 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 				continue
 			}
 			// No idea what these 15 bytes mean (kill type?)
-			_, err = readBytes(15, c.compressed)
+			_, err = r.Read(15)
 			if err != nil {
 				return activities, err
 			}
-			target, err := readString(c.compressed)
+			target, err := r.ReadString()
 			if err != nil {
 				return activities, err
 			}
@@ -64,11 +63,11 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 				Username: username,
 				Target:   target,
 			}
-			_, err = readBytes(56, c.compressed)
+			_, err = r.Read(56)
 			if err != nil {
 				return activities, err
 			}
-			headshot, err := readByteAsInt(c.compressed)
+			headshot, err := r.ReadInt()
 			if err != nil {
 				return activities, err
 			}
@@ -77,11 +76,20 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 				*headshotPtr = true
 			}
 			activity.Headshot = headshotPtr
-			activities = append(activities, activity)
-			log.Debug().Interface("activity", activity).Send()
+			found := false
+			for _, val := range activities {
+				if val.Type == types.KILL && val.Username == activity.Username && val.Target == activity.Target {
+					found = true
+					break
+				}
+			}
+			if !found {
+				activities = append(activities, activity)
+				log.Debug().Interface("activity", activity).Send()
+			}
 			continue
 		}
-		b, err := readBytes(size, c.compressed)
+		b, err := r.Read(size)
 		if err != nil {
 			return activities, err
 		}
@@ -112,44 +120,4 @@ func (c *Container) ReadActivities() ([]types.Activity, error) {
 		activities = append(activities, activity)
 		log.Debug().Interface("activity", activity).Send()
 	}
-}
-
-func locate(search []byte, r io.Reader) error {
-	b := make([]byte, 1)
-	i := 0
-	for {
-		_, err := r.Read(b)
-		if err != nil {
-			return err
-		}
-		if b[0] != search[i] {
-			i = 0
-			continue
-		}
-		i++
-		if i == len(search) {
-			return nil
-		}
-	}
-}
-
-func readByteAsInt(r io.Reader) (int, error) {
-	b, err := readBytes(1, r)
-	if err != nil {
-		return -1, err
-	}
-	return int(b[0]), nil
-}
-
-// readString reads one byte for string length and returns the resulting string.
-func readString(r io.Reader) (string, error) {
-	size, err := readByteAsInt(r)
-	if err != nil {
-		return "", err
-	}
-	b, err := readBytes(size, r)
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
 }

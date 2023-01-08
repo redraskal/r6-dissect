@@ -13,15 +13,15 @@ var ErrMissingStaticEOF = errors.New("dissect: missing static data eof")
 
 var staticEOF = []byte{0x6d, 0x88, 0x5f, 0xe5, 0xb7, 0x9c, 0xa3, 0x21}
 
-func (c *Container) ReadStatic() ([]byte, error) {
-	if len(c.static) > 0 {
-		return c.static, nil
+func (r *DissectReader) ReadStatic() ([]byte, error) {
+	if len(r.static) > 0 {
+		return r.static, nil
 	}
-	static, err := readStatic(*c.reader, c.compressed)
+	static, err := readStatic(*r.reader, r.compressed)
 	if err != nil {
 		return nil, err
 	}
-	c.static = static
+	r.static = static
 	return static, nil
 }
 

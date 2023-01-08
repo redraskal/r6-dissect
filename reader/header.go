@@ -2,7 +2,7 @@ package reader
 
 import (
 	"bytes"
-	"io"
+	"github.com/klauspost/compress/zstd"
 	"strconv"
 	"time"
 
@@ -10,28 +10,48 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// readHeaderStr reads the next string in the header.
-func readHeaderStr(r io.Reader) (string, error) {
-	b, err := readBytes(1, r)
+// readHeaderMagic reads the header magic of the reader
+// and validates the dissect format.
+// If there is an error, it will be of type *ErrInvalidFile.
+func (r *DissectReader) readHeaderMagic() error {
+	// Checks for the dissect header.
+	b, err := r.Read(7)
 	if err != nil {
-		return "", err
+		return err
 	}
-	len := int(b[0])
-	b, err = readBytes(7, r)
-	if err != nil {
-		return "", err
+	if string(b[:7]) != "dissect" {
+		return ErrInvalidFile
 	}
-	if !bytes.Equal(b, strSep) {
-		return "", ErrInvalidStringSep
+	// Skips to the end of the unknown dissect versioning scheme.
+	// Probably will be replaced later when more info is uncovered.
+	// We are skipping to the end of the second sequence of 7 0x00 bytes
+	// where the string values are stored.
+	b = make([]byte, 1)
+	n := 0
+	t := 0
+	for t != 2 {
+		len, err := r.compressed.Read(b)
+		if err != nil {
+			return err
+		}
+		if len != 1 {
+			return ErrInvalidFile
+		}
+		if b[0] == 0x00 {
+			if n != 6 {
+				n++
+			} else {
+				n = 0
+				t++
+			}
+		} else if n > 0 {
+			n = 0
+		}
 	}
-	b, err = readBytes(len, r)
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
+	return nil
 }
 
-func readHeader(r io.Reader) (types.Header, error) {
+func (r *DissectReader) readHeader() (types.Header, error) {
 	props := make(map[string]string)
 	gmSettings := make([]int, 0)
 	players := make([]types.Player, 0)
@@ -39,11 +59,11 @@ func readHeader(r io.Reader) (types.Header, error) {
 	currentPlayer := types.Player{}
 	playerData := false
 	for lastProp := false; !lastProp; {
-		k, err := readHeaderStr(r)
+		k, err := r.readHeaderString()
 		if err != nil {
 			return types.Header{}, err
 		}
-		v, err := readHeaderStr(r)
+		v, err := r.readHeaderString()
 		if err != nil {
 			return types.Header{}, err
 		}
@@ -201,14 +221,73 @@ func readHeader(r io.Reader) (types.Header, error) {
 	return h, nil
 }
 
-func readBytes(n int, r io.Reader) ([]byte, error) {
-	b := make([]byte, n)
-	len, err := r.Read(b)
+func (r *DissectReader) readPlayers() error {
+	indicator := []byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}
+	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
+	for i := 0; i < 10; i++ {
+		if err := r.Seek(indicator); err != nil && err != zstd.ErrMagicMismatch {
+			return err
+		} else if err == zstd.ErrMagicMismatch {
+			break
+		}
+		teamIndicator, err := r.ReadInt()
+		if err != nil {
+			return err
+		}
+		teamIndex := 0
+		if teamIndicator%2 == 0 {
+			teamIndex = 1
+		}
+		if _, err := r.Read(12); err != nil {
+			return err
+		}
+		username, err := r.ReadString()
+		if err != nil {
+			return err
+		}
+		if err := r.Seek(profileIDIndicator); err != nil {
+			return err
+		}
+		profileID, err := r.ReadString()
+		if err != nil {
+			return err
+		}
+		player := types.Player{
+			ProfileID: profileID,
+			Username:  username,
+			TeamIndex: teamIndex,
+		}
+		found := false
+		for _, player := range r.Header.Players {
+			if player.Username == username {
+				found = true
+				break
+			}
+		}
+		if !found {
+			r.Header.Players = append(r.Header.Players, player)
+		}
+		log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Send()
+	}
+	return nil
+}
+
+func (r *DissectReader) readHeaderString() (string, error) {
+	b, err := r.Read(1)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	if len != n {
-		return nil, ErrInvalidLength
+	len := int(b[0])
+	b, err = r.Read(7)
+	if err != nil {
+		return "", err
 	}
-	return b, nil
+	if !bytes.Equal(b, strSep) {
+		return "", ErrInvalidStringSep
+	}
+	b, err = r.Read(len)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }
