@@ -1,0 +1,215 @@
+{
+  "header": {
+    "gameVersion": "Y7S4",
+    "codeVersion": 7296873,
+    "timestamp": "2023-01-07T00:49:42Z",
+    "matchType": {
+      "name": "QUICK_MATCH",
+      "id": 1
+    },
+    "map": {
+      "name": "OREGON",
+      "id": 231702797556
+    },
+    "recordingPlayerID": "13258493764971037289",
+    "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+    "additionalTags": "423855620",
+    "gamemode": {
+      "name": "BOMB",
+      "id": 327933806
+    },
+    "roundsPerMatch": 4,
+    "roundsPerMatchOvertime": 1,
+    "roundNumber": 0,
+    "overtimeRoundNumber": 0,
+    "teams": [
+      {
+        "name": "OPPONENTS",
+        "score": 1
+      },
+      {
+        "name": "YOUR TEAM",
+        "score": 0
+      }
+    ],
+    "players": [
+      {
+        "id": "9951508089575384496",
+        "profileID": "",
+        "username": "FixedIce913",
+        "teamIndex": 1,
+        "heroName": 373332356036,
+        "alliance": 4,
+        "roleImage": 375628889901,
+        "roleName": "AZAMI",
+        "rolePortrait": 378305072064
+      },
+      {
+        "id": "14129783569949539069",
+        "profileID": "",
+        "username": "LiquoredUpNuts",
+        "teamIndex": 1,
+        "heroName": 385292995799,
+        "alliance": 4,
+        "roleImage": 26203442265,
+        "roleName": "RECRUIT",
+        "rolePortrait": 27880706866
+      },
+      {
+        "id": "1311338356192641556",
+        "profileID": "",
+        "username": "holyman54",
+        "teamIndex": 1,
+        "heroName": 38576459494,
+        "alliance": 4,
+        "roleImage": 39149215517,
+        "roleName": "LESION",
+        "rolePortrait": 39149215541
+      },
+      {
+        "id": "13258493764971037289",
+        "profileID": "",
+        "username": "redraskal",
+        "teamIndex": 1,
+        "heroName": 38576454533,
+        "alliance": 4,
+        "roleImage": 39149215373,
+        "roleName": "ECHO",
+        "rolePortrait": 39149215397
+      },
+      {
+        "id": "15953094557423569822",
+        "profileID": "",
+        "username": "BULLY_HUNTER_40",
+        "teamIndex": 1,
+        "heroName": 9147189187,
+        "alliance": 4,
+        "roleImage": 32822532305,
+        "roleName": "VALKYRIE",
+        "rolePortrait": 27880747293
+      },
+      {
+        "id": "",
+        "profileID": "8c900876-fc96-40a0-b036-22b38272491a",
+        "username": "okscams",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "26cd9a81-ff1b-43d7-a37b-71c2665ba802",
+        "username": "Kasper.FNB",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "b572a62d-9166-4fa9-9ba3-29ec5fa5ccf2",
+        "username": "LHAIRD",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "a5d17f30-047c-4d97-a501-5d141356994c",
+        "username": "SPEDAHH",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "00000000-0000-0000-0000-000000000000",
+        "username": "merg_yodel",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      }
+    ],
+    "gmSettings": [
+      245225395053,
+      245225395057,
+      245225395054
+    ],
+    "playlistCategory": 245225348295,
+    "matchID": "8630a037-5444-41e8-89f3-7c3460c9b578"
+  },
+  "activityFeed": [
+    {
+      "type": "PLAYER_LEAVE",
+      "username": "merg_yodel"
+    },
+    {
+      "type": "PLAYER_LEAVE",
+      "username": "merg_yodel"
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "LHAIRD"
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "LHAIRD"
+    },
+    {
+      "type": "KILL",
+      "username": "okscams",
+      "target": "FixedIce913",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "okscams",
+      "target": "LiquoredUpNuts",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "okscams",
+      "target": "redraskal",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "Kasper.FNB",
+      "target": "BULLY_HUNTER_40",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "holyman54",
+      "target": "SPEDAHH",
+      "headshot": true
+    },
+    {
+      "type": "KILL",
+      "username": "holyman54",
+      "target": "okscams",
+      "headshot": false
+    },
+    {
+      "type": "KILL",
+      "username": "Kasper.FNB",
+      "target": "holyman54",
+      "headshot": false
+    }
+  ]
+}
