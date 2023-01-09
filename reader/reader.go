@@ -17,6 +17,7 @@ var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 type DissectReader struct {
 	reader     *io.Reader
 	compressed *zstd.Decoder
+	offset     int
 	static     []byte
 	Header     types.Header `json:"header"`
 }
@@ -47,6 +48,7 @@ func NewReader(in io.Reader) (r DissectReader, err error) {
 func (r *DissectReader) Read(n int) ([]byte, error) {
 	b := make([]byte, n)
 	len, err := r.compressed.Read(b)
+	r.offset += len
 	if err != nil {
 		return nil, err
 	}
@@ -61,6 +63,7 @@ func (r *DissectReader) Seek(query []byte) error {
 	i := 0
 	for {
 		_, err := r.compressed.Read(b)
+		r.offset++
 		if err != nil {
 			return err
 		}

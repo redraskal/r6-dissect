@@ -31,6 +31,7 @@ func (r *DissectReader) readHeaderMagic() error {
 	t := 0
 	for t != 2 {
 		len, err := r.compressed.Read(b)
+		r.offset += len
 		if err != nil {
 			return err
 		}
@@ -224,6 +225,8 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 func (r *DissectReader) readPlayers() error {
 	indicator := []byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
+	unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08}
+	unknownComparison := HexEventComparison{}
 	for i := 0; i < 10; i++ {
 		if err := r.Seek(indicator); err != nil && err != zstd.ErrMagicMismatch {
 			return err
@@ -258,9 +261,10 @@ func (r *DissectReader) readPlayers() error {
 			TeamIndex: teamIndex,
 		}
 		found := false
-		for _, player := range r.Header.Players {
+		for i, player := range r.Header.Players {
 			if player.Username == username {
 				found = true
+				r.Header.Players[i].ProfileID = profileID
 				break
 			}
 		}
@@ -268,7 +272,16 @@ func (r *DissectReader) readPlayers() error {
 			r.Header.Players = append(r.Header.Players, player)
 		}
 		log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Send()
+		if err := r.Seek(unknownIndicator); err != nil {
+			return err
+		}
+		unknown, err := r.Read(30)
+		if err != nil {
+			return err
+		}
+		unknownComparison.Push(username, unknown)
 	}
+	unknownComparison.Flush()
 	return nil
 }
 
