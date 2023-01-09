@@ -98,7 +98,7 @@ func (r *DissectReader) ReadActivities() ([]types.Activity, error) {
 		if strings.HasPrefix(activityMessage, "Friendly Fire") {
 			continue
 		}
-		if strings.Contains(activityMessage, "bombs") {
+		if strings.Contains(activityMessage, "bombs") || strings.Contains(activityMessage, "objective") {
 			activityType = types.LOCATE_OBJECTIVE
 		}
 		if strings.Contains(activityMessage, "BattlEye") {
