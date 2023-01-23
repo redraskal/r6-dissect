@@ -265,6 +265,7 @@ func (r *DissectReader) readPlayers() error {
 			if player.Username == username {
 				found = true
 				r.Header.Players[i].ProfileID = profileID
+				r.Header.Players[i].TeamIndex = teamIndex
 				break
 			}
 		}
