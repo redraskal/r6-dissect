@@ -10,7 +10,7 @@ The data format is subject to change until a stable version is released.
 
 ## Current Features
 - Parsing match info (Game version, map, gamemode, match type, teams, players)
-- Parsing activities (Kills, headshot kills, objective locates)
+- Parsing activities (Kills, headshots, objective locates, BattlEye bans, DCs)
 - Exporting match info to JSON
 - Dumping static data to file
 
