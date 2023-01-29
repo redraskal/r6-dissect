@@ -16,10 +16,12 @@ const (
 )
 
 type Activity struct {
-	Type     ActivityType `json:"type"`
-	Username string       `json:"username,omitempty"`
-	Target   string       `json:"target,omitempty"`
-	Headshot *bool        `json:"headshot,omitempty"`
+	Type          ActivityType `json:"type"`
+	Username      string       `json:"username,omitempty"`
+	Target        string       `json:"target,omitempty"`
+	Headshot      *bool        `json:"headshot,omitempty"`
+	Time          string       `json:"time"`
+	TimeInSeconds int          `json:"timeInSeconds"`
 }
 
 func (i ActivityType) MarshalJSON() (text []byte, err error) {

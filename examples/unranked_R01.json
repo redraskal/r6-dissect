@@ -1,0 +1,230 @@
+{
+  "header": {
+    "gameVersion": "Y7S4",
+    "codeVersion": 7338571,
+    "timestamp": "2023-01-22T01:29:58Z",
+    "matchType": {
+      "name": "UNRANKED",
+      "id": 12
+    },
+    "map": {
+      "name": "CLUB_HOUSE",
+      "id": 837214085
+    },
+    "recordingPlayerID": "10079178519866882138",
+    "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+    "additionalTags": "423855620",
+    "gamemode": {
+      "name": "BOMB",
+      "id": 327933806
+    },
+    "roundsPerMatch": 6,
+    "roundsPerMatchOvertime": 3,
+    "roundNumber": 0,
+    "overtimeRoundNumber": 0,
+    "teams": [
+      {
+        "name": "YOUR TEAM",
+        "score": 1
+      },
+      {
+        "name": "OPPONENTS",
+        "score": 0
+      }
+    ],
+    "players": [
+      {
+        "id": "17158104956675634177",
+        "profileID": "95ed6407-ccb3-43bf-ae7e-8ad654350a8c",
+        "username": "TheRealRinks",
+        "teamIndex": 1,
+        "heroName": 423855925,
+        "alliance": 4,
+        "roleImage": 2461366790,
+        "roleName": "PULSE",
+        "rolePortrait": 27880706855
+      },
+      {
+        "id": "6299060601270470056",
+        "profileID": "1a2c69a5-53fc-4f6f-9213-6aef4d0f6d88",
+        "username": "RealFuseTV",
+        "teamIndex": 1,
+        "heroName": 350237875,
+        "alliance": 4,
+        "roleImage": 1326495639,
+        "roleName": "JÄGER",
+        "rolePortrait": 27880706811
+      },
+      {
+        "id": "16752849008617258116",
+        "profileID": "cdbb8973-3264-4b40-95a0-7938f3bcbeb5",
+        "username": "Cptbullettime",
+        "teamIndex": 1,
+        "heroName": 161356251582,
+        "alliance": 4,
+        "roleImage": 183220539138,
+        "roleName": "MOZZIE",
+        "rolePortrait": 174977498152
+      },
+      {
+        "id": "5802467642914731616",
+        "profileID": "",
+        "username": "imZOZO",
+        "teamIndex": 1,
+        "heroName": 423855893,
+        "alliance": 4,
+        "roleImage": 1326495635,
+        "roleName": "KAPKAN",
+        "rolePortrait": 27880706822
+      },
+      {
+        "id": "2218610830581566164",
+        "profileID": "859f10cf-656f-49c9-b68d-dac081a4dfc7",
+        "username": "AnOriginalMango",
+        "teamIndex": 1,
+        "heroName": 423855853,
+        "alliance": 4,
+        "roleImage": 1494825833,
+        "roleName": "SMOKE",
+        "rolePortrait": 27880743670
+      },
+      {
+        "id": "",
+        "profileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+        "username": "redraskal",
+        "teamIndex": 0,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "7e48ff43-2429-46d4-bfe0-0518dc6f5040",
+        "username": "Eilifint.Ve",
+        "teamIndex": 0,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "d706dbde-937e-4cf1-a595-cffd5498a532",
+        "username": "lwaxysl",
+        "teamIndex": 0,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "f2115a22-b3fe-414a-9de3-cbdc251c6486",
+        "username": "PilotSeeker2140",
+        "teamIndex": 0,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "f1ef316d-f32c-484c-9dea-a40258343612",
+        "username": "holyman54",
+        "teamIndex": 0,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      },
+      {
+        "id": "",
+        "profileID": "eb5a1699-c74a-4543-aabf-3f13ccd360af",
+        "username": "imZOZO420",
+        "teamIndex": 1,
+        "heroName": 0,
+        "alliance": 0,
+        "roleImage": 0,
+        "roleName": "",
+        "rolePortrait": 0
+      }
+    ],
+    "gmSettings": [
+      245225394808,
+      245225394853,
+      245225394902
+    ],
+    "playlistCategory": 245225348548,
+    "matchID": "324a1950-a760-4844-a392-1635c5876c0a"
+  },
+  "activityFeed": [
+    {
+      "type": "KILL",
+      "username": "Eilifint.Ve",
+      "target": "AnOriginalMango",
+      "headshot": false,
+      "time": "2:31",
+      "timeInSeconds": 151
+    },
+    {
+      "type": "KILL",
+      "username": "Eilifint.Ve",
+      "target": "Cptbullettime",
+      "headshot": true,
+      "time": "2:24",
+      "timeInSeconds": 144
+    },
+    {
+      "type": "LOCATE_OBJECTIVE",
+      "username": "Eilifint.Ve",
+      "time": "2:16",
+      "timeInSeconds": 136
+    },
+    {
+      "type": "KILL",
+      "username": "RealFuseTV",
+      "target": "lwaxysl",
+      "headshot": true,
+      "time": "1:57",
+      "timeInSeconds": 117
+    },
+    {
+      "type": "KILL",
+      "username": "Eilifint.Ve",
+      "target": "imZOZO420",
+      "headshot": false,
+      "time": "1:52",
+      "timeInSeconds": 112
+    },
+    {
+      "type": "KILL",
+      "username": "imZOZO420",
+      "target": "Eilifint.Ve",
+      "headshot": false,
+      "time": "1:45",
+      "timeInSeconds": 105
+    },
+    {
+      "type": "KILL",
+      "username": "holyman54",
+      "target": "TheRealRinks",
+      "headshot": false,
+      "time": "1:39",
+      "timeInSeconds": 99
+    },
+    {
+      "type": "KILL",
+      "username": "PilotSeeker2140",
+      "target": "RealFuseTV",
+      "headshot": false,
+      "time": "0:00",
+      "timeInSeconds": 0
+    }
+  ]
+}

@@ -2,7 +2,6 @@ package reader
 
 import (
 	"bytes"
-	"github.com/klauspost/compress/zstd"
 	"strconv"
 	"time"
 
@@ -15,7 +14,7 @@ import (
 // If there is an error, it will be of type *ErrInvalidFile.
 func (r *DissectReader) readHeaderMagic() error {
 	// Checks for the dissect header.
-	b, err := r.Read(7)
+	b, err := r.read(7)
 	if err != nil {
 		return err
 	}
@@ -222,84 +221,20 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 	return h, nil
 }
 
-func (r *DissectReader) readPlayers() error {
-	indicator := []byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}
-	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
-	unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08}
-	unknownComparison := HexEventComparison{}
-	for i := 0; i < 10; i++ {
-		if err := r.Seek(indicator); err != nil && err != zstd.ErrMagicMismatch {
-			return err
-		} else if err == zstd.ErrMagicMismatch {
-			break
-		}
-		teamIndicator, err := r.ReadInt()
-		if err != nil {
-			return err
-		}
-		teamIndex := 0
-		if teamIndicator%2 == 0 {
-			teamIndex = 1
-		}
-		if _, err := r.Read(12); err != nil {
-			return err
-		}
-		username, err := r.ReadString()
-		if err != nil {
-			return err
-		}
-		if err := r.Seek(profileIDIndicator); err != nil {
-			return err
-		}
-		profileID, err := r.ReadString()
-		if err != nil {
-			return err
-		}
-		player := types.Player{
-			ProfileID: profileID,
-			Username:  username,
-			TeamIndex: teamIndex,
-		}
-		found := false
-		for i, player := range r.Header.Players {
-			if player.Username == username {
-				found = true
-				r.Header.Players[i].ProfileID = profileID
-				r.Header.Players[i].TeamIndex = teamIndex
-				break
-			}
-		}
-		if !found {
-			r.Header.Players = append(r.Header.Players, player)
-		}
-		log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Send()
-		if err := r.Seek(unknownIndicator); err != nil {
-			return err
-		}
-		unknown, err := r.Read(30)
-		if err != nil {
-			return err
-		}
-		unknownComparison.Push(username, unknown)
-	}
-	unknownComparison.Flush()
-	return nil
-}
-
 func (r *DissectReader) readHeaderString() (string, error) {
-	b, err := r.Read(1)
+	b, err := r.read(1)
 	if err != nil {
 		return "", err
 	}
 	len := int(b[0])
-	b, err = r.Read(7)
+	b, err = r.read(7)
 	if err != nil {
 		return "", err
 	}
 	if !bytes.Equal(b, strSep) {
 		return "", ErrInvalidStringSep
 	}
-	b, err = r.Read(len)
+	b, err = r.read(len)
 	if err != nil {
 		return "", err
 	}

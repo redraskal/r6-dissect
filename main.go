@@ -30,11 +30,7 @@ func main() {
 			Header       types.Header     `json:"header"`
 			ActivityFeed []types.Activity `json:"activityFeed"`
 		}
-		if err != nil {
-			log.Fatal().Err(err).Send()
-		}
-		activityFeed, err := c.ReadActivities()
-		if err != nil && (err != io.EOF && err != zstd.ErrMagicMismatch) {
+		if err := c.Read(); err != nil && (err != io.EOF && err != zstd.ErrMagicMismatch) {
 			log.Fatal().Err(err).Send()
 		}
 		file, err := os.OpenFile(viper.GetString("output"), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
@@ -45,24 +41,17 @@ func main() {
 		encoder := json.NewEncoder(file)
 		encoder.Encode(output{
 			c.Header,
-			activityFeed,
+			c.Activities,
 		})
 		log.Info().Msg("Output saved.")
 	} else {
 		PrintHead(c)
-		if !viper.GetBool("static") {
-			return
-		}
-		if err = DumpStatic(c); err != nil {
-			log.Fatal().Err(err).Send()
-		}
 	}
 }
 
 func setupFlags() {
 	pflag.StringP("export", "x", "", "specifies the export format (json)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
-	pflag.BoolP("static", "s", false, "dumps static data to static.bin")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 	extra := len(pflag.Args())

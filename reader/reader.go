@@ -18,18 +18,22 @@ type DissectReader struct {
 	reader     *io.Reader
 	compressed *zstd.Decoder
 	offset     int
-	static     []byte
-	Header     types.Header `json:"header"`
+	queries    [][]byte
+	listeners  []func() error
+	time       int              // in seconds
+	timeRaw    string           // raw dissect format
+	Activities []types.Activity `json:"activityFeed"`
+	Header     types.Header     `json:"header"`
 }
 
 // NewReader decompresses in using zstd and
 // validates the dissect header.
-func NewReader(in io.Reader) (r DissectReader, err error) {
+func NewReader(in io.Reader) (r *DissectReader, err error) {
 	compressed, err := zstd.NewReader(in)
 	if err != nil {
 		return
 	}
-	r = DissectReader{
+	r = &DissectReader{
 		compressed: compressed,
 		reader:     &in,
 	}
@@ -39,26 +43,44 @@ func NewReader(in io.Reader) (r DissectReader, err error) {
 	if h, err := r.readHeader(); err == nil {
 		r.Header = h
 	}
-	if err = r.readPlayers(); err != nil {
-		return
-	}
+	r.listen(playerIndicator, r.readPlayer)
+	r.listen(timeIndicator, r.readTime)
+	r.listen(activityIndicator, r.readActivity)
 	return
 }
 
-func (r *DissectReader) Read(n int) ([]byte, error) {
-	b := make([]byte, n)
-	len, err := r.compressed.Read(b)
-	r.offset += len
-	if err != nil {
-		return nil, err
+// Read continues reading the replay past the header until the EOF.
+func (r *DissectReader) Read() error {
+	b := make([]byte, 1)
+	indexes := make([]int, len(r.queries))
+	for {
+		_, err := r.compressed.Read(b)
+		r.offset++
+		if err != nil {
+			return err
+		}
+		for i, query := range r.queries {
+			if b[0] != query[indexes[i]] {
+				indexes[i] = 0
+				continue
+			}
+			indexes[i]++
+			if indexes[i] == len(query) {
+				indexes[i] = 0
+				if err := r.listeners[i](); err != nil {
+					return err
+				}
+			}
+		}
 	}
-	if len != n {
-		return nil, ErrInvalidLength
-	}
-	return b, nil
 }
 
-func (r *DissectReader) Seek(query []byte) error {
+func (r *DissectReader) listen(query []byte, listener func() error) {
+	r.queries = append(r.queries, query)
+	r.listeners = append(r.listeners, listener)
+}
+
+func (r *DissectReader) seek(query []byte) error {
 	b := make([]byte, 1)
 	i := 0
 	for {
@@ -78,20 +100,33 @@ func (r *DissectReader) Seek(query []byte) error {
 	}
 }
 
-func (r *DissectReader) ReadInt() (int, error) {
-	b, err := r.Read(1)
+func (r *DissectReader) read(n int) ([]byte, error) {
+	b := make([]byte, n)
+	len, err := r.compressed.Read(b)
+	r.offset += len
+	if err != nil {
+		return nil, err
+	}
+	if len != n {
+		return nil, ErrInvalidLength
+	}
+	return b, nil
+}
+
+func (r *DissectReader) readInt() (int, error) {
+	b, err := r.read(1)
 	if err != nil {
 		return -1, err
 	}
 	return int(b[0]), nil
 }
 
-func (r *DissectReader) ReadString() (string, error) {
-	size, err := r.ReadInt()
+func (r *DissectReader) readString() (string, error) {
+	size, err := r.readInt()
 	if err != nil {
 		return "", err
 	}
-	b, err := r.Read(size)
+	b, err := r.read(size)
 	if err != nil {
 		return "", err
 	}
