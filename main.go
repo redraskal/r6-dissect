@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
+	defer r.Close()
 	c, err := reader.NewReader(r)
 	if err != nil {
 		log.Fatal().Err(err).Send()

@@ -15,15 +15,16 @@ var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
 type DissectReader struct {
-	reader     *io.Reader
-	compressed *zstd.Decoder
-	offset     int
-	queries    [][]byte
-	listeners  []func() error
-	time       int              // in seconds
-	timeRaw    string           // raw dissect format
-	Activities []types.Activity `json:"activityFeed"`
-	Header     types.Header     `json:"header"`
+	reader      *io.Reader
+	compressed  *zstd.Decoder
+	offset      int
+	queries     [][]byte
+	listeners   []func() error
+	time        int              // in seconds
+	timeRaw     string           // raw dissect format
+	partialRead bool             // reads up to the player info packets
+	Activities  []types.Activity `json:"activityFeed"`
+	Header      types.Header     `json:"header"`
 }
 
 // NewReader decompresses in using zstd and
@@ -34,8 +35,9 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 		return
 	}
 	r = &DissectReader{
-		compressed: compressed,
-		reader:     &in,
+		compressed:  compressed,
+		reader:      &in,
+		partialRead: false,
 	}
 	if err = r.readHeaderMagic(); err != nil {
 		return
@@ -72,7 +74,16 @@ func (r *DissectReader) Read() error {
 				}
 			}
 		}
+		if r.partialRead && len(r.Header.Players) == 10 {
+			return nil
+		}
 	}
+}
+
+// PartialRead continues reading the replay past the header until the full player list is read.
+func (r *DissectReader) PartialRead() error {
+	r.partialRead = true
+	return r.Read()
 }
 
 func (r *DissectReader) listen(query []byte, listener func() error) {
