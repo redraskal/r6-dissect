@@ -1,14 +1,37 @@
-package reader
+package dissect
 
 import (
 	"bytes"
-	"strings"
-
-	"github.com/redraskal/r6-dissect/types"
+	"encoding/json"
 	"github.com/rs/zerolog/log"
+	"strings"
 )
 
-var activityIndicator = []byte{0x59, 0x34, 0xe5, 0x8b, 0x04}
+type ActivityType int
+
+//go:generate stringer -type=ActivityType
+const (
+	KILL ActivityType = iota
+	DEATH
+	PLANT  // TODO
+	DEFUSE // TODO
+	LOCATE_OBJECTIVE
+	BATTLEYE
+	PLAYER_LEAVE
+)
+
+type Activity struct {
+	Type          ActivityType `json:"type"`
+	Username      string       `json:"username,omitempty"`
+	Target        string       `json:"target,omitempty"`
+	Headshot      *bool        `json:"headshot,omitempty"`
+	Time          string       `json:"time"`
+	TimeInSeconds int          `json:"timeInSeconds"`
+}
+
+func (i ActivityType) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(i.String())
+}
 
 var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
@@ -40,9 +63,9 @@ func (r *DissectReader) readActivity() error {
 		if err != nil {
 			return err
 		}
-		if len(username) == 0 {
+		empty := len(username) == 0
+		if empty {
 			log.Debug().Str("warn", "kill username empty").Send()
-			return nil
 		}
 		// No idea what these 15 bytes mean (kill type?)
 		_, err = r.read(15)
@@ -53,8 +76,22 @@ func (r *DissectReader) readActivity() error {
 		if err != nil {
 			return err
 		}
-		activity := types.Activity{
-			Type:          types.KILL,
+		if empty && len(target) > 0 {
+			activity := Activity{
+				Type:          DEATH,
+				Username:      target,
+				Time:          r.timeRaw,
+				TimeInSeconds: r.time,
+			}
+			r.Activities = append(r.Activities, activity)
+			log.Debug().Interface("activity", activity).Send()
+			log.Debug().Msg("kill username empty because of death")
+			return nil
+		} else if empty {
+			return nil
+		}
+		activity := Activity{
+			Type:          KILL,
 			Username:      username,
 			Target:        target,
 			Time:          r.timeRaw,
@@ -75,7 +112,7 @@ func (r *DissectReader) readActivity() error {
 		activity.Headshot = headshotPtr
 		// Ignore duplicates
 		for _, val := range r.Activities {
-			if val.Type == types.KILL && val.Username == activity.Username && val.Target == activity.Target {
+			if val.Type == KILL && val.Username == activity.Username && val.Target == activity.Target {
 				return nil
 			}
 		}
@@ -88,25 +125,25 @@ func (r *DissectReader) readActivity() error {
 		return err
 	}
 	activityMessage := string(b)
-	activityType := types.KILL
+	activityType := KILL
 	if strings.HasPrefix(activityMessage, "Friendly Fire") {
 		return nil
 	}
 	if strings.Contains(activityMessage, "bombs") || strings.Contains(activityMessage, "objective") {
-		activityType = types.LOCATE_OBJECTIVE
+		activityType = LOCATE_OBJECTIVE
 	}
 	if strings.Contains(activityMessage, "BattlEye") {
-		activityType = types.BATTLEYE
+		activityType = BATTLEYE
 	}
 	if strings.Contains(activityMessage, "left") {
-		activityType = types.PLAYER_LEAVE
+		activityType = PLAYER_LEAVE
 	}
 	username := strings.Split(activityMessage, " ")[0]
 	log.Debug().Str("activity_msg", activityMessage).Send()
-	if activityType == types.KILL {
+	if activityType == KILL {
 		return nil
 	}
-	activity := types.Activity{
+	activity := Activity{
 		Type:          activityType,
 		Username:      username,
 		Target:        "",

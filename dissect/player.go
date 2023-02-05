@@ -1,11 +1,9 @@
-package reader
+package dissect
 
 import (
-	"github.com/redraskal/r6-dissect/types"
 	"github.com/rs/zerolog/log"
+	"strings"
 )
-
-var playerIndicator = []byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}
 
 func (r *DissectReader) readPlayer() error {
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
@@ -25,14 +23,19 @@ func (r *DissectReader) readPlayer() error {
 	if err != nil {
 		return err
 	}
-	if err := r.seek(profileIDIndicator); err != nil {
-		return err
+	profileID := ""
+	if len(r.Header.RecordingProfileID) > 0 {
+		if err = r.seek(profileIDIndicator); err != nil {
+			return err
+		}
+		profileID, err = r.readString()
+		if err != nil {
+			return err
+		}
+	} else {
+		log.Debug().Str("warn", "profileID not found, skipping").Send()
 	}
-	profileID, err := r.readString()
-	if err != nil {
-		return err
-	}
-	player := types.Player{
+	player := Player{
 		ProfileID: profileID,
 		Username:  username,
 		TeamIndex: teamIndex,
@@ -46,7 +49,25 @@ func (r *DissectReader) readPlayer() error {
 			return nil
 		}
 	}
-	r.Header.Players = append(r.Header.Players, player)
+	// Handles weird edge case, likely to do with streamer mode nicknames :)
+	if len(r.Header.Players) == 10 {
+		log.Debug().Msg("correcting for rogue 11th player entry")
+		found := false
+		for i, player := range r.Header.Players {
+			if strings.HasPrefix(username, player.Username) {
+				r.Header.Players[i].Username = username
+				r.Header.Players[i].ProfileID = profileID
+				r.Header.Players[i].TeamIndex = teamIndex
+				found = true
+				break
+			}
+		}
+		if !found {
+			log.Warn().Str("username", username).Msg("could not find match for rogue player")
+		}
+	} else if len(username) > 0 {
+		r.Header.Players = append(r.Header.Players, player)
+	}
 	if err := r.seek(unknownIndicator); err != nil {
 		return err
 	}

@@ -1,16 +1,12 @@
-package reader
+package dissect
 
 import (
-	"errors"
+	"github.com/rs/zerolog/log"
 	"io"
+	"runtime"
 
 	"github.com/klauspost/compress/zstd"
-	"github.com/redraskal/r6-dissect/types"
 )
-
-var ErrInvalidFile = errors.New("dissect: not a dissect file")
-var ErrInvalidLength = errors.New("dissect: received an invalid length of bytes")
-var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
@@ -20,11 +16,11 @@ type DissectReader struct {
 	offset      int
 	queries     [][]byte
 	listeners   []func() error
-	time        int              // in seconds
-	timeRaw     string           // raw dissect format
-	partialRead bool             // reads up to the player info packets
-	Activities  []types.Activity `json:"activityFeed"`
-	Header      types.Header     `json:"header"`
+	time        int        // in seconds
+	timeRaw     string     // raw dissect format
+	readPartial bool       // reads up to the player info packets
+	Activities  []Activity `json:"activityFeed"`
+	Header      Header     `json:"header"`
 }
 
 // NewReader decompresses in using zstd and
@@ -37,17 +33,19 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	r = &DissectReader{
 		compressed:  compressed,
 		reader:      &in,
-		partialRead: false,
+		readPartial: false,
 	}
 	if err = r.readHeaderMagic(); err != nil {
 		return
 	}
-	if h, err := r.readHeader(); err == nil {
-		r.Header = h
+	h, err := r.readHeader()
+	r.Header = h
+	if err != nil {
+		return
 	}
-	r.listen(playerIndicator, r.readPlayer)
-	r.listen(timeIndicator, r.readTime)
-	r.listen(activityIndicator, r.readActivity)
+	r.listen([]byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}, r.readPlayer)
+	r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readTime)
+	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readActivity)
 	return
 }
 
@@ -55,12 +53,34 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 func (r *DissectReader) Read() error {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
+	var prev byte = 0x00
+	test := make(map[byte]int)
 	for {
 		_, err := r.compressed.Read(b)
 		r.offset++
 		if err != nil {
-			return err
+			// unoptimized debug stuff :)
+			var mostKey byte = 0x00
+			mostValue := 0
+			var secondMostKey byte = 0x00
+			secondMostValue := 0
+			for k, v := range test {
+				if v > mostValue {
+					mostKey = k
+					mostValue = v
+				} else if v > secondMostValue {
+					secondMostKey = k
+					secondMostValue = v
+				}
+			}
+			log.Debug().Hex("test", []byte{mostKey}).Int("val", mostValue).Send()
+			log.Debug().Hex("test2", []byte{secondMostKey}).Int("val", secondMostValue).Send()
+			return err // og
 		}
+		if prev == 0x00 && b[0] != 0x00 {
+			test[b[0]] += 1
+		}
+		prev = b[0]
 		for i, query := range r.queries {
 			if b[0] != query[indexes[i]] {
 				indexes[i] = 0
@@ -74,16 +94,19 @@ func (r *DissectReader) Read() error {
 				}
 			}
 		}
-		if r.partialRead && len(r.Header.Players) == 10 {
+		if r.readPartial && len(r.Header.Players) == 10 {
 			return nil
 		}
 	}
 }
 
-// PartialRead continues reading the replay past the header until the full player list is read.
-func (r *DissectReader) PartialRead() error {
-	r.partialRead = true
-	return r.Read()
+// ReadPartial continues reading the replay past the header until the full player list is read.
+func (r *DissectReader) ReadPartial() error {
+	r.readPartial = true
+	log.Debug().Msg("using partial read")
+	err := r.Read()
+	r.readPartial = false
+	return err
 }
 
 func (r *DissectReader) listen(query []byte, listener func() error) {
@@ -92,12 +115,22 @@ func (r *DissectReader) listen(query []byte, listener func() error) {
 }
 
 func (r *DissectReader) seek(query []byte) error {
+	start := r.offset
 	b := make([]byte, 1)
 	i := 0
 	for {
 		_, err := r.compressed.Read(b)
 		r.offset++
 		if err != nil {
+			if Ok(err) {
+				pc, _, _, ok := runtime.Caller(1)
+				details := runtime.FuncForPC(pc)
+				if ok && details != nil {
+					log.Warn().Int("bytes", r.offset-start).Interface("func", details.Name()).Msg("large seek")
+				} else {
+					log.Warn().Int("bytes", r.offset-start).Msg("large seek")
+				}
+			}
 			return err
 		}
 		if b[0] != query[i] {

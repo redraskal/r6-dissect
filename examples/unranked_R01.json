@@ -68,8 +68,8 @@
       },
       {
         "id": "5802467642914731616",
-        "profileID": "",
-        "username": "imZOZO",
+        "profileID": "eb5a1699-c74a-4543-aabf-3f13ccd360af",
+        "username": "imZOZO420",
         "teamIndex": 1,
         "heroName": 423855893,
         "alliance": 4,
@@ -137,17 +137,6 @@
         "profileID": "f1ef316d-f32c-484c-9dea-a40258343612",
         "username": "holyman54",
         "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      },
-      {
-        "id": "",
-        "profileID": "eb5a1699-c74a-4543-aabf-3f13ccd360af",
-        "username": "imZOZO420",
-        "teamIndex": 1,
         "heroName": 0,
         "alliance": 0,
         "roleImage": 0,
@@ -225,6 +214,108 @@
       "headshot": false,
       "time": "0:00",
       "timeInSeconds": 0
+    }
+  ],
+  "playerStats": [
+    {
+      "username": "TheRealRinks",
+      "teamIndex": 1,
+      "operator": "PULSE",
+      "kills": 0,
+      "died": true,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "RealFuseTV",
+      "teamIndex": 1,
+      "operator": "JÄGER",
+      "kills": 1,
+      "died": true,
+      "assists": 0,
+      "headshots": 1,
+      "headshotPercentage": 100
+    },
+    {
+      "username": "Cptbullettime",
+      "teamIndex": 1,
+      "operator": "MOZZIE",
+      "kills": 0,
+      "died": true,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "imZOZO420",
+      "teamIndex": 1,
+      "operator": "KAPKAN",
+      "kills": 1,
+      "died": true,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "AnOriginalMango",
+      "teamIndex": 1,
+      "operator": "SMOKE",
+      "kills": 0,
+      "died": true,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "redraskal",
+      "teamIndex": 0,
+      "operator": "",
+      "kills": 0,
+      "died": false,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "Eilifint.Ve",
+      "teamIndex": 0,
+      "operator": "",
+      "kills": 3,
+      "died": true,
+      "assists": 0,
+      "headshots": 1,
+      "headshotPercentage": 33.33333333333333
+    },
+    {
+      "username": "lwaxysl",
+      "teamIndex": 0,
+      "operator": "",
+      "kills": 0,
+      "died": true,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "PilotSeeker2140",
+      "teamIndex": 0,
+      "operator": "",
+      "kills": 1,
+      "died": false,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "holyman54",
+      "teamIndex": 0,
+      "operator": "",
+      "kills": 1,
+      "died": false,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
     }
   ]
 }

@@ -14,10 +14,14 @@ jobs:
         goarch: [amd64]
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@v1.20
+    - shell: bash
+      run: |
+        c=$(git rev-parse --short HEAD); b=$(git name-rev --name-only "$c"); echo -n "version=$c ($b branch)" >> $GITHUB_ENV
+    - uses: wangyoucao577/go-release-action@v1.35
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         goversion: "1.17"
         extra_files: LICENSE README.md
+        ldflags: "-X 'main.Version=${{ env.version }}'"
