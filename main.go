@@ -75,7 +75,7 @@ func setup() {
 	}
 	extra := len(pflag.Args())
 	if extra < 1 {
-		log.Fatal().Msg("Specify a valid match replay file path (*.rec)")
+		log.Fatal().Msg("Specify a valid match replay file/folder path (*.rec files)")
 	}
 	viper.Set("input", pflag.Args()[0])
 	export := viper.GetString("export")
