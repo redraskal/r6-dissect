@@ -11,10 +11,10 @@ type ActivityType int
 
 //go:generate stringer -type=ActivityType
 const (
-	KILL   ActivityType = iota
-	DEATH               // TODO
-	PLANT               // TODO
-	DEFUSE              // TODO
+	KILL ActivityType = iota
+	DEATH
+	PLANT  // TODO
+	DEFUSE // TODO
 	LOCATE_OBJECTIVE
 	BATTLEYE
 	PLAYER_LEAVE
@@ -65,9 +65,9 @@ func (r *DissectReader) readActivity() error {
 		if err != nil {
 			return err
 		}
-		if len(username) == 0 {
+		empty := len(username) == 0
+		if empty {
 			log.Debug().Str("warn", "kill username empty").Send()
-			return nil
 		}
 		// No idea what these 15 bytes mean (kill type?)
 		_, err = r.read(15)
@@ -77,6 +77,20 @@ func (r *DissectReader) readActivity() error {
 		target, err := r.readString()
 		if err != nil {
 			return err
+		}
+		if empty && len(target) > 0 {
+			activity := Activity{
+				Type:          DEATH,
+				Username:      target,
+				Time:          r.timeRaw,
+				TimeInSeconds: r.time,
+			}
+			r.Activities = append(r.Activities, activity)
+			log.Debug().Interface("activity", activity).Send()
+			log.Debug().Msg("kill username empty because of death")
+			return nil
+		} else if empty {
+			return nil
 		}
 		activity := Activity{
 			Type:          KILL,
