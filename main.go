@@ -29,7 +29,7 @@ func main() {
 		}
 		return
 	}
-	// Exports match data to file
+	// Exports match data to file or stdout (with json)
 	if s.IsDir() {
 		if err := exportMatch(input, export); err != nil {
 			log.Fatal().Err(err).Send()
@@ -40,8 +40,8 @@ func main() {
 	if strings.HasSuffix(export, ".xlsx") {
 		log.Fatal().Msg("Dissect will only export a match folder to Excel.")
 	}
-	// Exports round data to file
-	err = exportFile(input, export)
+	// Exports round data to file or stdout
+	err = exportRound(input, export)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
@@ -50,7 +50,7 @@ func main() {
 
 func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx)")
+	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx, stdout)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
 	pflag.BoolP("version", "v", false, "prints the version")
 	pflag.Parse()
@@ -73,8 +73,11 @@ func setup() {
 	}
 	viper.Set("input", pflag.Args()[0])
 	export := viper.GetString("export")
-	if len(export) > 0 && !(strings.HasSuffix(export, ".json") || strings.HasSuffix(export, ".xlsx")) {
-		log.Fatal().Msg("Specify a valid output path (*.json, *.xlsx)")
+	if len(export) > 0 && !(strings.HasSuffix(export, ".json") || strings.HasSuffix(export, ".xlsx") || export == "stdout") {
+		log.Fatal().Msg("Specify a valid output path (*.json, *.xlsx, stdout)")
+	}
+	if export == "stdout" {
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 }
 
@@ -115,13 +118,15 @@ func exportMatch(input, export string) (err error) {
 	}
 	if strings.HasSuffix(export, ".xlsx") {
 		err = m.Export(export)
-	} else {
+	} else if strings.HasSuffix(export, ".json") {
 		err = m.ExportJSON(export)
+	} else {
+		err = m.ExportStdout()
 	}
 	return
 }
 
-func exportFile(input, export string) (err error) {
+func exportRound(input, export string) (err error) {
 	f, err := os.Open(input)
 	if err != nil {
 		return
@@ -139,12 +144,17 @@ func exportFile(input, export string) (err error) {
 	if err := r.Read(); !dissect.Ok(err) {
 		return err
 	}
-	file, err := os.OpenFile(export, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		return
+	var encoder *json.Encoder = nil
+	if export == "stdout" {
+		encoder = json.NewEncoder(os.Stdout)
+	} else {
+		file, err := os.OpenFile(export, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		encoder = json.NewEncoder(file)
 	}
-	defer file.Close()
-	encoder := json.NewEncoder(file)
 	err = encoder.Encode(output{
 		r.Header,
 		r.Activities,

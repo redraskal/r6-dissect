@@ -33,7 +33,7 @@ func (r *DissectReader) readPlayer() error {
 			return err
 		}
 	} else {
-		log.Warn().Msg("profileID not found, skipping")
+		log.Debug().Str("warn", "profileID not found, skipping").Send()
 	}
 	player := Player{
 		ProfileID: profileID,

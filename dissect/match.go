@@ -211,6 +211,16 @@ func (m *MatchReader) ExportJSON(path string) error {
 		return err
 	}
 	defer f.Close()
+	encoder := json.NewEncoder(f)
+	return m.exportJSON(encoder)
+}
+
+func (m *MatchReader) ExportStdout() error {
+	encoder := json.NewEncoder(os.Stdout)
+	return m.exportJSON(encoder)
+}
+
+func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
 	type round struct {
 		Header       Header             `json:"header"`
 		ActivityFeed []Activity         `json:"activityFeed"`
@@ -228,7 +238,6 @@ func (m *MatchReader) ExportJSON(path string) error {
 			PlayerStats:  r.PlayerStats(m.WinningTeamIndex(i)),
 		})
 	}
-	encoder := json.NewEncoder(f)
 	return encoder.Encode(output{
 		Rounds:      rounds,
 		PlayerStats: m.PlayerStats(),
