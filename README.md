@@ -134,7 +134,7 @@ import (
 )
 
 func main() {
-	m, err := dissect.NewMatchReader("MatchReplay/Match-11-3-6-35/")
+	m, err := dissect.NewMatchReader("MatchReplay/Match-2022-08-28_23-43-24-133/")
 	if err != nil {
 		log.Fatal(err)
 	}
