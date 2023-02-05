@@ -316,11 +316,13 @@ func (r *DissectReader) readHeader() (Header, error) {
 	h.Teams[0].Name = props["teamname0"]
 	h.Teams[1].Name = props["teamname1"]
 	// Add playlist category
-	n, err = strconv.Atoi(props["playlistcategory"])
-	if err != nil {
-		log.Debug().Err(err).Msg("omitting playlistcategory")
+	if len(props["playlistcategory"]) > 0 {
+		n, err = strconv.Atoi(props["playlistcategory"])
+		if err != nil {
+			log.Debug().Err(err).Msg("omitting playlistcategory")
+		}
+		h.PlaylistCategory = n
 	}
-	h.PlaylistCategory = n
 	// Add match id
 	h.MatchID = props["id"]
 	// Parse team scores

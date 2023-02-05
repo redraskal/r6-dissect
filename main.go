@@ -21,15 +21,14 @@ func main() {
 	export := viper.GetString("export")
 	// Prints match info to console
 	if export == "" {
-		if head(input, s.IsDir()); err != nil {
+		if err := head(input, s.IsDir()); err != nil {
 			log.Fatal().Err(err).Send()
 		}
 		return
 	}
 	// Exports match data to file
 	if s.IsDir() {
-		err := exportMatch(input, export)
-		if err != nil {
+		if err := exportMatch(input, export); err != nil {
 			log.Fatal().Err(err).Send()
 		}
 		log.Info().Msg("Output saved.")
