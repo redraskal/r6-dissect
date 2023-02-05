@@ -9,7 +9,7 @@ type PlayerRoundStats struct {
 	Assists            int     `json:"assists"`
 	Headshots          int     `json:"headshots"`
 	HeadshotPercentage float64 `json:"headshotPercentage"`
-	OneVx              int     `json:"1vX"`
+	OneVx              int     `json:"1vX,omitempty"`
 }
 
 type PlayerMatchStats struct {

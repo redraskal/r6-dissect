@@ -138,8 +138,9 @@ func exportFile(input, export string) (err error) {
 		log.Fatal().Err(err).Send()
 	}
 	type output struct {
-		Header       dissect.Header     `json:"header"`
-		ActivityFeed []dissect.Activity `json:"activityFeed"`
+		Header       dissect.Header             `json:"header"`
+		ActivityFeed []dissect.Activity         `json:"activityFeed"`
+		PlayerStats  []dissect.PlayerRoundStats `json:"playerStats"`
 	}
 	if err := r.Read(); !dissect.Ok(err) {
 		return err
@@ -153,6 +154,7 @@ func exportFile(input, export string) (err error) {
 	err = encoder.Encode(output{
 		r.Header,
 		r.Activities,
+		r.PlayerStats(-1),
 	})
 	return
 }
