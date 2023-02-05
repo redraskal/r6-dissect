@@ -43,9 +43,9 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	if err != nil {
 		return
 	}
-	r.listen(playerIndicator, r.readPlayer)
-	r.listen(timeIndicator, r.readTime)
-	r.listen(activityIndicator, r.readActivity)
+	r.listen([]byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}, r.readPlayer)
+	r.listen([]byte{0x1e, 0xf1, 0x11, 0xab}, r.readTime)
+	r.listen([]byte{0x59, 0x34, 0xe5, 0x8b, 0x04}, r.readActivity)
 	return
 }
 

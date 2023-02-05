@@ -5,8 +5,6 @@ import (
 	"strings"
 )
 
-var timeIndicator = []byte{0x1e, 0xf1, 0x11, 0xab}
-
 func (r *DissectReader) readTime() error {
 	time, err := r.readString()
 	parts := strings.Split(time, ":")
