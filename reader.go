@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/rs/zerolog/log"
 	"io"
+	"runtime"
 
 	"github.com/klauspost/compress/zstd"
 )
@@ -37,8 +38,10 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	if err = r.readHeaderMagic(); err != nil {
 		return
 	}
-	if h, err := r.readHeader(); err == nil {
-		r.Header = h
+	h, err := r.readHeader()
+	r.Header = h
+	if err != nil {
+		return
 	}
 	r.listen(playerIndicator, r.readPlayer)
 	r.listen(timeIndicator, r.readTime)
@@ -56,6 +59,7 @@ func (r *DissectReader) Read() error {
 		_, err := r.compressed.Read(b)
 		r.offset++
 		if err != nil {
+			// unoptimized debug stuff :)
 			var mostKey byte = 0x00
 			mostValue := 0
 			var secondMostKey byte = 0x00
@@ -99,6 +103,7 @@ func (r *DissectReader) Read() error {
 // ReadPartial continues reading the replay past the header until the full player list is read.
 func (r *DissectReader) ReadPartial() error {
 	r.readPartial = true
+	log.Debug().Msg("using partial read")
 	err := r.Read()
 	r.readPartial = false
 	return err
@@ -110,12 +115,22 @@ func (r *DissectReader) listen(query []byte, listener func() error) {
 }
 
 func (r *DissectReader) seek(query []byte) error {
+	start := r.offset
 	b := make([]byte, 1)
 	i := 0
 	for {
 		_, err := r.compressed.Read(b)
 		r.offset++
 		if err != nil {
+			if Ok(err) {
+				pc, _, _, ok := runtime.Caller(1)
+				details := runtime.FuncForPC(pc)
+				if ok && details != nil {
+					log.Warn().Int("bytes", r.offset-start).Interface("func", details.Name()).Msg("large seek")
+				} else {
+					log.Warn().Int("bytes", r.offset-start).Msg("large seek")
+				}
+			}
 			return err
 		}
 		if b[0] != query[i] {

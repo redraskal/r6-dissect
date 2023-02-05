@@ -25,12 +25,17 @@ func (r *DissectReader) readPlayer() error {
 	if err != nil {
 		return err
 	}
-	if err := r.seek(profileIDIndicator); err != nil {
-		return err
-	}
-	profileID, err := r.readString()
-	if err != nil {
-		return err
+	profileID := ""
+	if len(r.Header.RecordingProfileID) > 0 {
+		if err = r.seek(profileIDIndicator); err != nil {
+			return err
+		}
+		profileID, err = r.readString()
+		if err != nil {
+			return err
+		}
+	} else {
+		log.Warn().Msg("profileID not found, skipping")
 	}
 	player := Player{
 		ProfileID: profileID,
