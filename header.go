@@ -1,13 +1,129 @@
-package reader
+package main
 
 import (
 	"bytes"
+	"encoding/json"
+	"github.com/rs/zerolog/log"
 	"strconv"
 	"time"
-
-	"github.com/redraskal/r6-dissect/types"
-	"github.com/rs/zerolog/log"
 )
+
+type Header struct {
+	GameVersion            string    `json:"gameVersion"`
+	CodeVersion            int       `json:"codeVersion"`
+	Timestamp              time.Time `json:"timestamp"`
+	MatchType              MatchType `json:"matchType"`
+	Map                    Map       `json:"map"`
+	RecordingPlayerID      string    `json:"recordingPlayerID"`
+	RecordingProfileID     string    `json:"recordingProfileID"`
+	AdditionalTags         string    `json:"additionalTags"`
+	GameMode               GameMode  `json:"gamemode"`
+	RoundsPerMatch         int       `json:"roundsPerMatch"`
+	RoundsPerMatchOvertime int       `json:"roundsPerMatchOvertime"`
+	RoundNumber            int       `json:"roundNumber"`
+	OvertimeRoundNumber    int       `json:"overtimeRoundNumber"`
+	Teams                  [2]Team   `json:"teams"`
+	Players                []Player  `json:"players"`
+	GMSettings             []int     `json:"gmSettings"`
+	PlaylistCategory       int       `json:"playlistCategory,omitempty"`
+	MatchID                string    `json:"matchID"`
+}
+
+type Team struct {
+	Name  string `json:"name"`
+	Score int    `json:"score"`
+}
+
+type Player struct {
+	ID           string `json:"id"`
+	ProfileID    string `json:"profileID"` // Ubisoft stats identifier
+	Username     string `json:"username"`
+	TeamIndex    int    `json:"teamIndex"`
+	HeroName     int    `json:"heroName"`
+	Alliance     int    `json:"alliance"`
+	RoleImage    int    `json:"roleImage"`
+	RoleName     string `json:"roleName"`
+	RolePortrait int    `json:"rolePortrait"`
+}
+
+type stringerIntMarshal struct {
+	Name string `json:"name"`
+	ID   int    `json:"id"`
+}
+
+type MatchType int
+type GameMode int
+type Map int
+
+//go:generate stringer -type=MatchType
+//go:generate stringer -type=GameMode
+//go:generate stringer -type=Map
+const (
+	QUICK_MATCH        MatchType = 1
+	RANKED             MatchType = 2
+	CUSTOM_GAME_LOCAL  MatchType = 7
+	CUSTOM_GAME_ONLINE MatchType = 8
+	UNRANKED           MatchType = 12
+
+	BOMB        GameMode = 327933806
+	SECURE_AREA GameMode = 1983085217
+	HOSTAGE     GameMode = 2838806006
+
+	CLUB_HOUSE         Map = 837214085
+	KAFE_DOSTOYEVSKY   Map = 1378191338
+	KANAL              Map = 1460220617
+	YACHT              Map = 1767965020
+	PRESIDENTIAL_PLANE Map = 2609218856
+	CONSULATE          Map = 2609221242
+	BARTLETT_U         Map = 2697268122
+	COASTLINE          Map = 42090092951
+	TOWER              Map = 53627213396
+	VILLA              Map = 88107330328
+	FORTRESS           Map = 126196841359
+	HEREFORD_BASE      Map = 127951053400
+	THEME_PARK         Map = 199824623654
+	OREGON             Map = 231702797556
+	HOUSE              Map = 237873412352
+	CHALET             Map = 259816839773
+	SKYSCRAPER         Map = 276279025182
+	BORDER             Map = 305979357167
+	FAVELA             Map = 329867321446
+	BANK               Map = 355496559878
+	OUTBACK            Map = 362605108559
+	EMERALD_PLAINS     Map = 365284490964
+	STADIUM_BRAVO      Map = 270063334510
+	NIGHTHAVEN_LABS    Map = 378595635123
+)
+
+func (i MatchType) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i GameMode) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i Map) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (h Header) RecordingPlayer() Player {
+	for _, val := range h.Players {
+		if val.ID == h.RecordingPlayerID {
+			return val
+		}
+	}
+	return Player{}
+}
 
 // readHeaderMagic reads the header magic of the reader
 // and validates the dissect format.
@@ -51,28 +167,28 @@ func (r *DissectReader) readHeaderMagic() error {
 	return nil
 }
 
-func (r *DissectReader) readHeader() (types.Header, error) {
+func (r *DissectReader) readHeader() (Header, error) {
 	props := make(map[string]string)
 	gmSettings := make([]int, 0)
-	players := make([]types.Player, 0)
+	players := make([]Player, 0)
 	// Loops until the last property is mapped.
-	currentPlayer := types.Player{}
+	currentPlayer := Player{}
 	playerData := false
 	for lastProp := false; !lastProp; {
 		k, err := r.readHeaderString()
 		if err != nil {
-			return types.Header{}, err
+			return Header{}, err
 		}
 		v, err := r.readHeaderString()
 		if err != nil {
-			return types.Header{}, err
+			return Header{}, err
 		}
 		if k == "playerid" {
 			if playerData {
 				players = append(players, currentPlayer)
 			}
 			playerData = true
-			currentPlayer = types.Player{}
+			currentPlayer = Player{}
 		}
 		if (k == "playlistcategory" || k == "id") && playerData {
 			players = append(players, currentPlayer)
@@ -84,7 +200,7 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 			} else {
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				gmSettings = append(gmSettings, n)
 			}
@@ -97,25 +213,25 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 			case "team":
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				currentPlayer.TeamIndex = n
 			case "heroname":
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				currentPlayer.HeroName = n
 			case "alliance":
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				currentPlayer.Alliance = n
 			case "roleimage":
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				currentPlayer.RoleImage = n
 			case "rolename":
@@ -123,15 +239,15 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 			case "roleportrait":
 				n, err := strconv.Atoi(v)
 				if err != nil {
-					return types.Header{}, err
+					return Header{}, err
 				}
 				currentPlayer.RolePortrait = n
 			}
 		}
 		_, lastProp = props["teamscore1"]
 	}
-	h := types.Header{
-		Teams:      [2]types.Team{},
+	h := Header{
+		Teams:      [2]Team{},
 		Players:    players,
 		GMSettings: gmSettings,
 	}
@@ -154,13 +270,13 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 	if err != nil {
 		return h, err
 	}
-	h.MatchType = types.MatchType(n)
+	h.MatchType = MatchType(n)
 	// Parse map
 	n, err = strconv.Atoi(props["worldid"])
 	if err != nil {
 		return h, err
 	}
-	h.Map = types.Map(n)
+	h.Map = Map(n)
 	// Add recording player id
 	h.RecordingPlayerID = props["recordingplayerid"]
 	h.RecordingProfileID = props["recordingprofileid"]
@@ -171,7 +287,7 @@ func (r *DissectReader) readHeader() (types.Header, error) {
 	if err != nil {
 		return h, err
 	}
-	h.GameMode = types.GameMode(n)
+	h.GameMode = GameMode(n)
 	// Parse rounds per match
 	n, err = strconv.Atoi(props["roundspermatch"])
 	if err != nil {

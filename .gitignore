@@ -9,6 +9,7 @@
 *.rec
 # Dissect output files
 /*.json
+/*.xlsx
 *.bin
 # Memory dumps
 *.dmp
