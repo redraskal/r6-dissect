@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"encoding/json"
 	"github.com/redraskal/r6-dissect/dissect"
 	"os"
@@ -13,8 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-//go:embed version.txt
-var version embed.FS
+var Version = "dev"
 
 func main() {
 	setup()
@@ -52,10 +50,6 @@ func main() {
 
 func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	v, err := version.ReadFile("version.txt")
-	if err != nil {
-		log.Warn().Err(err).Send()
-	}
 	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
 	pflag.BoolP("version", "v", false, "prints the version")
@@ -69,7 +63,7 @@ func setup() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 	if viper.GetBool("version") {
-		log.Info().Msgf("r6-dissect version: %s", string(v))
+		log.Info().Msgf("r6-dissect version: %s", Version)
 		log.Info().Msg("https://github.com/redraskal/r6-dissect")
 		os.Exit(0)
 	}
