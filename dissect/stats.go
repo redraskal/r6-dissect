@@ -3,12 +3,24 @@ package dissect
 type PlayerRoundStats struct {
 	Username           string  `json:"username"`
 	TeamIndex          int     `json:"teamIndex"`
+	Operator           string  `json:"operator"`
 	Kills              int     `json:"kills"`
 	Died               bool    `json:"died"`
 	Assists            int     `json:"assists"`
 	Headshots          int     `json:"headshots"`
 	HeadshotPercentage float64 `json:"headshotPercentage"`
 	OneVx              int     `json:"1vX"`
+}
+
+type PlayerMatchStats struct {
+	Username           string  `json:"username"`
+	TeamIndex          int     `json:"teamIndex"`
+	Rounds             int     `json:"rounds"`
+	Kills              int     `json:"kills"`
+	Deaths             int     `json:"deaths"`
+	Assists            int     `json:"assists"`
+	Headshots          int     `json:"headshots"`
+	HeadshotPercentage float64 `json:"headshotPercentage"`
 }
 
 // OpeningKill returns the first player to kill.
@@ -70,6 +82,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 		stats = append(stats, PlayerRoundStats{
 			Username:  p.Username,
 			TeamIndex: p.TeamIndex,
+			Operator:  p.RoleName,
 		})
 		index[p.Username] = i
 	}
@@ -135,6 +148,32 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 			}
 		}
 		stats[lastWinnerStanding].OneVx = oneVx
+	}
+	return stats
+}
+
+func (m *MatchReader) PlayerStats() []PlayerMatchStats {
+	stats := make([]PlayerMatchStats, 0)
+	index := make(map[string]int)
+	for i, r := range m.rounds {
+		for _, p := range r.PlayerStats(m.WinningTeamIndex(i)) {
+			if len(stats) == 0 || stats[index[p.Username]].Username != p.Username {
+				stats = append(stats, PlayerMatchStats{
+					Username:  p.Username,
+					TeamIndex: p.TeamIndex,
+				})
+				index[p.Username] = len(index)
+			}
+			i = index[p.Username]
+			stats[i].Rounds += 1
+			stats[i].Kills += p.Kills
+			if p.Died {
+				stats[i].Deaths += 1
+			}
+			stats[i].Assists += p.Assists
+			stats[i].Headshots += p.Headshots
+			stats[i].HeadshotPercentage = (float64(stats[i].Headshots) / float64(stats[i].Kills)) * 100
+		}
 	}
 	return stats
 }

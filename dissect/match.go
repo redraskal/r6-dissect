@@ -122,9 +122,10 @@ func (m *MatchReader) Export(path string) error {
 		c.Right(1).Str("Hs%")
 		c.Right(1).Str("Headshots")
 		c.Right(1).Str("1vX")
+		c.Right(1).Str("Operator")
 		winningTeamIndex := m.WinningTeamIndex(i)
 		for _, s := range r.PlayerStats(winningTeamIndex) {
-			c.Down(1).Left(7).Str(s.Username)
+			c.Down(1).Left(8).Str(s.Username)
 			c.Right(1).Int(s.TeamIndex)
 			c.Right(1).Int(s.Kills)
 			c.Right(1).Bool(s.Died)
@@ -132,9 +133,10 @@ func (m *MatchReader) Export(path string) error {
 			c.Right(1).Float(s.HeadshotPercentage, 3)
 			c.Right(1).Int(s.Headshots)
 			c.Right(1).Int(s.OneVx)
+			c.Right(1).Str(s.Operator)
 			log.Debug().Interface("round_player_stats", s).Send()
 		}
-		c.Down(2).Left(7).Heading("Other statistics")
+		c.Down(2).Left(8).Heading("Other statistics")
 		c.Down(1).Str("Name")
 		c.Right(1).Str("Value")
 		c.Right(1).Str("Time")
@@ -167,7 +169,7 @@ func (m *MatchReader) Export(path string) error {
 			}
 			c.Right(1).Bool(headshot)
 		}
-		c.Reset().Right(9).Heading("Trades")
+		c.Reset().Right(10).Heading("Trades")
 		c.Down(1).Str("Player 1")
 		c.Right(1).Str("Player 2")
 		c.Right(1).Str("Time")
@@ -177,6 +179,27 @@ func (m *MatchReader) Export(path string) error {
 			c.Right(1).Str(trade[0].Target)
 			c.Right(1).Str(trade[0].Time)
 		}
+	}
+	c.Sheet("Match")
+	c.Heading("Statistics")
+	c.Down(1).Str("Player")
+	c.Right(1).Str("Team Index")
+	c.Right(1).Str("Rounds")
+	c.Right(1).Str("Kills")
+	c.Right(1).Str("Deaths")
+	c.Right(1).Str("Assists (TODO)")
+	c.Right(1).Str("Hs%")
+	c.Right(1).Str("Headshots")
+	for _, s := range m.PlayerStats() {
+		c.Down(1).Left(8).Str(s.Username)
+		c.Right(1).Int(s.TeamIndex)
+		c.Right(1).Int(s.Rounds)
+		c.Right(1).Int(s.Kills)
+		c.Right(1).Int(s.Deaths)
+		c.Right(1).Int(s.Assists)
+		c.Right(1).Float(s.HeadshotPercentage, 3)
+		c.Right(1).Int(s.Headshots)
+		log.Debug().Interface("match_player_stats", s).Send()
 	}
 	f.SetActiveSheet(first)
 	return f.SaveAs(path)
