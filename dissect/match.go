@@ -212,22 +212,26 @@ func (m *MatchReader) ExportJSON(path string) error {
 	}
 	defer f.Close()
 	type round struct {
-		Header       Header     `json:"header"`
-		ActivityFeed []Activity `json:"activityFeed"`
+		Header       Header             `json:"header"`
+		ActivityFeed []Activity         `json:"activityFeed"`
+		PlayerStats  []PlayerRoundStats `json:"playerStats"`
 	}
 	type output struct {
-		Rounds []round `json:"rounds"`
+		Rounds      []round            `json:"rounds"`
+		PlayerStats []PlayerMatchStats `json:"playerStats"`
 	}
 	rounds := make([]round, 0)
-	for _, r := range m.rounds {
+	for i, r := range m.rounds {
 		rounds = append(rounds, round{
 			Header:       r.Header,
 			ActivityFeed: r.Activities,
+			PlayerStats:  r.PlayerStats(m.WinningTeamIndex(i)),
 		})
 	}
 	encoder := json.NewEncoder(f)
 	return encoder.Encode(output{
-		Rounds: rounds,
+		Rounds:      rounds,
+		PlayerStats: m.PlayerStats(),
 	})
 }
 

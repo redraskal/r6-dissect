@@ -94,7 +94,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 			if *a.Headshot {
 				stats[i].Headshots += 1
 			}
-			stats[i].HeadshotPercentage = (float64(stats[i].Headshots) / float64(stats[i].Kills)) * 100
+			stats[i].HeadshotPercentage = headshotPercentage(stats[i].Headshots, stats[i].Kills)
 			stats[index[a.Target]].Died = true
 			lastDeath = index[a.Target]
 		} else if a.Type == DEATH {
@@ -172,8 +172,15 @@ func (m *MatchReader) PlayerStats() []PlayerMatchStats {
 			}
 			stats[i].Assists += p.Assists
 			stats[i].Headshots += p.Headshots
-			stats[i].HeadshotPercentage = (float64(stats[i].Headshots) / float64(stats[i].Kills)) * 100
+			stats[i].HeadshotPercentage = headshotPercentage(stats[i].Headshots, stats[i].Kills)
 		}
 	}
 	return stats
+}
+
+func headshotPercentage(headshots, kills int) float64 {
+	if kills == 0 {
+		return 0
+	}
+	return float64(headshots) / float64(kills) * 100
 }
