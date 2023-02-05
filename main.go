@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/redraskal/r6-dissect/dissect"
 	"os"
 	"strings"
 
@@ -71,12 +72,12 @@ func setup() {
 
 func head(input string, dir bool) (err error) {
 	if dir {
-		m, err := NewMatchReader(input)
+		m, err := dissect.NewMatchReader(input)
 		if err != nil {
 			return err
 		}
 		defer m.Close()
-		m.FirstRound().head()
+		m.FirstRound().Head()
 		return err
 	}
 	f, err := os.Open(input)
@@ -84,24 +85,24 @@ func head(input string, dir bool) (err error) {
 		return
 	}
 	defer f.Close()
-	r, err := NewReader(f)
+	r, err := dissect.NewReader(f)
 	if err != nil {
 		return
 	}
-	if err := r.ReadPartial(); !Ok(err) {
+	if err := r.ReadPartial(); !dissect.Ok(err) {
 		return err
 	}
-	r.head()
+	r.Head()
 	return
 }
 
 func exportMatch(input, export string) (err error) {
-	m, err := NewMatchReader(input)
+	m, err := dissect.NewMatchReader(input)
 	if err != nil {
 		return
 	}
 	defer m.Close()
-	if err := m.Read(); !Ok(err) {
+	if err := m.Read(); !dissect.Ok(err) {
 		return err
 	}
 	if strings.HasSuffix(export, ".xlsx") {
@@ -118,15 +119,15 @@ func exportFile(input, export string) (err error) {
 		return
 	}
 	defer f.Close()
-	r, err := NewReader(f)
+	r, err := dissect.NewReader(f)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
 	type output struct {
-		Header       Header     `json:"header"`
-		ActivityFeed []Activity `json:"activityFeed"`
+		Header       dissect.Header     `json:"header"`
+		ActivityFeed []dissect.Activity `json:"activityFeed"`
 	}
-	if err := r.Read(); !Ok(err) {
+	if err := r.Read(); !dissect.Ok(err) {
 		return err
 	}
 	file, err := os.OpenFile(export, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)

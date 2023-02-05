@@ -1,10 +1,10 @@
-package main
+package dissect
 
 import (
 	"github.com/rs/zerolog/log"
 )
 
-func (r *DissectReader) head() {
+func (r *DissectReader) Head() {
 	username := "N/A"
 	for _, p := range r.Header.Players {
 		if p.ProfileID == r.Header.RecordingProfileID {

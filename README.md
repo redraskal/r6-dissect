@@ -100,8 +100,8 @@ package main
 import (
 	"log"
 	"os"
-	
-	"github.com/redraskal/r6-dissect"
+
+	"github.com/redraskal/r6-dissect/dissect"
 )
 
 func main() {
@@ -129,8 +129,8 @@ package main
 
 import (
 	"log"
-	
-	"github.com/redraskal/r6-dissect"
+
+	"github.com/redraskal/r6-dissect/dissect"
 )
 
 func main() {
