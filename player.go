@@ -62,7 +62,7 @@ func (r *DissectReader) readPlayer() error {
 		if !found {
 			log.Warn().Str("username", username).Msg("could not find match for rogue player")
 		}
-	} else {
+	} else if len(username) > 0 {
 		r.Header.Players = append(r.Header.Players, player)
 	}
 	if err := r.seek(unknownIndicator); err != nil {
