@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
 	"github.com/redraskal/r6-dissect/dissect"
 	"os"
@@ -11,6 +12,9 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
+
+//go:embed version.txt
+var version embed.FS
 
 func main() {
 	setup()
@@ -48,11 +52,26 @@ func main() {
 
 func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	v, err := version.ReadFile("version.txt")
+	if err != nil {
+		log.Warn().Err(err).Send()
+	}
 	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
+	pflag.BoolP("version", "v", false, "prints the version")
 	pflag.Parse()
 	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
 		log.Fatal().Err(err)
+	}
+	if viper.GetBool("debug") {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	} else {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	}
+	if viper.GetBool("version") {
+		log.Info().Msgf("r6-dissect version: %s", string(v))
+		log.Info().Msg("https://github.com/redraskal/r6-dissect")
+		os.Exit(0)
 	}
 	extra := len(pflag.Args())
 	if extra < 1 {
@@ -62,11 +81,6 @@ func setup() {
 	export := viper.GetString("export")
 	if len(export) > 0 && !(strings.HasSuffix(export, ".json") || strings.HasSuffix(export, ".xlsx")) {
 		log.Fatal().Msg("Specify a valid output path (*.json, *.xlsx)")
-	}
-	if viper.GetBool("debug") {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	} else {
-		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 }
 
