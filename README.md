@@ -11,8 +11,7 @@ The data format is subject to change until a stable version is released.
 ## Current Features
 - Parsing match info (Game version, map, gamemode, match type, teams, players)
 - Parsing activities with timestamps (Kills, headshots, objective locates, BattlEye bans, DCs)
-- Exporting match stats to Excel
-- Exporting round stats to JSON
+- Exporting match stats to JSON, Excel, or stdout (JSON)
 
 ## Planned Features
 - Track plants/disables
@@ -25,7 +24,7 @@ The data format is subject to change until a stable version is released.
 
 ## CLI Usage
 Print a match overview by specifying a match folder or .rec file:
-```
+```bash
 r6-dissect Match-2023-01-22_01-28-13-135/
 # or
 r6-dissect Match-2023-01-22_01-28-13-135-R01.rec
@@ -40,11 +39,11 @@ r6-dissect Match-2023-01-22_01-28-13-135-R01.rec
 1:15PM INF Map:              CLUB_HOUSE
 ```
 You can export round stats to a JSON file:
-```
+```bash
 r6-dissect Match-2023-01-22_01-28-13-135-R01.rec -x round.json
 ```
 Example:
-```
+```json
 {
   "header": {
     "gameVersion": "Y7S4",
@@ -84,13 +83,21 @@ Example:
 ...
 ```
 Or the entire match:
-```
+```bash
 r6-dissect Match-2023-01-22_01-28-13-135/ -x match.json
 ```
 Export an Excel spreadsheet by swapping .json with .xlsx.
-```
+```bash
 r6-dissect Match-2023-01-22_01-28-13-135-R01/ -x match.xlsx
 ```
+Output JSON to the console (stdout) with the following syntax:
+```bash
+# entire match
+r6-dissect Match-2023-01-22_01-28-13-135-R01/ -x stdout
+# or single round
+r6-dissect Match-2023-01-22_01-28-13-135-R01/Match-2023-01-22_01-28-13-135-R01.rec -x stdout
+```
+
 See example outputs in [/examples](https://github.com/redraskal/r6-dissect/tree/main/examples).
 
 ## Importing a .rec file
