@@ -14,7 +14,7 @@ type Header struct {
 	Timestamp              time.Time `json:"timestamp"`
 	MatchType              MatchType `json:"matchType"`
 	Map                    Map       `json:"map"`
-	RecordingPlayerID      string    `json:"recordingPlayerID"`
+	RecordingPlayerID      uint64    `json:"recordingPlayerID"`
 	RecordingProfileID     string    `json:"recordingProfileID"`
 	AdditionalTags         string    `json:"additionalTags"`
 	GameMode               GameMode  `json:"gamemode"`
@@ -35,7 +35,7 @@ type Team struct {
 }
 
 type Player struct {
-	ID           string `json:"id"`
+	ID           uint64 `json:"id"`
 	ProfileID    string `json:"profileID"` // Ubisoft stats identifier
 	Username     string `json:"username"`
 	TeamIndex    int    `json:"teamIndex"`
@@ -207,7 +207,11 @@ func (r *DissectReader) readHeader() (Header, error) {
 		} else {
 			switch k {
 			case "playerid":
-				currentPlayer.ID = v
+				n, err := strconv.ParseUint(v, 10, 64)
+				if err != nil {
+					return Header{}, err
+				}
+				currentPlayer.ID = n
 			case "playername":
 				currentPlayer.Username = v
 			case "team":
@@ -278,7 +282,11 @@ func (r *DissectReader) readHeader() (Header, error) {
 	}
 	h.Map = Map(n)
 	// Add recording player id
-	h.RecordingPlayerID = props["recordingplayerid"]
+	u, err := strconv.ParseUint(props["recordingplayerid"], 10, 64)
+	if err != nil {
+		return h, err
+	}
+	h.RecordingPlayerID = u
 	h.RecordingProfileID = props["recordingprofileid"]
 	// Add additional tags
 	h.AdditionalTags = props["additionaltags"]

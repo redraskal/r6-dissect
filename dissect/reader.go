@@ -1,11 +1,11 @@
 package dissect
 
 import (
+	"encoding/binary"
+	"github.com/klauspost/compress/zstd"
 	"github.com/rs/zerolog/log"
 	"io"
 	"runtime"
-
-	"github.com/klauspost/compress/zstd"
 )
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
@@ -175,4 +175,16 @@ func (r *DissectReader) readString() (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func (r *DissectReader) readUint64() (uint64, error) {
+	_, err := r.read(1) // size- unnecessary since we already know the length
+	if err != nil {
+		return 0, err
+	}
+	b, err := r.read(8)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint64(b), nil
 }
