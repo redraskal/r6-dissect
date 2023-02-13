@@ -1,12 +1,22 @@
 package dissect
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"github.com/xuri/excelize/v2"
 	"strings"
 )
+
+func (r *DissectReader) playerIndexById(id []byte) int {
+	for i, p := range r.Header.Players {
+		if bytes.Equal(id, p.id) {
+			return i
+		}
+	}
+	return -1
+}
 
 // hexEventComparison - Debugging tool
 type hexEventComparison struct {

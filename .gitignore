@@ -11,6 +11,7 @@
 /*.json
 /*.xlsx
 *.bin
+*.txt
 # Memory dumps
 *.dmp
 

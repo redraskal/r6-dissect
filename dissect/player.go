@@ -22,9 +22,16 @@ func (r *DissectReader) readPlayer() error {
 	if err != nil {
 		return err
 	}
+	if _, err := r.read(67); err != nil {
+		return err
+	}
+	id, err := r.read(4)
+	if err != nil {
+		return err
+	}
 	// Older versions of siege did not include profile ids
 	profileID := ""
-	var id uint64
+	var unknownId uint64
 	if len(r.Header.RecordingProfileID) > 0 {
 		if err = r.seek(profileIDIndicator); err != nil {
 			return err
@@ -37,7 +44,7 @@ func (r *DissectReader) readPlayer() error {
 		if err != nil {
 			return err
 		}
-		id, err = r.readUint64()
+		unknownId, err = r.readUint64()
 		if err != nil {
 			return err
 		}
@@ -45,16 +52,17 @@ func (r *DissectReader) readPlayer() error {
 		log.Debug().Str("warn", "profileID not found, skipping").Send()
 	}
 	player := Player{
-		ID:        id,
+		ID:        unknownId,
 		ProfileID: profileID,
 		Username:  username,
 		TeamIndex: teamIndex,
+		id:        id,
 	}
-	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Send()
+	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
 	for i, player := range r.Header.Players {
 		if player.Username == username {
-			r.Header.Players[i].ID = id
+			r.Header.Players[i].ID = unknownId
 			r.Header.Players[i].ProfileID = profileID
 			r.Header.Players[i].TeamIndex = teamIndex
 			found = true

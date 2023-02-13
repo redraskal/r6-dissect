@@ -22,8 +22,16 @@ func main() {
 		log.Fatal().Err(err).Send()
 	}
 	export := viper.GetString("export")
+	dump := viper.GetString("dump")
 	// Prints match info to console
 	if export == "" {
+		if len(dump) > 0 {
+			if err := dumpRound(input, dump); err != nil {
+				log.Fatal().Err(err).Send()
+			}
+			log.Info().Msgf("Dump saved to %s.", dump)
+			return
+		}
 		if err := head(input, s.IsDir()); err != nil {
 			log.Fatal().Err(err).Send()
 		}
@@ -52,6 +60,7 @@ func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx, stdout)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
+	pflag.StringP("dump", "p", "", "dumps packets to specified file")
 	pflag.BoolP("version", "v", false, "prints the version")
 	pflag.Parse()
 	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
@@ -161,4 +170,25 @@ func exportRound(input, export string) (err error) {
 		r.PlayerStats(-1),
 	})
 	return
+}
+
+func dumpRound(input string, output string) error {
+	f, err := os.Open(input)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	r, err := dissect.NewReader(f)
+	if err != nil {
+		return err
+	}
+	out, err := os.OpenFile(output, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+	if err := r.Dump(out); !dissect.Ok(err) {
+		return err
+	}
+	return nil
 }

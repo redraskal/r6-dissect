@@ -44,6 +44,7 @@ type Player struct {
 	RoleImage    int    `json:"roleImage"`
 	RoleName     string `json:"roleName"`
 	RolePortrait int    `json:"rolePortrait"`
+	id           []byte // dissect player id at end of packet (4 bytes)
 }
 
 type stringerIntMarshal struct {

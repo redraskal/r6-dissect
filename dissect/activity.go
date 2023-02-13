@@ -13,8 +13,11 @@ type ActivityType int
 const (
 	KILL ActivityType = iota
 	DEATH
-	PLANT  // TODO
-	DEFUSE // TODO
+	DEFUSE_PLANT_START
+	DEFUSE_PLANT_COMPLETE
+	DEFUSE_CANCEL_START
+	DEFUSE_CANCEL_COMPLETE
+	DEFUSE
 	LOCATE_OBJECTIVE
 	BATTLEYE
 	PLAYER_LEAVE
@@ -26,7 +29,7 @@ type Activity struct {
 	Target        string       `json:"target,omitempty"`
 	Headshot      *bool        `json:"headshot,omitempty"`
 	Time          string       `json:"time"`
-	TimeInSeconds int          `json:"timeInSeconds"`
+	TimeInSeconds float64      `json:"timeInSeconds"`
 }
 
 func (i ActivityType) MarshalJSON() (text []byte, err error) {

@@ -11,16 +11,17 @@ import (
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
 type DissectReader struct {
-	reader      *io.Reader
-	compressed  *zstd.Decoder
-	offset      int
-	queries     [][]byte
-	listeners   []func() error
-	time        int        // in seconds
-	timeRaw     string     // raw dissect format
-	readPartial bool       // reads up to the player info packets
-	Activities  []Activity `json:"activityFeed"`
-	Header      Header     `json:"header"`
+	reader                 *io.Reader
+	compressed             *zstd.Decoder
+	offset                 int
+	queries                [][]byte
+	listeners              []func() error
+	time                   float64 // in seconds
+	timeRaw                string  // raw dissect format
+	lastDefusePlanterIndex int
+	readPartial            bool       // reads up to the player info packets
+	Activities             []Activity `json:"activityFeed"`
+	Header                 Header     `json:"header"`
 }
 
 // NewReader decompresses in using zstd and
@@ -46,6 +47,7 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	r.listen([]byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}, r.readPlayer)
 	r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readTime)
 	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readActivity)
+	r.listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefusePlantTimer)
 	return
 }
 
@@ -59,23 +61,7 @@ func (r *DissectReader) Read() error {
 		_, err := r.compressed.Read(b)
 		r.offset++
 		if err != nil {
-			// unoptimized debug stuff :)
-			var mostKey byte = 0x00
-			mostValue := 0
-			var secondMostKey byte = 0x00
-			secondMostValue := 0
-			for k, v := range test {
-				if v > mostValue {
-					mostKey = k
-					mostValue = v
-				} else if v > secondMostValue {
-					secondMostKey = k
-					secondMostValue = v
-				}
-			}
-			log.Debug().Hex("test", []byte{mostKey}).Int("val", mostValue).Send()
-			log.Debug().Hex("test2", []byte{secondMostKey}).Int("val", secondMostValue).Send()
-			return err // og
+			return err
 		}
 		if prev == 0x00 && b[0] != 0x00 {
 			test[b[0]] += 1

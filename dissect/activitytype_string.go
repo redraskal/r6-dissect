@@ -10,16 +10,19 @@ func _() {
 	var x [1]struct{}
 	_ = x[KILL-0]
 	_ = x[DEATH-1]
-	_ = x[PLANT-2]
-	_ = x[DEFUSE-3]
-	_ = x[LOCATE_OBJECTIVE-4]
-	_ = x[BATTLEYE-5]
-	_ = x[PLAYER_LEAVE-6]
+	_ = x[DEFUSE_PLANT_START-2]
+	_ = x[DEFUSE_PLANT_COMPLETE-3]
+	_ = x[DEFUSE_CANCEL_START-4]
+	_ = x[DEFUSE_CANCEL_COMPLETE-5]
+	_ = x[DEFUSE-6]
+	_ = x[LOCATE_OBJECTIVE-7]
+	_ = x[BATTLEYE-8]
+	_ = x[PLAYER_LEAVE-9]
 }
 
-const _ActivityType_name = "KILLDEATHPLANTDEFUSELOCATE_OBJECTIVEBATTLEYEPLAYER_LEAVE"
+const _ActivityType_name = "KILLDEATHDEFUSE_PLANT_STARTDEFUSE_PLANT_COMPLETEDEFUSE_CANCEL_STARTDEFUSE_CANCEL_COMPLETEDEFUSELOCATE_OBJECTIVEBATTLEYEPLAYER_LEAVE"
 
-var _ActivityType_index = [...]uint8{0, 4, 9, 14, 20, 36, 44, 56}
+var _ActivityType_index = [...]uint8{0, 4, 9, 27, 48, 67, 89, 95, 111, 119, 131}
 
 func (i ActivityType) String() string {
 	if i < 0 || i >= ActivityType(len(_ActivityType_index)-1) {

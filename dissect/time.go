@@ -14,7 +14,7 @@ func (r *DissectReader) readTime() error {
 		if err != nil {
 			return err
 		}
-		r.time = int(seconds)
+		r.time = seconds
 		r.timeRaw = parts[0]
 		return nil
 	}
@@ -26,7 +26,7 @@ func (r *DissectReader) readTime() error {
 	if err != nil {
 		return err
 	}
-	r.time = (minutes * 60) + seconds
+	r.time = float64((minutes * 60) + seconds)
 	r.timeRaw = time
 	return nil
 }
