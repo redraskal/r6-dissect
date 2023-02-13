@@ -15,14 +15,17 @@ func (r *DissectReader) readPlayer() error {
 	if teamIndicator%2 != 0 {
 		teamIndex = 1
 	}
-	if _, err := r.read(12); err != nil {
+	if _, err = r.read(12); err != nil {
 		return err
 	}
 	username, err := r.readString()
 	if err != nil {
 		return err
 	}
-	if _, err := r.read(67); err != nil {
+	if err = r.seek([]byte{0x00, 0x1A}); err != nil {
+		return err
+	}
+	if _, err = r.read(4); err != nil {
 		return err
 	}
 	id, err := r.read(4)
