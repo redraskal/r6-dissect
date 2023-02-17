@@ -10,11 +10,10 @@ The data format is subject to change until a stable version is released.
 
 ## Current Features
 - Parsing match info (Game version, map, gamemode, match type, teams, players)
-- Parsing activities with timestamps (Kills, headshots, objective locates, BattlEye bans, DCs)
+- Parsing activities with timestamps (Kills, headshots, objective locates, defuser plants/disables, BattlEye bans, DCs)
 - Exporting match stats to JSON, Excel, or stdout (JSON)
 
 ## Planned Features
-- Track plants/disables
 - UI alternative
 - Track bullet hits/misses
 - Track movement packets
