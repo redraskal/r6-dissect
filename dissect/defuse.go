@@ -2,9 +2,10 @@ package dissect
 
 import (
 	"github.com/rs/zerolog/log"
+	"strings"
 )
 
-func (r *DissectReader) readDefusePlantTimer() error {
+func (r *DissectReader) readDefuserTimer() error {
 	timer, err := r.readString()
 	if err != nil {
 		return err
@@ -17,26 +18,36 @@ func (r *DissectReader) readDefusePlantTimer() error {
 		return err
 	}
 	i := r.playerIndexById(id)
-	if i > -1 && timer == "6.967" {
+	a := DEFUSER_PLANT_START
+	if r.planted {
+		a = DEFUSER_DISABLE_START
+	}
+	if i > -1 {
 		activity := Activity{
-			Type:          DEFUSE_PLANT_START,
+			Type:          a,
 			Username:      r.Header.Players[i].Username,
 			Time:          r.timeRaw,
 			TimeInSeconds: r.time,
 		}
 		r.Activities = append(r.Activities, activity)
 		log.Debug().Interface("activity", activity).Send()
-		r.lastDefusePlanterIndex = i
+		r.lastDefuserPlayerIndex = i
 	}
-	if timer == "0.000" {
-		activity := Activity{
-			Type:          DEFUSE_PLANT_COMPLETE,
-			Username:      r.Header.Players[r.lastDefusePlanterIndex].Username,
-			Time:          r.timeRaw,
-			TimeInSeconds: r.time,
-		}
-		r.Activities = append(r.Activities, activity)
-		log.Debug().Interface("activity", activity).Send()
+	if !strings.HasPrefix(timer, "0.00") {
+		return nil
 	}
+	a = DEFUSER_DISABLE_COMPLETE
+	if !r.planted {
+		a = DEFUSER_PLANT_COMPLETE
+		r.planted = true
+	}
+	activity := Activity{
+		Type:          a,
+		Username:      r.Header.Players[r.lastDefuserPlayerIndex].Username,
+		Time:          r.timeRaw,
+		TimeInSeconds: r.time,
+	}
+	r.Activities = append(r.Activities, activity)
+	log.Debug().Interface("activity", activity).Send()
 	return nil
 }
