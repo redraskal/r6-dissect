@@ -146,9 +146,9 @@ func exportRound(input, export string) (err error) {
 		log.Fatal().Err(err).Send()
 	}
 	type output struct {
-		Header       dissect.Header             `json:"header"`
-		ActivityFeed []dissect.Activity         `json:"activityFeed"`
-		PlayerStats  []dissect.PlayerRoundStats `json:"playerStats"`
+		Header        dissect.Header             `json:"header"`
+		MatchFeedback []dissect.MatchUpdate      `json:"matchFeedback"`
+		PlayerStats   []dissect.PlayerRoundStats `json:"stats"`
 	}
 	if err := r.Read(); !dissect.Ok(err) {
 		return err
@@ -166,7 +166,7 @@ func exportRound(input, export string) (err error) {
 	}
 	err = encoder.Encode(output{
 		r.Header,
-		r.Activities,
+		r.MatchFeedback,
 		r.PlayerStats(-1),
 	})
 	return

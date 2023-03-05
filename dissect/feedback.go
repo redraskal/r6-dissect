@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-type ActivityType int
+type MatchUpdateType int
 
-//go:generate stringer -type=ActivityType
+//go:generate stringer -type=MatchUpdateType
 const (
-	KILL ActivityType = iota
+	KILL MatchUpdateType = iota
 	DEATH
 	DEFUSER_PLANT_START
 	DEFUSER_PLANT_COMPLETE
@@ -20,25 +20,27 @@ const (
 	LOCATE_OBJECTIVE
 	BATTLEYE
 	PLAYER_LEAVE
+	OTHER
 )
 
-type Activity struct {
-	Type          ActivityType `json:"type"`
-	Username      string       `json:"username,omitempty"`
-	Target        string       `json:"target,omitempty"`
-	Headshot      *bool        `json:"headshot,omitempty"`
-	Time          string       `json:"time"`
-	TimeInSeconds float64      `json:"timeInSeconds"`
+type MatchUpdate struct {
+	Type          MatchUpdateType `json:"type"`
+	Username      string          `json:"username,omitempty"`
+	Target        string          `json:"target,omitempty"`
+	Headshot      *bool           `json:"headshot,omitempty"`
+	Time          string          `json:"time"`
+	TimeInSeconds float64         `json:"timeInSeconds"`
+	Message       string          `json:"message,omitempty"`
 }
 
-func (i ActivityType) MarshalJSON() (text []byte, err error) {
+func (i MatchUpdateType) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(i.String())
 }
 
 var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
-func (r *DissectReader) readActivity() error {
+func (r *DissectReader) readMatchFeedback() error {
 	bombIndicator, err := r.read(1)
 	if err != nil {
 		return err
@@ -79,20 +81,20 @@ func (r *DissectReader) readActivity() error {
 			return err
 		}
 		if empty && len(target) > 0 {
-			activity := Activity{
+			u := MatchUpdate{
 				Type:          DEATH,
 				Username:      target,
 				Time:          r.timeRaw,
 				TimeInSeconds: r.time,
 			}
-			r.Activities = append(r.Activities, activity)
-			log.Debug().Interface("activity", activity).Send()
+			r.MatchFeedback = append(r.MatchFeedback, u)
+			log.Debug().Interface("match_update", u).Send()
 			log.Debug().Msg("kill username empty because of death")
 			return nil
 		} else if empty {
 			return nil
 		}
-		activity := Activity{
+		u := MatchUpdate{
 			Type:          KILL,
 			Username:      username,
 			Target:        target,
@@ -111,48 +113,47 @@ func (r *DissectReader) readActivity() error {
 		if headshot == 1 {
 			*headshotPtr = true
 		}
-		activity.Headshot = headshotPtr
+		u.Headshot = headshotPtr
 		// Ignore duplicates
-		for _, val := range r.Activities {
-			if val.Type == KILL && val.Username == activity.Username && val.Target == activity.Target {
+		for _, val := range r.MatchFeedback {
+			if val.Type == KILL && val.Username == u.Username && val.Target == u.Target {
 				return nil
 			}
 		}
-		r.Activities = append(r.Activities, activity)
-		log.Debug().Interface("activity", activity).Send()
+		r.MatchFeedback = append(r.MatchFeedback, u)
+		log.Debug().Interface("match_update", u).Send()
 		return nil
 	}
 	b, err := r.read(size)
 	if err != nil {
 		return err
 	}
-	activityMessage := string(b)
-	activityType := KILL
-	if strings.HasPrefix(activityMessage, "Friendly Fire") {
-		return nil
+	msg := string(b)
+	t := OTHER
+	if strings.Contains(msg, "bombs") || strings.Contains(msg, "objective") {
+		t = LOCATE_OBJECTIVE
 	}
-	if strings.Contains(activityMessage, "bombs") || strings.Contains(activityMessage, "objective") {
-		activityType = LOCATE_OBJECTIVE
+	if strings.Contains(msg, "BattlEye") {
+		t = BATTLEYE
 	}
-	if strings.Contains(activityMessage, "BattlEye") {
-		activityType = BATTLEYE
+	if strings.Contains(msg, "left") {
+		t = PLAYER_LEAVE
 	}
-	if strings.Contains(activityMessage, "left") {
-		activityType = PLAYER_LEAVE
+	username := strings.Split(msg, " ")[0]
+	if t == OTHER {
+		username = ""
+	} else {
+		msg = ""
 	}
-	username := strings.Split(activityMessage, " ")[0]
-	log.Debug().Str("activity_msg", activityMessage).Send()
-	if activityType == KILL {
-		return nil
-	}
-	activity := Activity{
-		Type:          activityType,
+	u := MatchUpdate{
+		Type:          t,
 		Username:      username,
 		Target:        "",
 		Time:          r.timeRaw,
 		TimeInSeconds: r.time,
+		Message:       msg,
 	}
-	r.Activities = append(r.Activities, activity)
-	log.Debug().Interface("activity", activity).Send()
+	r.MatchFeedback = append(r.MatchFeedback, u)
+	log.Debug().Interface("match_update", u).Send()
 	return nil
 }

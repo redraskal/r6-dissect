@@ -20,9 +20,9 @@ type DissectReader struct {
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
 	planted                bool
-	readPartial            bool       // reads up to the player info packets
-	Activities             []Activity `json:"activityFeed"`
-	Header                 Header     `json:"header"`
+	readPartial            bool          // reads up to the player info packets
+	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
+	Header                 Header        `json:"header"`
 }
 
 // NewReader decompresses in using zstd and
@@ -51,7 +51,7 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	} else {
 		r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
 	}
-	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readActivity)
+	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readMatchFeedback)
 	r.listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
 	return
 }

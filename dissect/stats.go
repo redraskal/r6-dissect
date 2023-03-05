@@ -24,45 +24,45 @@ type PlayerMatchStats struct {
 }
 
 // OpeningKill returns the first player to kill.
-func (r *DissectReader) OpeningKill() Activity {
-	for _, a := range r.Activities {
+func (r *DissectReader) OpeningKill() MatchUpdate {
+	for _, a := range r.MatchFeedback {
 		if a.Type == KILL {
 			return a
 		}
 	}
-	return Activity{}
+	return MatchUpdate{}
 }
 
 // OpeningDeath returns the first player to die (KILL or DEATH activity).
-func (r *DissectReader) OpeningDeath() Activity {
-	for _, a := range r.Activities {
+func (r *DissectReader) OpeningDeath() MatchUpdate {
+	for _, a := range r.MatchFeedback {
 		if a.Type == KILL || a.Type == DEATH {
 			return a
 		}
 	}
-	return Activity{}
+	return MatchUpdate{}
 }
 
 // Trades returns KILL Activity pairs of trades.
-func (r *DissectReader) Trades() [][]Activity {
-	trades := make([][]Activity, 0)
-	var previous = Activity{}
-	for _, a := range r.Activities {
+func (r *DissectReader) Trades() [][]MatchUpdate {
+	trades := make([][]MatchUpdate, 0)
+	var previous = MatchUpdate{}
+	for _, a := range r.MatchFeedback {
 		if a.Type == KILL && previous.Target == a.Username {
-			trades = append(trades, []Activity{previous, a})
+			trades = append(trades, []MatchUpdate{previous, a})
 		}
 	}
 	return trades
 }
 
-func (r *DissectReader) KillsAndDeaths() []Activity {
-	activities := make([]Activity, 0)
-	for _, a := range r.Activities {
+func (r *DissectReader) KillsAndDeaths() []MatchUpdate {
+	MatchFeedback := make([]MatchUpdate, 0)
+	for _, a := range r.MatchFeedback {
 		if a.Type == KILL || a.Type == DEATH {
-			activities = append(activities, a)
+			MatchFeedback = append(MatchFeedback, a)
 		}
 	}
-	return activities
+	return MatchFeedback
 }
 
 func (r *DissectReader) NumPlayers(team int) int {
@@ -87,7 +87,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 		index[p.Username] = i
 	}
 	lastDeath := -1
-	for _, a := range r.Activities {
+	for _, a := range r.MatchFeedback {
 		i := index[a.Username]
 		if a.Type == KILL {
 			stats[i].Kills += 1
@@ -127,7 +127,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 		username := stats[lastWinnerStanding].Username
 		teamLeft := r.NumPlayers(roundWinTeamIndex)
 		oneVx := 0
-		for _, a := range r.Activities {
+		for _, a := range r.MatchFeedback {
 			if a.Type == KILL && stats[index[a.Target]].TeamIndex == roundWinTeamIndex {
 				teamLeft--
 			} else if a.Type == DEATH && stats[index[a.Username]].TeamIndex == roundWinTeamIndex {

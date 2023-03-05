@@ -15,7 +15,7 @@ type Header struct {
 	MatchType              MatchType `json:"matchType"`
 	Map                    Map       `json:"map"`
 	RecordingPlayerID      uint64    `json:"recordingPlayerID"`
-	RecordingProfileID     string    `json:"recordingProfileID"`
+	RecordingProfileID     string    `json:"recordingProfileID,omitempty"`
 	AdditionalTags         string    `json:"additionalTags"`
 	GameMode               GameMode  `json:"gamemode"`
 	RoundsPerMatch         int       `json:"roundsPerMatch"`
@@ -35,15 +35,15 @@ type Team struct {
 }
 
 type Player struct {
-	ID           uint64 `json:"id"`
-	ProfileID    string `json:"profileID"` // Ubisoft stats identifier
+	ID           uint64 `json:"id,omitempty"`
+	ProfileID    string `json:"profileID,omitempty"` // Ubisoft stats identifier
 	Username     string `json:"username"`
 	TeamIndex    int    `json:"teamIndex"`
-	HeroName     int    `json:"heroName"`
+	HeroName     int    `json:"heroName,omitempty"`
 	Alliance     int    `json:"alliance"`
-	RoleImage    int    `json:"roleImage"`
-	RoleName     string `json:"roleName"`
-	RolePortrait int    `json:"rolePortrait"`
+	RoleImage    int    `json:"roleImage,omitempty"`
+	RoleName     string `json:"roleName,omitempty"`
+	RolePortrait int    `json:"rolePortrait,omitempty"`
 	id           []byte // dissect player id at end of packet (4 bytes)
 }
 

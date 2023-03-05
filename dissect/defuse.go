@@ -23,14 +23,14 @@ func (r *DissectReader) readDefuserTimer() error {
 		a = DEFUSER_DISABLE_START
 	}
 	if i > -1 {
-		activity := Activity{
+		u := MatchUpdate{
 			Type:          a,
 			Username:      r.Header.Players[i].Username,
 			Time:          r.timeRaw,
 			TimeInSeconds: r.time,
 		}
-		r.Activities = append(r.Activities, activity)
-		log.Debug().Interface("activity", activity).Send()
+		r.MatchFeedback = append(r.MatchFeedback, u)
+		log.Debug().Interface("match_update", u).Send()
 		r.lastDefuserPlayerIndex = i
 	}
 	if !strings.HasPrefix(timer, "0.00") {
@@ -41,13 +41,13 @@ func (r *DissectReader) readDefuserTimer() error {
 		a = DEFUSER_PLANT_COMPLETE
 		r.planted = true
 	}
-	activity := Activity{
+	u := MatchUpdate{
 		Type:          a,
 		Username:      r.Header.Players[r.lastDefuserPlayerIndex].Username,
 		Time:          r.timeRaw,
 		TimeInSeconds: r.time,
 	}
-	r.Activities = append(r.Activities, activity)
-	log.Debug().Interface("activity", activity).Send()
+	r.MatchFeedback = append(r.MatchFeedback, u)
+	log.Debug().Interface("match_update", u).Send()
 	return nil
 }
