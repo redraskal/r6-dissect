@@ -18,6 +18,15 @@ func (r *DissectReader) playerIndexById(id []byte) int {
 	return -1
 }
 
+func (r *DissectReader) playerIndexByUsername(username string) int {
+	for i, p := range r.Header.Players {
+		if p.Username == username {
+			return i
+		}
+	}
+	return -1
+}
+
 // hexEventComparison - Debugging tool
 type hexEventComparison struct {
 	usernames []string
