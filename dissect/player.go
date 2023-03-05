@@ -7,12 +7,12 @@ import (
 func (r *DissectReader) readPlayer() error {
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
 	//unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08} // maybe player appearance?
-	teamIndicator, err := r.readInt()
+	_, err := r.readInt()
 	if err != nil {
 		return err
 	}
 	teamIndex := 0
-	if teamIndicator%2 != 0 {
+	if r.playersRead > 4 {
 		teamIndex = 1
 	}
 	if _, err = r.read(12); err != nil {
@@ -54,7 +54,7 @@ func (r *DissectReader) readPlayer() error {
 	} else {
 		log.Debug().Str("warn", "profileID not found, skipping").Send()
 	}
-	player := Player{
+	p := Player{
 		ID:        unknownId,
 		ProfileID: profileID,
 		Username:  username,
@@ -63,8 +63,8 @@ func (r *DissectReader) readPlayer() error {
 	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
-	for i, player := range r.Header.Players {
-		if player.Username == username {
+	for i, p := range r.Header.Players {
+		if p.Username == username {
 			r.Header.Players[i].ID = unknownId
 			r.Header.Players[i].ProfileID = profileID
 			r.Header.Players[i].TeamIndex = teamIndex
@@ -74,11 +74,12 @@ func (r *DissectReader) readPlayer() error {
 		}
 	}
 	if !found && len(username) > 0 {
-		r.Header.Players = append(r.Header.Players, player)
+		r.Header.Players = append(r.Header.Players, p)
 	}
 	//if err := r.seek(unknownIndicator); err != nil {
 	//	return err
 	//}
 	//_, err = r.read(30) // unknown data, see above
+	r.playersRead++
 	return err
 }

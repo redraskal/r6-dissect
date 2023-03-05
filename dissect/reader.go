@@ -20,7 +20,8 @@ type DissectReader struct {
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
 	planted                bool
-	readPartial            bool          // reads up to the player info packets
+	readPartial            bool // reads up to the player info packets
+	playersRead            int
 	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
 	Header                 Header        `json:"header"`
 }
