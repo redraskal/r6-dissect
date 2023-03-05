@@ -1,11 +1,22 @@
 package dissect
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
 
 func (r *DissectReader) readTime() error {
+	time, err := r.readUint32()
+	if err != nil {
+		return err
+	}
+	r.time = float64(time)
+	r.timeRaw = fmt.Sprintf("%d:%02d", time/60, time%60)
+	return nil
+}
+
+func (r *DissectReader) readY7Time() error {
 	time, err := r.readString()
 	parts := strings.Split(time, ":")
 	if len(parts) == 1 {

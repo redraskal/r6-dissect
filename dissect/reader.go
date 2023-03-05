@@ -46,7 +46,11 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 		return
 	}
 	r.listen([]byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}, r.readPlayer)
-	r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readTime)
+	if h.CodeVersion >= 7408213 { // Y8S1
+		r.listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
+	} else {
+		r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
+	}
 	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readActivity)
 	r.listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
 	return
@@ -156,6 +160,18 @@ func (r *DissectReader) readString() (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func (r *DissectReader) readUint32() (uint32, error) {
+	_, err := r.read(1) // size- unnecessary since we already know the length
+	if err != nil {
+		return 0, err
+	}
+	b, err := r.read(4)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint32(b), nil
 }
 
 func (r *DissectReader) readUint64() (uint64, error) {
