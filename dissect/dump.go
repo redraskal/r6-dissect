@@ -10,6 +10,9 @@ import (
 // Dump dumps packet information to w. Packets are separated line-by-line into sections based on game time.
 func (r *DissectReader) Dump(w io.StringWriter) error {
 	time := []byte{0x1E, 0xF1, 0x11, 0xAB}
+	if r.Header.CodeVersion >= 7408213 { // Y8S1
+		time = []byte{0x1F, 0x07, 0xEF, 0xC9}
+	}
 	timeIndex := 0
 	username := []byte{0x22, 0x07, 0x94}
 	usernameIndex := 0
@@ -31,8 +34,14 @@ func (r *DissectReader) Dump(w io.StringWriter) error {
 			timeIndex++
 			if timeIndex == 4 {
 				timeIndex = 0
-				if err := r.readTime(); err != nil {
-					return err
+				if r.Header.CodeVersion >= 7408213 { // Y8S1
+					if err := r.readTime(); err != nil {
+						return err
+					}
+				} else {
+					if err := r.readY7Time(); err != nil {
+						return err
+					}
 				}
 				_, err := w.WriteString("\n\n" + r.timeRaw + ":\n---------------\n")
 				if err != nil {
