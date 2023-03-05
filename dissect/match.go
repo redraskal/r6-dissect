@@ -222,7 +222,7 @@ func (m *MatchReader) ExportStdout() error {
 
 func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
 	type round struct {
-		Header        Header             `json:"header"`
+		Header
 		MatchFeedback []MatchUpdate      `json:"matchFeedback"`
 		PlayerStats   []PlayerRoundStats `json:"stats"`
 	}

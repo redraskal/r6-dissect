@@ -146,7 +146,7 @@ func exportRound(input, export string) (err error) {
 		log.Fatal().Err(err).Send()
 	}
 	type output struct {
-		Header        dissect.Header             `json:"header"`
+		dissect.Header
 		MatchFeedback []dissect.MatchUpdate      `json:"matchFeedback"`
 		PlayerStats   []dissect.PlayerRoundStats `json:"stats"`
 	}

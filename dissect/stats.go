@@ -2,8 +2,8 @@ package dissect
 
 type PlayerRoundStats struct {
 	Username           string  `json:"username"`
-	TeamIndex          int     `json:"teamIndex"`
-	Operator           string  `json:"operator"`
+	TeamIndex          int     `json:"-"`
+	Operator           string  `json:"-"`
 	Kills              int     `json:"kills"`
 	Died               bool    `json:"died"`
 	Assists            int     `json:"assists"`
@@ -14,7 +14,7 @@ type PlayerRoundStats struct {
 
 type PlayerMatchStats struct {
 	Username           string  `json:"username"`
-	TeamIndex          int     `json:"teamIndex"`
+	TeamIndex          int     `json:"-"`
 	Rounds             int     `json:"rounds"`
 	Kills              int     `json:"kills"`
 	Deaths             int     `json:"deaths"`
