@@ -64,9 +64,10 @@ func (r *DissectReader) readPlayer() error {
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
 	for i, p := range r.Header.Players {
-		if p.Username == username {
+		if p.Username == username || p.ID == unknownId {
 			r.Header.Players[i].ID = unknownId
 			r.Header.Players[i].ProfileID = profileID
+			r.Header.Players[i].Username = username
 			r.Header.Players[i].TeamIndex = teamIndex
 			r.Header.Players[i].id = id
 			found = true
