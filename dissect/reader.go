@@ -46,7 +46,8 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	if err != nil {
 		return
 	}
-	r.listen([]byte{0x22, 0x95, 0x1C, 0x16, 0x50, 0x08}, r.readPlayer)
+	r.listen([]byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}, r.readPlayer)
+	r.listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
 	if h.CodeVersion >= 7408213 { // Y8S1
 		r.listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
 	} else {

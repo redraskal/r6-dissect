@@ -34,6 +34,7 @@ type Team struct {
 	Score        int          `json:"score"`
 	Won          bool         `json:"won"`
 	WinCondition WinCondition `json:"winCondition,omitempty"`
+	Site         string       `json:"site,omitempty"`
 }
 
 type Player struct {
@@ -46,6 +47,7 @@ type Player struct {
 	RoleImage    int    `json:"roleImage,omitempty"`
 	RoleName     string `json:"roleName,omitempty"`
 	RolePortrait int    `json:"rolePortrait,omitempty"`
+	Spawn        string `json:"spawn,omitempty"`
 	id           []byte // dissect player id at end of packet (4 bytes)
 }
 

@@ -1,34 +1,46 @@
 package dissect
 
 import (
+	"bytes"
 	"github.com/rs/zerolog/log"
 )
 
 func (r *DissectReader) readPlayer() error {
+	spawnIndicator := []byte{0xAF, 0x98, 0x99, 0xCA}
+	usernameIndicator := []byte{0x22, 0x85, 0xCF, 0x36, 0x3A}
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
 	//unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08} // maybe player appearance?
-	_, err := r.readInt()
+	id, err := r.read(4)
 	if err != nil {
+		return err
+	}
+	if err := r.seek(spawnIndicator); err != nil {
+		return err
+	}
+	spawn, err := r.readString()
+	if err != nil {
+		return err
+	}
+	if spawn == "" {
+		if _, err := r.read(10); err != nil {
+			return err
+		}
+		valid, err := r.read(1)
+		if err != nil {
+			return err
+		}
+		if !bytes.Equal(valid, []byte{0x1B}) {
+			return nil
+		}
+	}
+	if err := r.seek(usernameIndicator); err != nil {
 		return err
 	}
 	teamIndex := 0
 	if r.playersRead > 4 {
 		teamIndex = 1
 	}
-	if _, err = r.read(12); err != nil {
-		return err
-	}
 	username, err := r.readString()
-	if err != nil {
-		return err
-	}
-	if err = r.seek([]byte{0x00, 0x1A}); err != nil {
-		return err
-	}
-	if _, err = r.read(4); err != nil {
-		return err
-	}
-	id, err := r.read(4)
 	if err != nil {
 		return err
 	}
@@ -59,6 +71,7 @@ func (r *DissectReader) readPlayer() error {
 		ProfileID: profileID,
 		Username:  username,
 		TeamIndex: teamIndex,
+		Spawn:     spawn,
 		id:        id,
 	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Hex("id", id).Send()
@@ -69,6 +82,7 @@ func (r *DissectReader) readPlayer() error {
 			r.Header.Players[i].ProfileID = profileID
 			r.Header.Players[i].Username = username
 			r.Header.Players[i].TeamIndex = teamIndex
+			r.Header.Players[i].Spawn = spawn
 			r.Header.Players[i].id = id
 			found = true
 			break
