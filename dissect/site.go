@@ -25,9 +25,9 @@ func (r *DissectReader) readSpawn() error {
 		for i, p := range r.Header.Players {
 			if p.Alliance == 4 {
 				r.Header.Players[i].Spawn = formatted
-				r.Header.Teams[p.TeamIndex].Site = formatted
 			}
 		}
+		r.Header.Site = formatted
 		return nil
 	}
 	return nil

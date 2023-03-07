@@ -14,6 +14,7 @@ type Header struct {
 	Timestamp              time.Time `json:"timestamp"`
 	MatchType              MatchType `json:"matchType"`
 	Map                    Map       `json:"map"`
+	Site                   string    `json:"site,omitempty"`
 	RecordingPlayerID      uint64    `json:"recordingPlayerID"`
 	RecordingProfileID     string    `json:"recordingProfileID,omitempty"`
 	AdditionalTags         string    `json:"additionalTags"`
@@ -34,7 +35,7 @@ type Team struct {
 	Score        int          `json:"score"`
 	Won          bool         `json:"won"`
 	WinCondition WinCondition `json:"winCondition,omitempty"`
-	Site         string       `json:"site,omitempty"`
+	Role         TeamRole     `json:"role,omitempty"`
 }
 
 type Player struct {
@@ -60,6 +61,7 @@ type MatchType int
 type GameMode int
 type Map int
 type WinCondition string
+type TeamRole string
 
 //go:generate stringer -type=MatchType
 //go:generate stringer -type=GameMode
@@ -106,6 +108,9 @@ const (
 	DEFUSED_BOMB      WinCondition = "DEFUSED_BOMB"
 	EXTRACTED_HOSTAGE WinCondition = "EXTRACTED_HOSTAGE" // TODO
 	TIME              WinCondition = "TIME"
+
+	ATTACK  TeamRole = "ATTACK"
+	DEFENSE TeamRole = "DEFENSE"
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {

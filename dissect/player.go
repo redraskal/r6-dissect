@@ -74,16 +74,23 @@ func (r *DissectReader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
+	if spawn == "" {
+		p.Alliance = 4
+		r.Header.Teams[teamIndex].Role = DEFENSE
+	} else {
+		r.Header.Teams[teamIndex].Role = ATTACK
+	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
-	for i, p := range r.Header.Players {
-		if p.Username == username || p.ID == unknownId {
-			r.Header.Players[i].ID = unknownId
-			r.Header.Players[i].ProfileID = profileID
-			r.Header.Players[i].Username = username
-			r.Header.Players[i].TeamIndex = teamIndex
-			r.Header.Players[i].Spawn = spawn
-			r.Header.Players[i].id = id
+	for i, existing := range r.Header.Players {
+		if existing.Username == p.Username || existing.ID == p.ID {
+			r.Header.Players[i].ID = p.ID
+			r.Header.Players[i].ProfileID = p.ProfileID
+			r.Header.Players[i].Username = p.Username
+			r.Header.Players[i].TeamIndex = p.TeamIndex
+			r.Header.Players[i].Alliance = p.Alliance
+			r.Header.Players[i].Spawn = p.Spawn
+			r.Header.Players[i].id = p.id
 			found = true
 			break
 		}
