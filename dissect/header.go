@@ -39,17 +39,18 @@ type Team struct {
 }
 
 type Player struct {
-	ID           uint64 `json:"id,omitempty"`
-	ProfileID    string `json:"profileID,omitempty"` // Ubisoft stats identifier
-	Username     string `json:"username"`
-	TeamIndex    int    `json:"teamIndex"`
-	HeroName     int    `json:"heroName,omitempty"`
-	Alliance     int    `json:"alliance"`
-	RoleImage    int    `json:"roleImage,omitempty"`
-	RoleName     string `json:"roleName,omitempty"`
-	RolePortrait int    `json:"rolePortrait,omitempty"`
-	Spawn        string `json:"spawn,omitempty"`
-	id           []byte // dissect player id at end of packet (4 bytes)
+	ID           uint64   `json:"id,omitempty"`
+	ProfileID    string   `json:"profileID,omitempty"` // Ubisoft stats identifier
+	Username     string   `json:"username"`
+	TeamIndex    int      `json:"teamIndex"`
+	Operator     Operator `json:"operator"`
+	HeroName     int      `json:"heroName,omitempty"`
+	Alliance     int      `json:"alliance"`
+	RoleImage    int      `json:"roleImage,omitempty"`
+	RoleName     string   `json:"roleName,omitempty"`
+	RolePortrait int      `json:"rolePortrait,omitempty"`
+	Spawn        string   `json:"spawn,omitempty"`
+	id           []byte   // dissect player id at end of packet (4 bytes)
 }
 
 type stringerIntMarshal struct {
@@ -62,55 +63,94 @@ type GameMode int
 type Map int
 type WinCondition string
 type TeamRole string
+type Operator uint64
 
 //go:generate stringer -type=MatchType
 //go:generate stringer -type=GameMode
 //go:generate stringer -type=Map
+//go:generate stringer -type=Operator
 const (
-	QUICK_MATCH        MatchType = 1
-	RANKED             MatchType = 2
-	CUSTOM_GAME_LOCAL  MatchType = 7
-	CUSTOM_GAME_ONLINE MatchType = 8
-	UNRANKED           MatchType = 12
+	QuickMatch       MatchType = 1
+	Ranked           MatchType = 2
+	CustomGameLocal  MatchType = 7
+	CustomGameOnline MatchType = 8
+	Unranked         MatchType = 12
 
-	BOMB        GameMode = 327933806
-	SECURE_AREA GameMode = 1983085217
-	HOSTAGE     GameMode = 2838806006
+	Bomb       GameMode = 327933806
+	SecureArea GameMode = 1983085217
+	Hostage    GameMode = 2838806006
 
-	CLUB_HOUSE         Map = 837214085
-	KAFE_DOSTOYEVSKY   Map = 1378191338
-	KANAL              Map = 1460220617
-	YACHT              Map = 1767965020
-	PRESIDENTIAL_PLANE Map = 2609218856
-	CONSULATE          Map = 2609221242
-	BARTLETT_U         Map = 2697268122
-	COASTLINE          Map = 42090092951
-	TOWER              Map = 53627213396
-	VILLA              Map = 88107330328
-	FORTRESS           Map = 126196841359
-	HEREFORD_BASE      Map = 127951053400
-	THEME_PARK         Map = 199824623654
-	OREGON             Map = 231702797556
-	HOUSE              Map = 237873412352
-	CHALET             Map = 259816839773
-	SKYSCRAPER         Map = 276279025182
-	BORDER             Map = 305979357167
-	FAVELA             Map = 329867321446
-	BANK               Map = 355496559878
-	OUTBACK            Map = 362605108559
-	EMERALD_PLAINS     Map = 365284490964
-	STADIUM_BRAVO      Map = 270063334510
-	NIGHTHAVEN_LABS    Map = 378595635123
+	ClubHouse         Map = 837214085
+	KafeDostoyevsky   Map = 1378191338
+	Kanal             Map = 1460220617
+	Yacht             Map = 1767965020
+	PresidentialPlane Map = 2609218856
+	Consulate         Map = 2609221242
+	BartlettU         Map = 2697268122
+	Coastline         Map = 42090092951
+	Tower             Map = 53627213396
+	Villa             Map = 88107330328
+	Fortress          Map = 126196841359
+	HerefordBase      Map = 127951053400
+	ThemePark         Map = 199824623654
+	Oregon            Map = 231702797556
+	House             Map = 237873412352
+	Chalet            Map = 259816839773
+	Skyscraper        Map = 276279025182
+	Border            Map = 305979357167
+	Favela            Map = 329867321446
+	Bank              Map = 355496559878
+	Outback           Map = 362605108559
+	EmeraldPlains     Map = 365284490964
+	StadiumBravo      Map = 270063334510
+	NighthavenLabs    Map = 378595635123
 
-	KILLED_OPPONENTS  WinCondition = "KILLED_OPPONENTS"
-	SECURED_AREA      WinCondition = "SECURED_AREA" // TODO
-	DISABLED_DEFUSER  WinCondition = "DISABLED_DEFUSER"
-	DEFUSED_BOMB      WinCondition = "DEFUSED_BOMB"
-	EXTRACTED_HOSTAGE WinCondition = "EXTRACTED_HOSTAGE" // TODO
-	TIME              WinCondition = "TIME"
+	KilledOpponents  WinCondition = "KilledOpponents"
+	SecuredArea      WinCondition = "SecuredArea" // TODO
+	DisabledDefuser  WinCondition = "DisabledDefuser"
+	DefusedBomb      WinCondition = "DefusedBomb"
+	ExtractedHostage WinCondition = "ExtractedHostage" // TODO
+	Time             WinCondition = "Time"
 
-	ATTACK  TeamRole = "ATTACK"
-	DEFENSE TeamRole = "DEFENSE"
+	Attack  TeamRole = "Attack"
+	Defense TeamRole = "Defense"
+
+	Castle     Operator = 92270642682 // May technically refer to the op icon?
+	Aruni      Operator = 104189664704
+	Kaid       Operator = 161289666230
+	Mozzie     Operator = 174977508820
+	Pulse      Operator = 92270642708
+	Ace        Operator = 104189664390
+	Echo       Operator = 92270642214
+	Azami      Operator = 378305069945
+	Solis      Operator = 391752120891
+	Capitao    Operator = 92270644215
+	Zofia      Operator = 92270644189
+	Dokkaebi   Operator = 92270644267
+	Warden     Operator = 104189662920
+	Mira       Operator = 92270644319
+	Sledge     Operator = 92270642344
+	Melusi     Operator = 104189664273
+	Bandit     Operator = 92270642526
+	Valkyrie   Operator = 92270642188
+	Rook       Operator = 92270644059
+	Kapkan     Operator = 92270641980
+	Zero       Operator = 291191151607
+	Iana       Operator = 104189664038
+	Ash        Operator = 92270642656
+	Blackbeard Operator = 92270642136
+	Osa        Operator = 288200867444
+	Thorn      Operator = 373711624351
+	Jager      Operator = 92270642604
+	Kali       Operator = 104189663920
+	Thermite   Operator = 92270642760
+	Brava      Operator = 288200866821
+	Amaru      Operator = 104189663607
+	Ying       Operator = 92270642292
+	Lesion     Operator = 92270642266
+	Doc        Operator = 92270644007
+	Lion       Operator = 104189661861
+	Fuze       Operator = 92270642032
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {
@@ -128,6 +168,13 @@ func (i GameMode) MarshalJSON() (text []byte, err error) {
 }
 
 func (i Map) MarshalJSON() (text []byte, err error) {
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i Operator) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(stringerIntMarshal{
 		Name: i.String(),
 		ID:   int(i),

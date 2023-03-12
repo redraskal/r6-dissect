@@ -46,7 +46,8 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 	if err != nil {
 		return
 	}
-	r.listen([]byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}, r.readPlayer)
+	r.listen([]byte{0x40, 0xF2, 0x15, 0x04}, r.readPlayer)
+	r.listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
 	r.listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
 	if h.CodeVersion >= 7408213 { // Y8S1
 		r.listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
@@ -69,16 +70,16 @@ func (r *DissectReader) Read() error {
 			return err
 		}
 		for i, query := range r.queries {
-			if b[0] != query[indexes[i]] {
-				indexes[i] = 0
-				continue
-			}
-			indexes[i]++
-			if indexes[i] == len(query) {
-				indexes[i] = 0
-				if err := r.listeners[i](); err != nil {
-					return err
+			if b[0] == query[indexes[i]] {
+				indexes[i]++
+				if indexes[i] == len(query) {
+					indexes[i] = 0
+					if err := r.listeners[i](); err != nil {
+						return err
+					}
 				}
+			} else {
+				indexes[i] = 0
 			}
 		}
 		if r.readPartial && len(r.Header.Players) == 10 {

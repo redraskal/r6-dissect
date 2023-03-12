@@ -8,15 +8,15 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[BOMB-327933806]
-	_ = x[SECURE_AREA-1983085217]
-	_ = x[HOSTAGE-2838806006]
+	_ = x[Bomb-327933806]
+	_ = x[SecureArea-1983085217]
+	_ = x[Hostage-2838806006]
 }
 
 const (
-	_GameMode_name_0 = "BOMB"
-	_GameMode_name_1 = "SECURE_AREA"
-	_GameMode_name_2 = "HOSTAGE"
+	_GameMode_name_0 = "Bomb"
+	_GameMode_name_1 = "SecureArea"
+	_GameMode_name_2 = "Hostage"
 )
 
 func (i GameMode) String() string {

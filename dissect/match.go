@@ -110,7 +110,7 @@ func (m *MatchReader) Export(path string) error {
 		openingKill := r.OpeningKill()
 		openingDeath := r.OpeningDeath()
 		openingDeathUsername := openingDeath.Username
-		if openingDeath.Type == KILL {
+		if openingDeath.Type == Kill {
 			openingDeathUsername = openingDeath.Target
 		}
 		c.Heading("Statistics")
@@ -155,7 +155,7 @@ func (m *MatchReader) Export(path string) error {
 		c.Right(1).Str("Headshot")
 		for _, a := range r.KillsAndDeaths() {
 			c.Down(1).Left(3)
-			if a.Type == KILL {
+			if a.Type == Kill {
 				c.Str(a.Username)
 				c.Right(1).Str(a.Target)
 			} else {
@@ -164,7 +164,7 @@ func (m *MatchReader) Export(path string) error {
 			}
 			c.Right(1).Str(a.Time)
 			headshot := false
-			if a.Type == KILL && *a.Headshot {
+			if a.Type == Kill && *a.Headshot {
 				headshot = true
 			}
 			c.Right(1).Bool(headshot)

@@ -18,9 +18,9 @@ func (r *DissectReader) readDefuserTimer() error {
 		return err
 	}
 	i := r.playerIndexById(id)
-	a := DEFUSER_PLANT_START
+	a := DefuserPlantStart
 	if r.planted {
-		a = DEFUSER_DISABLE_START
+		a = DefuserDisableStart
 	}
 	if i > -1 {
 		u := MatchUpdate{
@@ -36,9 +36,9 @@ func (r *DissectReader) readDefuserTimer() error {
 	if !strings.HasPrefix(timer, "0.00") {
 		return nil
 	}
-	a = DEFUSER_DISABLE_COMPLETE
+	a = DefuserDisableComplete
 	if !r.planted {
-		a = DEFUSER_PLANT_COMPLETE
+		a = DefuserPlantComplete
 		r.planted = true
 	}
 	u := MatchUpdate{

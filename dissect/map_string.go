@@ -8,59 +8,59 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[CLUB_HOUSE-837214085]
-	_ = x[KAFE_DOSTOYEVSKY-1378191338]
-	_ = x[KANAL-1460220617]
-	_ = x[YACHT-1767965020]
-	_ = x[PRESIDENTIAL_PLANE-2609218856]
-	_ = x[CONSULATE-2609221242]
-	_ = x[BARTLETT_U-2697268122]
-	_ = x[COASTLINE-42090092951]
-	_ = x[TOWER-53627213396]
-	_ = x[VILLA-88107330328]
-	_ = x[FORTRESS-126196841359]
-	_ = x[HEREFORD_BASE-127951053400]
-	_ = x[THEME_PARK-199824623654]
-	_ = x[OREGON-231702797556]
-	_ = x[HOUSE-237873412352]
-	_ = x[CHALET-259816839773]
-	_ = x[SKYSCRAPER-276279025182]
-	_ = x[BORDER-305979357167]
-	_ = x[FAVELA-329867321446]
-	_ = x[BANK-355496559878]
-	_ = x[OUTBACK-362605108559]
-	_ = x[EMERALD_PLAINS-365284490964]
-	_ = x[STADIUM_BRAVO-270063334510]
-	_ = x[NIGHTHAVEN_LABS-378595635123]
+	_ = x[ClubHouse-837214085]
+	_ = x[KafeDostoyevsky-1378191338]
+	_ = x[Kanal-1460220617]
+	_ = x[Yacht-1767965020]
+	_ = x[PresidentialPlane-2609218856]
+	_ = x[Consulate-2609221242]
+	_ = x[BartlettU-2697268122]
+	_ = x[Coastline-42090092951]
+	_ = x[Tower-53627213396]
+	_ = x[Villa-88107330328]
+	_ = x[Fortress-126196841359]
+	_ = x[HerefordBase-127951053400]
+	_ = x[ThemePark-199824623654]
+	_ = x[Oregon-231702797556]
+	_ = x[House-237873412352]
+	_ = x[Chalet-259816839773]
+	_ = x[Skyscraper-276279025182]
+	_ = x[Border-305979357167]
+	_ = x[Favela-329867321446]
+	_ = x[Bank-355496559878]
+	_ = x[Outback-362605108559]
+	_ = x[EmeraldPlains-365284490964]
+	_ = x[StadiumBravo-270063334510]
+	_ = x[NighthavenLabs-378595635123]
 }
 
-const _Map_name = "CLUB_HOUSEKAFE_DOSTOYEVSKYKANALYACHTPRESIDENTIAL_PLANECONSULATEBARTLETT_UCOASTLINETOWERVILLAFORTRESSHEREFORD_BASETHEME_PARKOREGONHOUSECHALETSTADIUM_BRAVOSKYSCRAPERBORDERFAVELABANKOUTBACKEMERALD_PLAINSNIGHTHAVEN_LABS"
+const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateBartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabs"
 
 var _Map_map = map[Map]string{
-	837214085:    _Map_name[0:10],
-	1378191338:   _Map_name[10:26],
-	1460220617:   _Map_name[26:31],
-	1767965020:   _Map_name[31:36],
-	2609218856:   _Map_name[36:54],
-	2609221242:   _Map_name[54:63],
-	2697268122:   _Map_name[63:73],
-	42090092951:  _Map_name[73:82],
-	53627213396:  _Map_name[82:87],
-	88107330328:  _Map_name[87:92],
-	126196841359: _Map_name[92:100],
-	127951053400: _Map_name[100:113],
-	199824623654: _Map_name[113:123],
-	231702797556: _Map_name[123:129],
-	237873412352: _Map_name[129:134],
-	259816839773: _Map_name[134:140],
-	270063334510: _Map_name[140:153],
-	276279025182: _Map_name[153:163],
-	305979357167: _Map_name[163:169],
-	329867321446: _Map_name[169:175],
-	355496559878: _Map_name[175:179],
-	362605108559: _Map_name[179:186],
-	365284490964: _Map_name[186:200],
-	378595635123: _Map_name[200:215],
+	837214085:    _Map_name[0:9],
+	1378191338:   _Map_name[9:24],
+	1460220617:   _Map_name[24:29],
+	1767965020:   _Map_name[29:34],
+	2609218856:   _Map_name[34:51],
+	2609221242:   _Map_name[51:60],
+	2697268122:   _Map_name[60:69],
+	42090092951:  _Map_name[69:78],
+	53627213396:  _Map_name[78:83],
+	88107330328:  _Map_name[83:88],
+	126196841359: _Map_name[88:96],
+	127951053400: _Map_name[96:108],
+	199824623654: _Map_name[108:117],
+	231702797556: _Map_name[117:123],
+	237873412352: _Map_name[123:128],
+	259816839773: _Map_name[128:134],
+	270063334510: _Map_name[134:146],
+	276279025182: _Map_name[146:156],
+	305979357167: _Map_name[156:162],
+	329867321446: _Map_name[162:168],
+	355496559878: _Map_name[168:172],
+	362605108559: _Map_name[172:179],
+	365284490964: _Map_name[179:192],
+	378595635123: _Map_name[192:206],
 }
 
 func (i Map) String() string {

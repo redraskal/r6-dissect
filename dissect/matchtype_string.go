@@ -8,22 +8,22 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[QUICK_MATCH-1]
-	_ = x[RANKED-2]
-	_ = x[CUSTOM_GAME_LOCAL-7]
-	_ = x[CUSTOM_GAME_ONLINE-8]
-	_ = x[UNRANKED-12]
+	_ = x[QuickMatch-1]
+	_ = x[Ranked-2]
+	_ = x[CustomGameLocal-7]
+	_ = x[CustomGameOnline-8]
+	_ = x[Unranked-12]
 }
 
 const (
-	_MatchType_name_0 = "QUICK_MATCHRANKED"
-	_MatchType_name_1 = "CUSTOM_GAME_LOCALCUSTOM_GAME_ONLINE"
-	_MatchType_name_2 = "UNRANKED"
+	_MatchType_name_0 = "QuickMatchRanked"
+	_MatchType_name_1 = "CustomGameLocalCustomGameOnline"
+	_MatchType_name_2 = "Unranked"
 )
 
 var (
-	_MatchType_index_0 = [...]uint8{0, 11, 17}
-	_MatchType_index_1 = [...]uint8{0, 17, 35}
+	_MatchType_index_0 = [...]uint8{0, 10, 16}
+	_MatchType_index_1 = [...]uint8{0, 15, 31}
 )
 
 func (i MatchType) String() string {

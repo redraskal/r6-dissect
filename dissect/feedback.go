@@ -11,16 +11,16 @@ type MatchUpdateType int
 
 //go:generate stringer -type=MatchUpdateType
 const (
-	KILL MatchUpdateType = iota
-	DEATH
-	DEFUSER_PLANT_START
-	DEFUSER_PLANT_COMPLETE
-	DEFUSER_DISABLE_START
-	DEFUSER_DISABLE_COMPLETE
-	LOCATE_OBJECTIVE
-	BATTLEYE
-	PLAYER_LEAVE
-	OTHER
+	Kill MatchUpdateType = iota
+	Death
+	DefuserPlantStart
+	DefuserPlantComplete
+	DefuserDisableStart
+	DefuserDisableComplete
+	LocateObjective
+	Battleye
+	PlayerLeave
+	Other
 )
 
 type MatchUpdate struct {
@@ -82,7 +82,7 @@ func (r *DissectReader) readMatchFeedback() error {
 		}
 		if empty && len(target) > 0 {
 			u := MatchUpdate{
-				Type:          DEATH,
+				Type:          Death,
 				Username:      target,
 				Time:          r.timeRaw,
 				TimeInSeconds: r.time,
@@ -95,7 +95,7 @@ func (r *DissectReader) readMatchFeedback() error {
 			return nil
 		}
 		u := MatchUpdate{
-			Type:          KILL,
+			Type:          Kill,
 			Username:      username,
 			Target:        target,
 			Time:          r.timeRaw,
@@ -116,7 +116,7 @@ func (r *DissectReader) readMatchFeedback() error {
 		u.Headshot = headshotPtr
 		// Ignore duplicates
 		for _, val := range r.MatchFeedback {
-			if val.Type == KILL && val.Username == u.Username && val.Target == u.Target {
+			if val.Type == Kill && val.Username == u.Username && val.Target == u.Target {
 				return nil
 			}
 		}
@@ -129,18 +129,18 @@ func (r *DissectReader) readMatchFeedback() error {
 		return err
 	}
 	msg := string(b)
-	t := OTHER
+	t := Other
 	if strings.Contains(msg, "bombs") || strings.Contains(msg, "objective") {
-		t = LOCATE_OBJECTIVE
+		t = LocateObjective
 	}
 	if strings.Contains(msg, "BattlEye") {
-		t = BATTLEYE
+		t = Battleye
 	}
 	if strings.Contains(msg, "left") {
-		t = PLAYER_LEAVE
+		t = PlayerLeave
 	}
 	username := strings.Split(msg, " ")[0]
-	if t == OTHER {
+	if t == Other {
 		username = ""
 	} else {
 		msg = ""

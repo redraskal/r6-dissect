@@ -59,28 +59,28 @@ func (r *DissectReader) roundEnd() {
 		alliances[p.TeamIndex] = p.Alliance
 	}
 	for _, u := range r.MatchFeedback {
-		if u.Type == KILL {
+		if u.Type == Kill {
 			i := r.Header.Players[r.playerIndexByUsername(u.Target)].TeamIndex
 			deaths[i] = deaths[i] + 1
 		}
-		if u.Type == DEATH {
+		if u.Type == Death {
 			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
 			deaths[i] = deaths[i] + 1
 		}
-		if u.Type == DEFUSER_PLANT_COMPLETE {
+		if u.Type == DefuserPlantComplete {
 			planter = r.playerIndexByUsername(u.Username)
 		}
-		if u.Type == DEFUSER_DISABLE_COMPLETE {
+		if u.Type == DefuserDisableComplete {
 			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
 			r.Header.Teams[i].Won = true
-			r.Header.Teams[i].WinCondition = DISABLED_DEFUSER
+			r.Header.Teams[i].WinCondition = DisabledDefuser
 			return
 		}
 	}
 	if planter > -1 {
 		i := r.Header.Players[planter].TeamIndex
 		r.Header.Teams[i].Won = true
-		r.Header.Teams[i].WinCondition = DEFUSED_BOMB
+		r.Header.Teams[i].WinCondition = DefusedBomb
 		return
 	}
 	if deaths[0] == sizes[0] {
@@ -88,7 +88,7 @@ func (r *DissectReader) roundEnd() {
 			return
 		}
 		r.Header.Teams[1].Won = true
-		r.Header.Teams[1].WinCondition = KILLED_OPPONENTS
+		r.Header.Teams[1].WinCondition = KilledOpponents
 		return
 	}
 	if deaths[1] == sizes[1] {
@@ -96,7 +96,7 @@ func (r *DissectReader) roundEnd() {
 			return
 		}
 		r.Header.Teams[0].Won = true
-		r.Header.Teams[0].WinCondition = KILLED_OPPONENTS
+		r.Header.Teams[0].WinCondition = KilledOpponents
 		return
 	}
 	i := 0
@@ -104,5 +104,5 @@ func (r *DissectReader) roundEnd() {
 		i = 1
 	}
 	r.Header.Teams[i].Won = true
-	r.Header.Teams[i].WinCondition = TIME
+	r.Header.Teams[i].WinCondition = Time
 }

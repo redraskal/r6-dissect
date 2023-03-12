@@ -26,7 +26,7 @@ type PlayerMatchStats struct {
 // OpeningKill returns the first player to kill.
 func (r *DissectReader) OpeningKill() MatchUpdate {
 	for _, a := range r.MatchFeedback {
-		if a.Type == KILL {
+		if a.Type == Kill {
 			return a
 		}
 	}
@@ -36,7 +36,7 @@ func (r *DissectReader) OpeningKill() MatchUpdate {
 // OpeningDeath returns the first player to die (KILL or DEATH activity).
 func (r *DissectReader) OpeningDeath() MatchUpdate {
 	for _, a := range r.MatchFeedback {
-		if a.Type == KILL || a.Type == DEATH {
+		if a.Type == Kill || a.Type == Death {
 			return a
 		}
 	}
@@ -48,7 +48,7 @@ func (r *DissectReader) Trades() [][]MatchUpdate {
 	trades := make([][]MatchUpdate, 0)
 	var previous = MatchUpdate{}
 	for _, a := range r.MatchFeedback {
-		if a.Type == KILL && previous.Target == a.Username {
+		if a.Type == Kill && previous.Target == a.Username {
 			trades = append(trades, []MatchUpdate{previous, a})
 		}
 	}
@@ -58,7 +58,7 @@ func (r *DissectReader) Trades() [][]MatchUpdate {
 func (r *DissectReader) KillsAndDeaths() []MatchUpdate {
 	MatchFeedback := make([]MatchUpdate, 0)
 	for _, a := range r.MatchFeedback {
-		if a.Type == KILL || a.Type == DEATH {
+		if a.Type == Kill || a.Type == Death {
 			MatchFeedback = append(MatchFeedback, a)
 		}
 	}
@@ -89,7 +89,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 	lastDeath := -1
 	for _, a := range r.MatchFeedback {
 		i := index[a.Username]
-		if a.Type == KILL {
+		if a.Type == Kill {
 			stats[i].Kills += 1
 			if *a.Headshot {
 				stats[i].Headshots += 1
@@ -97,7 +97,7 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 			stats[i].HeadshotPercentage = headshotPercentage(stats[i].Headshots, stats[i].Kills)
 			stats[index[a.Target]].Died = true
 			lastDeath = index[a.Target]
-		} else if a.Type == DEATH {
+		} else if a.Type == Death {
 			stats[i].Died = true
 			lastDeath = i
 		}
@@ -128,17 +128,17 @@ func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 		teamLeft := r.NumPlayers(roundWinTeamIndex)
 		oneVx := 0
 		for _, a := range r.MatchFeedback {
-			if a.Type == KILL && stats[index[a.Target]].TeamIndex == roundWinTeamIndex {
+			if a.Type == Kill && stats[index[a.Target]].TeamIndex == roundWinTeamIndex {
 				teamLeft--
-			} else if a.Type == DEATH && stats[index[a.Username]].TeamIndex == roundWinTeamIndex {
+			} else if a.Type == Death && stats[index[a.Username]].TeamIndex == roundWinTeamIndex {
 				teamLeft--
-			} else if a.Type == PLAYER_LEAVE && stats[index[a.Username]].TeamIndex == roundWinTeamIndex {
+			} else if a.Type == PlayerLeave && stats[index[a.Username]].TeamIndex == roundWinTeamIndex {
 				teamLeft--
 			}
 			if a.Username != username {
 				continue
 			}
-			if a.Type == KILL && teamLeft < 2 {
+			if a.Type == Kill && teamLeft < 2 {
 				oneVx++
 			}
 		}
