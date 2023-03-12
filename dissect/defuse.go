@@ -33,6 +33,7 @@ func (r *DissectReader) readDefuserTimer() error {
 		log.Debug().Interface("match_update", u).Send()
 		r.lastDefuserPlayerIndex = i
 	}
+	// TODO: 0.00 can be present even if defuser was not disabled.
 	if !strings.HasPrefix(timer, "0.00") {
 		return nil
 	}
