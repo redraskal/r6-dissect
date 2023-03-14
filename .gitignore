@@ -15,6 +15,9 @@
 # Memory dumps
 *.dmp
 
+# IDEs
+.vscode/launch.json
+
 # Test binary, built with `go test -c`
 *.test
 
