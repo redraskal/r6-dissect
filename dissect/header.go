@@ -3,9 +3,10 @@ package dissect
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/rs/zerolog/log"
 	"strconv"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Header struct {
@@ -65,10 +66,11 @@ type WinCondition string
 type TeamRole string
 type Operator uint64
 
-//go:generate stringer -type=MatchType
-//go:generate stringer -type=GameMode
-//go:generate stringer -type=Map
-//go:generate stringer -type=Operator
+//gog:generate stringer -type=MatchType
+//gog:generate stringer -type=GameMode
+//gog:generate stringer -type=Map
+//gog:generate stringer -type=Operator
+//go:generate go run ./generate/genops.go -type=Operator
 const (
 	QuickMatch       MatchType = 1
 	Ranked           MatchType = 2
