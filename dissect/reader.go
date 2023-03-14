@@ -2,10 +2,11 @@ package dissect
 
 import (
 	"encoding/binary"
-	"github.com/klauspost/compress/zstd"
-	"github.com/rs/zerolog/log"
 	"io"
 	"runtime"
+
+	"github.com/klauspost/compress/zstd"
+	"github.com/rs/zerolog/log"
 )
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
@@ -60,22 +61,27 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 }
 
 // Read continues reading the replay past the header until the EOF.
-func (r *DissectReader) Read() error {
+func (r *DissectReader) Read() (err error) {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
+	defer func() {
+		if Ok(err) {
+			err = r.deriveTeamRoles()
+		}
+	}()
 	for {
-		_, err := r.compressed.Read(b)
+		_, err = r.compressed.Read(b)
 		r.offset++
 		if err != nil {
-			return err
+			return
 		}
 		for i, query := range r.queries {
 			if b[0] == query[indexes[i]] {
 				indexes[i]++
 				if indexes[i] == len(query) {
 					indexes[i] = 0
-					if err := r.listeners[i](); err != nil {
-						return err
+					if err = r.listeners[i](); err != nil {
+						return
 					}
 				}
 			} else {
@@ -83,7 +89,7 @@ func (r *DissectReader) Read() error {
 			}
 		}
 		if r.readPartial && len(r.Header.Players) == 10 {
-			return nil
+			return
 		}
 	}
 }

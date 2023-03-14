@@ -3,9 +3,11 @@ package dissect
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/rs/zerolog/log"
+	"fmt"
 	"strconv"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Header struct {
@@ -69,6 +71,7 @@ type Operator uint64
 //go:generate stringer -type=GameMode
 //go:generate stringer -type=Map
 //go:generate stringer -type=Operator
+//go:generate go run ./genops.go -type=Operator -atkval=Attack -defval=Defense
 const (
 	QuickMatch       MatchType = 1
 	Ranked           MatchType = 2
@@ -422,7 +425,28 @@ func (r *DissectReader) readHeader() (Header, error) {
 		return h, err
 	}
 	h.Teams[1].Score = n
+
 	return h, nil
+}
+
+// deriveTeamRoles uses the operators chosen by the players to
+// determine the team roles
+func (r *DissectReader) deriveTeamRoles() error {
+	for _, p := range r.Header.Players {
+		if role, err := p.Operator.Role(); err == nil {
+			teamIndex := p.TeamIndex
+			oppositeTeamIndex := teamIndex ^ 1
+			if role == Attack {
+				r.Header.Teams[teamIndex].Role = Attack
+				r.Header.Teams[oppositeTeamIndex].Role = Defense
+			} else {
+				r.Header.Teams[teamIndex].Role = Defense
+				r.Header.Teams[oppositeTeamIndex].Role = Attack
+			}
+			return nil
+		}
+	}
+	return fmt.Errorf("could not determine team roles (have %d players)", len(r.Header.Players))
 }
 
 func (r *DissectReader) readHeaderString() (string, error) {
