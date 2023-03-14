@@ -85,6 +85,8 @@ type Generator struct {
 	operatorConsts   []*types.Const
 }
 
+// parseSrcFile reads an input file and parses its package
+// to find the types and values we need for generating our output
 func (g *Generator) parseSrcFile(file string) {
 	cfg := &packages.Config{
 		Mode:  packages.NeedName | packages.NeedTypes | packages.NeedTypesInfo,
@@ -104,6 +106,8 @@ func (g *Generator) parseSrcFile(file string) {
 	g.loadPackage(pkgs[0])
 }
 
+// loadPackage processes the provided pkg and attempts to find consts
+// with the configured type to obtain a list of operator names
 func (g *Generator) loadPackage(pkg *packages.Package) {
 	g.pkgName = pkg.Name
 	operatorConsts := make([]*types.Const, 0, 100)
@@ -121,6 +125,7 @@ func (g *Generator) loadPackage(pkg *packages.Package) {
 		}
 	}
 
+	// validate we actually found consts with desired type
 	if len(operatorConsts) == 0 {
 		log.Fatalf("error: did not find any constants of type \"%s\" in package %s", g.operatorTypeName, pkg.Name)
 	}
@@ -128,8 +133,11 @@ func (g *Generator) loadPackage(pkg *packages.Package) {
 	g.roleTypeName = g.getRoleTypeName(pkg)
 }
 
+// getRoleTypeName attempts to find the type name for the attack/defense
+// values provided via flags
 func (g *Generator) getRoleTypeName(pkg *packages.Package) string {
 	scope := pkg.Types.Scope()
+	// lookup objects for atk/def
 	atkType := scope.Lookup(g.roleValueAtk)
 	if atkType == nil {
 		log.Fatalf(`error: could not resolve -%s value in package "%s"`, flagAtkValueName, pkg.Name)
@@ -138,6 +146,7 @@ func (g *Generator) getRoleTypeName(pkg *packages.Package) string {
 	if defType == nil {
 		log.Fatalf(`error: could not resolve -%s value in package "%s"`, flagDefValueName, pkg.Name)
 	}
+	// assert they are the same type
 	if atkType.Type() != defType.Type() {
 		log.Fatalf(
 			`-%s and -%s values need to be same type, got "%s %s" and "%s %s"`,
@@ -149,6 +158,7 @@ func (g *Generator) getRoleTypeName(pkg *packages.Package) string {
 			defType,
 		)
 	}
+	// attempt to case to get .Name() function
 	t, ok := atkType.Type().(*types.Named)
 	if !ok {
 		log.Fatalf(`error: could not cast type of "%s" to types.Named (is %T)`, g.roleValueAtk, atkType.Type())
@@ -156,6 +166,8 @@ func (g *Generator) getRoleTypeName(pkg *packages.Package) string {
 	return t.Obj().Name()
 }
 
+// generate will use everything we compiled previously to write to
+// our output file
 func (g *Generator) generate() {
 	g.printHeader()
 
