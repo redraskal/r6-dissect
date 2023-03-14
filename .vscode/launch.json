@@ -5,18 +5,6 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch file",
-			"type": "go",
-			"request": "launch",
-			"mode": "debug",
-			"program": "${workspaceFolder}/main.go",
-			"args": [
-				"Match-2023-03-08_19-39-16-85-R01.rec",
-				"-x",
-				"out.json"
-			]
-		},
-		{
 			"name": "Launch genops",
 			"type": "go",
 			"request": "launch",
