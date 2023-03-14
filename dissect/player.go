@@ -96,10 +96,6 @@ func (r *DissectReader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
-	// TODO: remove (?)
-	if spawn == "" {
-		p.Alliance = 4
-	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Interface("op", p.Operator).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
 	for i, existing := range r.Header.Players {
