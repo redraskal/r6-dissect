@@ -67,11 +67,11 @@ type WinCondition string
 type TeamRole string
 type Operator uint64
 
-//gog:generate stringer -type=MatchType
-//gog:generate stringer -type=GameMode
-//gog:generate stringer -type=Map
-//gog:generate stringer -type=Operator
-//go:generate go run ./generate/genops.go -type=Operator
+//go:generate stringer -type=MatchType
+//go:generate stringer -type=GameMode
+//go:generate stringer -type=Map
+//go:generate stringer -type=Operator
+//go:generate go run ./genops.go -type=Operator -atkval=Attack -defval=Defense
 const (
 	QuickMatch       MatchType = 1
 	Ranked           MatchType = 2
@@ -436,7 +436,7 @@ func (r *DissectReader) deriveTeamRoles() error {
 		if role, err := p.Operator.Role(); err == nil {
 			teamIndex := p.TeamIndex
 			oppositeTeamIndex := teamIndex ^ 1
-			if role == Atk {
+			if role == Attack {
 				r.Header.Teams[teamIndex].Role = Attack
 				r.Header.Teams[oppositeTeamIndex].Role = Defense
 			} else {

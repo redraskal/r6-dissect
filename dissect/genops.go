@@ -24,16 +24,24 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-var typeName = flag.String("type", "", "operator type name; must be set")
+const (
+	flagOperatorTypeName string = "type"
+	flagAtkValueName     string = "atkval"
+	flagDefValueName     string = "defval"
+)
 
 // main (and most of this file) is heavily inspired by go/x/tools/stringer
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("genops: ")
+
+	typeName := flag.String(flagOperatorTypeName, "", "operator type name; required")
+	atkValueName := flag.String(flagAtkValueName, "", "value name for attack role; required")
+	defValueName := flag.String(flagDefValueName, "", "value name for defense role; required")
 	flag.Parse()
 
-	// validate -type flag is set
-	if len(*typeName) == 0 {
+	// validate flags are set
+	if len(*typeName) == 0 || len(*atkValueName) == 0 || len(*defValueName) == 0 {
 		flag.Usage()
 		os.Exit(2)
 	}
@@ -47,9 +55,8 @@ func main() {
 
 	g := Generator{
 		operatorTypeName: *typeName,
-		roleTypeName:     "OperatorRole",
-		roleValueAtk:     "Atk",
-		roleValueDef:     "Def",
+		roleValueAtk:     *atkValueName,
+		roleValueDef:     *defValueName,
 	}
 
 	// load input package
@@ -118,20 +125,41 @@ func (g *Generator) loadPackage(pkg *packages.Package) {
 		log.Fatalf("error: did not find any constants of type \"%s\" in package %s", g.operatorTypeName, pkg.Name)
 	}
 	g.operatorConsts = operatorConsts
+	g.roleTypeName = g.getRoleTypeName(pkg)
+}
+
+func (g *Generator) getRoleTypeName(pkg *packages.Package) string {
+	scope := pkg.Types.Scope()
+	atkType := scope.Lookup(g.roleValueAtk)
+	if atkType == nil {
+		log.Fatalf(`error: could not resolve -%s value in package "%s"`, flagAtkValueName, pkg.Name)
+	}
+	defType := scope.Lookup(g.roleValueDef)
+	if defType == nil {
+		log.Fatalf(`error: could not resolve -%s value in package "%s"`, flagDefValueName, pkg.Name)
+	}
+	if atkType.Type() != defType.Type() {
+		log.Fatalf(
+			`-%s and -%s values need to be same type, got "%s %s" and "%s %s"`,
+			flagAtkValueName,
+			flagDefValueName,
+			g.roleValueAtk,
+			atkType,
+			g.roleValueDef,
+			defType,
+		)
+	}
+	t, ok := atkType.Type().(*types.Named)
+	if !ok {
+		log.Fatalf(`error: could not cast type of "%s" to types.Named (is %T)`, g.roleValueAtk, atkType.Type())
+	}
+	return t.Obj().Name()
 }
 
 func (g *Generator) generate() {
 	g.printHeader()
 
-	// role type
-	g.printf("type %s int\n\n", g.roleTypeName)
-	g.printf("const (\n")
-	g.printf("%s %s = iota\n", g.roleValueAtk, g.roleTypeName)
-	g.printf("%s\n", g.roleValueDef)
-	g.printf(")\n")
-
 	log.Println("retrieving operator data from Ubisoft")
-	// map[Operator]Role
 	ops, err := ubi.GetOperatorMap()
 	if err != nil {
 		log.Fatalln(err)
@@ -172,7 +200,7 @@ func (g *Generator) printGetter() {
 	g.printf("if r, ok := _operatorRoles[i]; ok {\n")
 	g.printf("return r, nil\n")
 	g.printf("}\n")
-	g.printf(`return 0, errors.New("role unknown for this operator")`)
+	g.printf(`return %s, errors.New("role unknown for this operator")`, g.roleValueAtk)
 	g.printf("}\n")
 }
 
