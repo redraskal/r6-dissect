@@ -2,6 +2,7 @@ package dissect
 
 import (
 	"bytes"
+
 	"github.com/rs/zerolog/log"
 )
 
@@ -95,11 +96,9 @@ func (r *DissectReader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
+	// TODO: remove (?)
 	if spawn == "" {
 		p.Alliance = 4
-		r.Header.Teams[teamIndex].Role = Defense
-	} else {
-		r.Header.Teams[teamIndex].Role = Attack
 	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Interface("op", p.Operator).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
