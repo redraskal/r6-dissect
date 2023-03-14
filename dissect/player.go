@@ -136,9 +136,19 @@ func (r *DissectReader) readAtkOpSwap() error {
 		return err
 	}
 	i := r.playerIndexById(id)
+	o := Operator(op)
 	if i > -1 {
-		r.Header.Players[i].Operator = Operator(op)
+		r.Header.Players[i].Operator = o
+		u := MatchUpdate{
+			Type:          OperatorSwap,
+			Username:      r.Header.Players[i].Username,
+			Time:          r.timeRaw,
+			TimeInSeconds: r.time,
+			Operator:      o,
+		}
+		r.MatchFeedback = append(r.MatchFeedback, u)
+		log.Debug().Interface("match_update", u).Send()
 	}
-	log.Debug().Hex("id", id).Uint64("op", op).Msg("atk_op_swap")
+	log.Debug().Hex("id", id).Interface("op", op).Msg("atk_op_swap")
 	return nil
 }

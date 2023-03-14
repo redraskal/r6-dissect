@@ -18,6 +18,7 @@ const (
 	DefuserDisableStart
 	DefuserDisableComplete
 	LocateObjective
+	OperatorSwap
 	Battleye
 	PlayerLeave
 	Other
@@ -31,6 +32,7 @@ type MatchUpdate struct {
 	Time          string          `json:"time"`
 	TimeInSeconds float64         `json:"timeInSeconds"`
 	Message       string          `json:"message,omitempty"`
+	Operator      Operator        `json:"operator,omitempty"`
 }
 
 func (i MatchUpdateType) MarshalJSON() (text []byte, err error) {

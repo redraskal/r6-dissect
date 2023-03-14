@@ -15,14 +15,15 @@ func _() {
 	_ = x[DefuserDisableStart-4]
 	_ = x[DefuserDisableComplete-5]
 	_ = x[LocateObjective-6]
-	_ = x[Battleye-7]
-	_ = x[PlayerLeave-8]
-	_ = x[Other-9]
+	_ = x[OperatorSwap-7]
+	_ = x[Battleye-8]
+	_ = x[PlayerLeave-9]
+	_ = x[Other-10]
 }
 
-const _MatchUpdateType_name = "KillDeathDefuserPlantStartDefuserPlantCompleteDefuserDisableStartDefuserDisableCompleteLocateObjectiveBattleyePlayerLeaveOther"
+const _MatchUpdateType_name = "KillDeathDefuserPlantStartDefuserPlantCompleteDefuserDisableStartDefuserDisableCompleteLocateObjectiveOperatorSwapBattleyePlayerLeaveOther"
 
-var _MatchUpdateType_index = [...]uint8{0, 4, 9, 26, 46, 65, 87, 102, 110, 121, 126}
+var _MatchUpdateType_index = [...]uint8{0, 4, 9, 26, 46, 65, 87, 102, 114, 122, 133, 138}
 
 func (i MatchUpdateType) String() string {
 	if i < 0 || i >= MatchUpdateType(len(_MatchUpdateType_index)-1) {
