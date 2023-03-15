@@ -181,6 +181,10 @@ const (
 	Jackal      Operator = 92270644345
 	Grim        Operator = 374667788042
 	Tachanka    Operator = 291437347686
+	Oryx        Operator = 104189664155
+	Frost       Operator = 92270642500
+	Maestro     Operator = 104189662175
+	Clash       Operator = 104189662280
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {
