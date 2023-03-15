@@ -155,7 +155,7 @@ func main() {
 	if err := r.Read(); !dissect.Ok(err) {
 		log.Fatal(err)
 	}
-	print(r.Header.GameVersion) // Y7S4
+	print(r.Header.GameVersion) // Y8S1
 }
 ```
 
