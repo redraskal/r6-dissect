@@ -167,6 +167,20 @@ const (
 	Caveira     Operator = 92270644241
 	Nomad       Operator = 161289666248
 	Thunderbird Operator = 288200867351
+	Sens        Operator = 384797789346
+	IQ          Operator = 92270642578
+	Blitz       Operator = 92270642539
+	Hibana      Operator = 92270642240
+	Maverick    Operator = 104189662384
+	Flores      Operator = 328397386974
+	Buck        Operator = 92270642474
+	Twitch      Operator = 92270644111
+	Gridlock    Operator = 174977508808
+	Thatcher    Operator = 92270642422
+	Glaz        Operator = 92270642084
+	Jackal      Operator = 92270644345
+	Grim        Operator = 374667788042
+	Tachanka    Operator = 291437347686
 )
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {

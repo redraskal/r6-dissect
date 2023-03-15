@@ -88,7 +88,7 @@ func (r *DissectReader) Read() (err error) {
 				indexes[i] = 0
 			}
 		}
-		if r.readPartial && len(r.Header.Players) == 10 {
+		if r.readPartial && r.playersRead == 10 {
 			return
 		}
 	}
