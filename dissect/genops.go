@@ -92,10 +92,14 @@ func (g *Generator) parseSrcFile(file string) {
 		Mode:  packages.NeedName | packages.NeedTypes | packages.NeedTypesInfo,
 		Tests: false,
 	}
-	pkgs, err := packages.Load(cfg, file)
+	pkgs, err := packages.Load(cfg, "file="+file)
 	if err != nil {
 		log.Fatal(err)
 	}
+	if packages.PrintErrors(pkgs) > 0 {
+		log.Fatal("got errors during package load")
+	}
+
 	// validate we have exactly *one* package
 	// (since we only accept exactly one type, we should also only get one package)
 	if len(pkgs) == 0 {
@@ -208,6 +212,9 @@ func (g *Generator) printHeader() {
 }
 
 func (g *Generator) printGetter() {
+	// since we have a test validating that every operator has a role,
+	// it could be argued that this method does not need to return an error
+	// and instead could just panic if the role isnt found
 	g.printf("func (i Operator) Role() (%s, error) {\n", g.roleTypeName)
 	g.printf("if r, ok := _operatorRoles[i]; ok {\n")
 	g.printf("return r, nil\n")

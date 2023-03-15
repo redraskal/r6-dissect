@@ -12,6 +12,7 @@ func (r *DissectReader) readPlayer() error {
 	usernameIndicator := []byte{0x22, 0x85, 0xCF, 0x36, 0x3A}
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
 	//unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08} // maybe player appearance?
+	r.playersRead++
 	if _, err := r.read(8); err != nil {
 		return err
 	}
@@ -27,6 +28,9 @@ func (r *DissectReader) readPlayer() error {
 	op, err := r.readUint64() // Op before atk role swaps
 	if err != nil {
 		return err
+	}
+	if op == 0 { // Empty player slot
+		return nil
 	}
 	if err := r.seek(idIndicator); err != nil {
 		return err
@@ -58,7 +62,7 @@ func (r *DissectReader) readPlayer() error {
 		return err
 	}
 	teamIndex := 0
-	if r.playersRead > 4 {
+	if r.playersRead > 5 {
 		teamIndex = 1
 	}
 	username, err := r.readString()
@@ -119,7 +123,6 @@ func (r *DissectReader) readPlayer() error {
 	//	return err
 	//}
 	//_, err = r.read(30) // unknown data, see above
-	r.playersRead++
 	return err
 }
 

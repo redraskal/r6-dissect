@@ -57,60 +57,96 @@ func _() {
 	_ = x[Caveira-92270644241]
 	_ = x[Nomad-161289666248]
 	_ = x[Thunderbird-288200867351]
+	_ = x[Sens-384797789346]
+	_ = x[IQ-92270642578]
+	_ = x[Blitz-92270642539]
+	_ = x[Hibana-92270642240]
+	_ = x[Maverick-104189662384]
+	_ = x[Flores-328397386974]
+	_ = x[Buck-92270642474]
+	_ = x[Twitch-92270644111]
+	_ = x[Gridlock-174977508808]
+	_ = x[Thatcher-92270642422]
+	_ = x[Glaz-92270642084]
+	_ = x[Jackal-92270644345]
+	_ = x[Grim-374667788042]
+	_ = x[Tachanka-291437347686]
+	_ = x[Oryx-104189664155]
+	_ = x[Frost-92270642500]
+	_ = x[Maestro-104189662175]
+	_ = x[Clash-104189662280]
 }
 
-const _Operator_name = "KapkanFuzeBlackbeardValkyrieEchoLesionYingMuteSledgeSmokeBanditJagerAshCastlePulseThermiteDocMontagneRookElaZofiaCapitaoCaveiraDokkaebiVigilMiraLionFinkaAlibiWardenNokkAmaruGoyoWamaiKaliIanaMelusiAceAruniKaidNomadMozzieBravaThunderbirdOsaZeroThornAzamiSolis"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaThunderbirdOsaZeroTachankaFloresThornGrimAzamiSensSolis"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
 	92270642032:  _Operator_name[6:10],
-	92270642136:  _Operator_name[10:20],
-	92270642188:  _Operator_name[20:28],
-	92270642214:  _Operator_name[28:32],
-	92270642266:  _Operator_name[32:38],
-	92270642292:  _Operator_name[38:42],
-	92270642318:  _Operator_name[42:46],
-	92270642344:  _Operator_name[46:52],
-	92270642396:  _Operator_name[52:57],
-	92270642526:  _Operator_name[57:63],
-	92270642604:  _Operator_name[63:68],
-	92270642656:  _Operator_name[68:71],
-	92270642682:  _Operator_name[71:77],
-	92270642708:  _Operator_name[77:82],
-	92270642760:  _Operator_name[82:90],
-	92270644007:  _Operator_name[90:93],
-	92270644033:  _Operator_name[93:101],
-	92270644059:  _Operator_name[101:105],
-	92270644163:  _Operator_name[105:108],
-	92270644189:  _Operator_name[108:113],
-	92270644215:  _Operator_name[113:120],
-	92270644241:  _Operator_name[120:127],
-	92270644267:  _Operator_name[127:135],
-	92270644293:  _Operator_name[135:140],
-	92270644319:  _Operator_name[140:144],
-	104189661861: _Operator_name[144:148],
-	104189661965: _Operator_name[148:153],
-	104189662071: _Operator_name[153:158],
-	104189662920: _Operator_name[158:164],
-	104189663024: _Operator_name[164:168],
-	104189663607: _Operator_name[168:173],
-	104189663698: _Operator_name[173:177],
-	104189663803: _Operator_name[177:182],
-	104189663920: _Operator_name[182:186],
-	104189664038: _Operator_name[186:190],
-	104189664273: _Operator_name[190:196],
-	104189664390: _Operator_name[196:199],
-	104189664704: _Operator_name[199:204],
-	161289666230: _Operator_name[204:208],
-	161289666248: _Operator_name[208:213],
-	174977508820: _Operator_name[213:219],
-	288200866821: _Operator_name[219:224],
-	288200867351: _Operator_name[224:235],
-	288200867444: _Operator_name[235:238],
-	291191151607: _Operator_name[238:242],
-	373711624351: _Operator_name[242:247],
-	378305069945: _Operator_name[247:252],
-	391752120891: _Operator_name[252:257],
+	92270642084:  _Operator_name[10:14],
+	92270642136:  _Operator_name[14:24],
+	92270642188:  _Operator_name[24:32],
+	92270642214:  _Operator_name[32:36],
+	92270642240:  _Operator_name[36:42],
+	92270642266:  _Operator_name[42:48],
+	92270642292:  _Operator_name[48:52],
+	92270642318:  _Operator_name[52:56],
+	92270642344:  _Operator_name[56:62],
+	92270642396:  _Operator_name[62:67],
+	92270642422:  _Operator_name[67:75],
+	92270642474:  _Operator_name[75:79],
+	92270642500:  _Operator_name[79:84],
+	92270642526:  _Operator_name[84:90],
+	92270642539:  _Operator_name[90:95],
+	92270642578:  _Operator_name[95:97],
+	92270642604:  _Operator_name[97:102],
+	92270642656:  _Operator_name[102:105],
+	92270642682:  _Operator_name[105:111],
+	92270642708:  _Operator_name[111:116],
+	92270642760:  _Operator_name[116:124],
+	92270644007:  _Operator_name[124:127],
+	92270644033:  _Operator_name[127:135],
+	92270644059:  _Operator_name[135:139],
+	92270644111:  _Operator_name[139:145],
+	92270644163:  _Operator_name[145:148],
+	92270644189:  _Operator_name[148:153],
+	92270644215:  _Operator_name[153:160],
+	92270644241:  _Operator_name[160:167],
+	92270644267:  _Operator_name[167:175],
+	92270644293:  _Operator_name[175:180],
+	92270644319:  _Operator_name[180:184],
+	92270644345:  _Operator_name[184:190],
+	104189661861: _Operator_name[190:194],
+	104189661965: _Operator_name[194:199],
+	104189662071: _Operator_name[199:204],
+	104189662175: _Operator_name[204:211],
+	104189662280: _Operator_name[211:216],
+	104189662384: _Operator_name[216:224],
+	104189662920: _Operator_name[224:230],
+	104189663024: _Operator_name[230:234],
+	104189663607: _Operator_name[234:239],
+	104189663698: _Operator_name[239:243],
+	104189663803: _Operator_name[243:248],
+	104189663920: _Operator_name[248:252],
+	104189664038: _Operator_name[252:256],
+	104189664155: _Operator_name[256:260],
+	104189664273: _Operator_name[260:266],
+	104189664390: _Operator_name[266:269],
+	104189664704: _Operator_name[269:274],
+	161289666230: _Operator_name[274:278],
+	161289666248: _Operator_name[278:283],
+	174977508808: _Operator_name[283:291],
+	174977508820: _Operator_name[291:297],
+	288200866821: _Operator_name[297:302],
+	288200867351: _Operator_name[302:313],
+	288200867444: _Operator_name[313:316],
+	291191151607: _Operator_name[316:320],
+	291437347686: _Operator_name[320:328],
+	328397386974: _Operator_name[328:334],
+	373711624351: _Operator_name[334:339],
+	374667788042: _Operator_name[339:343],
+	378305069945: _Operator_name[343:348],
+	384797789346: _Operator_name[348:352],
+	391752120891: _Operator_name[352:357],
 }
 
 func (i Operator) String() string {
