@@ -2,16 +2,14 @@
 [![](https://discordapp.com/api/guilds/936737628756271114/widget.png?style=shield)](https://discord.gg/XdEXWQZZAa)
 [![Go Reference](https://pkg.go.dev/badge/github.com/redraskal/r6-dissect.svg)](https://pkg.go.dev/github.com/redraskal/r6-dissect)
 
-Match replay API/CLI for Rainbow Six: Siege's Dissect (.rec) format.
+Match Replay API/CLI for Rainbow Six: Siege's Dissect (.rec) format.
 
-This is a work in progress. I will be using this resource in an upcoming project :eyes:
-
-The data format is subject to change until a stable version is released.
+**This is a work in progress. The data format is subject to change until a stable version is released.**
 
 ## Current Features
-- Parsing match info (Game version, map, gamemode, match type, teams, players)
-- Parsing activities with timestamps (Kills, headshots, objective locates, defuser plants/disables, BattlEye bans, DCs)
-- Exporting match stats to JSON, Excel, or stdout (JSON)
+- Match Info (Game version, map, gamemode, match type, teams, players)
+- Match Feedback (Kills, headshots, objective locates, defuser plants/disables, BattlEye bans, DCs)
+- Exporting to JSON, Excel, or stdout (in JSON)
 
 ## Planned Features
 - UI alternative
@@ -19,82 +17,114 @@ The data format is subject to change until a stable version is released.
 - Track movement packets
 - Track other player statistics
 
-### See roadmap at https://github.com/users/redraskal/projects/1/views/1?query=is%3Aopen+sort%3Aupdated-desc.
+### See roadmap at https://github.com/users/redraskal/projects/1.
 
 ## CLI Usage
 Print a match overview by specifying a match folder or .rec file:
 ```bash
-r6-dissect Match-2023-01-22_01-28-13-135/
+r6-dissect Match-2023-03-13_23-23-58-199/
 # or
-r6-dissect Match-2023-01-22_01-28-13-135-R01.rec
+r6-dissect Match-2023-03-13_23-23-58-199-R01.rec
 ```
 ```
-1:15PM INF Version:          Y7S4/7338571
-1:15PM INF Recording Player: redraskal [1f63af29-7ebe-48e7-b570-e820632d9565]
-1:15PM INF Match ID:         324a1950-a760-4844-a392-1635c5876c0a
-1:15PM INF Timestamp:        2023-01-21 19:29:58 -0600 CST
-1:15PM INF Match Type:       UNRANKED
-1:15PM INF Game Mode:        BOMB
-1:15PM INF Map:              CLUB_HOUSE
+5:20PM INF Version:          Y8S1/7422506
+5:20PM INF Recording Player: redraskal [1f63af29-7ebe-48e7-b570-e820632d9565]
+5:20PM INF Match ID:         d74d2685-193f-4fee-831f-41f8c7792250
+5:20PM INF Timestamp:        2023-03-13 13:00:08 -0500 CDT
+5:20PM INF Match Type:       QuickMatch
+5:20PM INF Game Mode:        Bomb
+5:20PM INF Map:              House
 ```
 You can export round stats to a JSON file:
 ```bash
-r6-dissect Match-2023-01-22_01-28-13-135-R01.rec -x round.json
+r6-dissect Match-2023-03-13_23-23-58-199-R01.rec -x round.json
 ```
 Example:
 ```json
 {
-  "header": {
-    "gameVersion": "Y7S4",
-    "codeVersion": 7338571,
-    "timestamp": "2023-01-22T01:29:58Z",
-    "matchType": {
-      "name": "UNRANKED",
-      "id": 12
+  "gameVersion": "Y8S1",
+  "codeVersion": 7422506,
+  "timestamp": "2023-03-13T23:25:46Z",
+  "matchType": {
+    "name": "Ranked",
+    "id": 2
+  },
+  "map": {
+    "name": "Villa",
+    "id": 88107330328
+  },
+  "site": "2F Aviator Room, 2F Games Room",
+  "recordingPlayerID": 15451868541914624436,
+  "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+  "additionalTags": "423855620",
+  "gamemode": {
+    "name": "Bomb",
+    "id": 327933806
+  },
+...
+  "teams": [
+    {
+      "name": "YOUR TEAM",
+      "score": 1,
+      "won": true,
+      "winCondition": "KilledOpponents",
+      "role": "Attack"
     },
-    "map": {
-      "name": "CLUB_HOUSE",
-      "id": 837214085
-    },
-    "recordingPlayerID": "10079178519866882138",
-    "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
-    "additionalTags": "423855620",
-    "gamemode": {
-      "name": "BOMB",
-      "id": 327933806
+    {
+      "name": "OPPONENTS",
+      "score": 0,
+      "won": false,
+      "role": "Defense"
+    }
+  ],
+  "players": [
+    {
+      "id": 1830934665040226621,
+      "profileID": "f33396d4-714b-442d-b110-9237e291cc71",
+      "username": "IanFiftyForty",
+      "teamIndex": 1,
+      "operator": {
+        "name": "Oryx",
+        "id": 104189664155
+      },
+      "heroName": 243632506966,
+      "alliance": 0,
+      "roleImage": 104189664090,
+      "roleName": "ORYX",
+      "rolePortrait": 258649622576
     },
 ...
-  "activityFeed": [
+  "matchFeedback": [
     {
-      "type": "KILL",
-      "username": "Eilifint.Ve",
-      "target": "AnOriginalMango",
-      "headshot": false,
-      "time": "2:31",
-      "timeInSeconds": 151
+      "type": "Other",
+      "time": "2:59",
+      "timeInSeconds": 179,
+      "message": "Friendly Fire is now active"
     },
     {
-      "type": "LOCATE_OBJECTIVE",
-      "username": "Eilifint.Ve",
-      "time": "2:16",
-      "timeInSeconds": 136
+      "type": "Kill",
+      "username": "ReithYT",
+      "target": "Ambatakum.",
+      "headshot": false,
+      "time": "1:51",
+      "timeInSeconds": 111
     },
 ...
 ```
 Or the entire match:
 ```bash
-r6-dissect Match-2023-01-22_01-28-13-135/ -x match.json
+r6-dissect Match-2023-03-13_23-23-58-199/ -x match.json
 ```
 Export an Excel spreadsheet by swapping .json with .xlsx.
 ```bash
-r6-dissect Match-2023-01-22_01-28-13-135-R01/ -x match.xlsx
+r6-dissect Match-2023-03-13_23-23-58-199-R01/ -x match.xlsx
 ```
 Output JSON to the console (stdout) with the following syntax:
 ```bash
 # entire match
-r6-dissect Match-2023-01-22_01-28-13-135-R01/ -x stdout
+r6-dissect Match-2023-03-13_23-23-58-199-R01/ -x stdout
 # or single round
-r6-dissect Match-2023-01-22_01-28-13-135-R01/Match-2023-01-22_01-28-13-135-R01.rec -x stdout
+r6-dissect Match-2023-03-13_23-23-58-199-R01/Match-2023-03-13_23-23-58-199-R01.rec -x stdout
 ```
 
 See example outputs in [/examples](https://github.com/redraskal/r6-dissect/tree/main/examples).
@@ -111,7 +141,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("Match-2022-08-28_23-43-24-133-R01.rec")
+	f, err := os.Open("Match-2023-03-13_23-23-58-199-R01.rec")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -140,7 +170,7 @@ import (
 )
 
 func main() {
-	m, err := dissect.NewMatchReader("MatchReplay/Match-2022-08-28_23-43-24-133/")
+	m, err := dissect.NewMatchReader("MatchReplay/Match-2023-03-13_23-23-58-199/")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -157,4 +187,4 @@ func main() {
 ```
 
 #
-I would like to thank [draguve](https://github.com/draguve) & other contributors at [draguve/R6-Replays](https://github.com/draguve/R6-Replays) for their additional work on reverse engineering the dissect format.
+I would like to thank [stnokott](https://github.com/stnokott) for their work on r6-dissect, along with [draguve](https://github.com/draguve) & other contributors at [draguve/R6-Replays](https://github.com/draguve/R6-Replays) for their additional reverse engineering work.

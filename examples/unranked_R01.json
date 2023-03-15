@@ -1,236 +1,265 @@
 {
-  "header": {
-    "gameVersion": "Y7S4",
-    "codeVersion": 7338571,
-    "timestamp": "2023-01-22T01:29:58Z",
-    "matchType": {
-      "name": "UNRANKED",
-      "id": 12
-    },
-    "map": {
-      "name": "CLUB_HOUSE",
-      "id": 837214085
-    },
-    "recordingPlayerID": "10079178519866882138",
-    "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
-    "additionalTags": "423855620",
-    "gamemode": {
-      "name": "BOMB",
-      "id": 327933806
-    },
-    "roundsPerMatch": 6,
-    "roundsPerMatchOvertime": 3,
-    "roundNumber": 0,
-    "overtimeRoundNumber": 0,
-    "teams": [
-      {
-        "name": "YOUR TEAM",
-        "score": 1
-      },
-      {
-        "name": "OPPONENTS",
-        "score": 0
-      }
-    ],
-    "players": [
-      {
-        "id": "17158104956675634177",
-        "profileID": "95ed6407-ccb3-43bf-ae7e-8ad654350a8c",
-        "username": "TheRealRinks",
-        "teamIndex": 1,
-        "heroName": 423855925,
-        "alliance": 4,
-        "roleImage": 2461366790,
-        "roleName": "PULSE",
-        "rolePortrait": 27880706855
-      },
-      {
-        "id": "6299060601270470056",
-        "profileID": "1a2c69a5-53fc-4f6f-9213-6aef4d0f6d88",
-        "username": "RealFuseTV",
-        "teamIndex": 1,
-        "heroName": 350237875,
-        "alliance": 4,
-        "roleImage": 1326495639,
-        "roleName": "JÄGER",
-        "rolePortrait": 27880706811
-      },
-      {
-        "id": "16752849008617258116",
-        "profileID": "cdbb8973-3264-4b40-95a0-7938f3bcbeb5",
-        "username": "Cptbullettime",
-        "teamIndex": 1,
-        "heroName": 161356251582,
-        "alliance": 4,
-        "roleImage": 183220539138,
-        "roleName": "MOZZIE",
-        "rolePortrait": 174977498152
-      },
-      {
-        "id": "5802467642914731616",
-        "profileID": "eb5a1699-c74a-4543-aabf-3f13ccd360af",
-        "username": "imZOZO420",
-        "teamIndex": 1,
-        "heroName": 423855893,
-        "alliance": 4,
-        "roleImage": 1326495635,
-        "roleName": "KAPKAN",
-        "rolePortrait": 27880706822
-      },
-      {
-        "id": "2218610830581566164",
-        "profileID": "859f10cf-656f-49c9-b68d-dac081a4dfc7",
-        "username": "AnOriginalMango",
-        "teamIndex": 1,
-        "heroName": 423855853,
-        "alliance": 4,
-        "roleImage": 1494825833,
-        "roleName": "SMOKE",
-        "rolePortrait": 27880743670
-      },
-      {
-        "id": "",
-        "profileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
-        "username": "redraskal",
-        "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      },
-      {
-        "id": "",
-        "profileID": "7e48ff43-2429-46d4-bfe0-0518dc6f5040",
-        "username": "Eilifint.Ve",
-        "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      },
-      {
-        "id": "",
-        "profileID": "d706dbde-937e-4cf1-a595-cffd5498a532",
-        "username": "lwaxysl",
-        "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      },
-      {
-        "id": "",
-        "profileID": "f2115a22-b3fe-414a-9de3-cbdc251c6486",
-        "username": "PilotSeeker2140",
-        "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      },
-      {
-        "id": "",
-        "profileID": "f1ef316d-f32c-484c-9dea-a40258343612",
-        "username": "holyman54",
-        "teamIndex": 0,
-        "heroName": 0,
-        "alliance": 0,
-        "roleImage": 0,
-        "roleName": "",
-        "rolePortrait": 0
-      }
-    ],
-    "gmSettings": [
-      245225394808,
-      245225394853,
-      245225394902
-    ],
-    "playlistCategory": 245225348548,
-    "matchID": "324a1950-a760-4844-a392-1635c5876c0a"
+  "gameVersion": "Y8S1",
+  "codeVersion": 7422506,
+  "timestamp": "2023-03-13T23:25:46Z",
+  "matchType": {
+    "name": "Ranked",
+    "id": 2
   },
-  "activityFeed": [
+  "map": {
+    "name": "Villa",
+    "id": 88107330328
+  },
+  "site": "2F Aviator Room, 2F Games Room",
+  "recordingPlayerID": 15451868541914624436,
+  "recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+  "additionalTags": "423855620",
+  "gamemode": {
+    "name": "Bomb",
+    "id": 327933806
+  },
+  "roundsPerMatch": 6,
+  "roundsPerMatchOvertime": 3,
+  "roundNumber": 0,
+  "overtimeRoundNumber": 0,
+  "teams": [
     {
-      "type": "KILL",
-      "username": "Eilifint.Ve",
-      "target": "AnOriginalMango",
-      "headshot": false,
-      "time": "2:31",
-      "timeInSeconds": 151
+      "name": "YOUR TEAM",
+      "score": 1,
+      "won": true,
+      "winCondition": "KilledOpponents",
+      "role": "Attack"
     },
     {
-      "type": "KILL",
-      "username": "Eilifint.Ve",
-      "target": "Cptbullettime",
-      "headshot": true,
-      "time": "2:24",
-      "timeInSeconds": 144
-    },
-    {
-      "type": "LOCATE_OBJECTIVE",
-      "username": "Eilifint.Ve",
-      "time": "2:16",
-      "timeInSeconds": 136
-    },
-    {
-      "type": "KILL",
-      "username": "RealFuseTV",
-      "target": "lwaxysl",
-      "headshot": true,
-      "time": "1:57",
-      "timeInSeconds": 117
-    },
-    {
-      "type": "KILL",
-      "username": "Eilifint.Ve",
-      "target": "imZOZO420",
-      "headshot": false,
-      "time": "1:52",
-      "timeInSeconds": 112
-    },
-    {
-      "type": "KILL",
-      "username": "imZOZO420",
-      "target": "Eilifint.Ve",
-      "headshot": false,
-      "time": "1:45",
-      "timeInSeconds": 105
-    },
-    {
-      "type": "KILL",
-      "username": "holyman54",
-      "target": "TheRealRinks",
-      "headshot": false,
-      "time": "1:39",
-      "timeInSeconds": 99
-    },
-    {
-      "type": "KILL",
-      "username": "PilotSeeker2140",
-      "target": "RealFuseTV",
-      "headshot": false,
-      "time": "0:00",
-      "timeInSeconds": 0
+      "name": "OPPONENTS",
+      "score": 0,
+      "won": false,
+      "role": "Defense"
     }
   ],
-  "playerStats": [
+  "players": [
     {
-      "username": "TheRealRinks",
+      "id": 1830934665040226621,
+      "profileID": "f33396d4-714b-442d-b110-9237e291cc71",
+      "username": "IanFiftyForty",
       "teamIndex": 1,
-      "operator": "PULSE",
-      "kills": 0,
-      "died": true,
-      "assists": 0,
-      "headshots": 0,
-      "headshotPercentage": 0
+      "operator": {
+        "name": "Oryx",
+        "id": 104189664155
+      },
+      "heroName": 243632506966,
+      "alliance": 0,
+      "roleImage": 104189664090,
+      "roleName": "ORYX",
+      "rolePortrait": 258649622576
     },
     {
-      "username": "RealFuseTV",
+      "id": 8300656911615175085,
+      "profileID": "d2bf5263-9bef-473d-a3f6-39416943759c",
+      "username": "Thugg.Shaker",
       "teamIndex": 1,
-      "operator": "JÄGER",
+      "operator": {
+        "name": "Aruni",
+        "id": 104189664704
+      },
+      "heroName": 282357287306,
+      "alliance": 0,
+      "roleImage": 104189664639,
+      "roleName": "ARUNI",
+      "rolePortrait": 104189664665
+    },
+    {
+      "id": 14529896020388961514,
+      "profileID": "584b5f46-1622-4934-a7c1-aac02a7bec59",
+      "username": "PaptheDap",
+      "teamIndex": 1,
+      "operator": {
+        "name": "Mira",
+        "id": 92270644319
+      },
+      "heroName": 38576458766,
+      "alliance": 0,
+      "roleImage": 39149215445,
+      "roleName": "MIRA",
+      "rolePortrait": 39149215469
+    },
+    {
+      "id": 12481669488454895235,
+      "profileID": "7332108b-937b-4929-b4cc-7fcb68ce01c8",
+      "username": "Ambatakum.",
+      "teamIndex": 1,
+      "operator": {
+        "name": "Maestro",
+        "id": 104189662175
+      },
+      "heroName": 42095194492,
+      "alliance": 0,
+      "roleImage": 104189662110,
+      "roleName": "MAESTRO",
+      "rolePortrait": 104189662136
+    },
+    {
+      "id": 1969778442544220531,
+      "profileID": "a94d069a-192b-448e-89ca-f5ce459b6664",
+      "username": "Jcelaya123",
+      "teamIndex": 1,
+      "operator": {
+        "name": "Mute",
+        "id": 92270642318
+      },
+      "heroName": 423855857,
+      "alliance": 0,
+      "roleImage": 1494825830,
+      "roleName": "MUTE",
+      "rolePortrait": 27880706844
+    },
+    {
+      "id": 15451868541914624436,
+      "profileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+      "username": "redraskal",
+      "teamIndex": 0,
+      "operator": {
+        "name": "Buck",
+        "id": 92270642474
+      },
+      "alliance": 0,
+      "spawn": "Fountain"
+    },
+    {
+      "id": 2656511413247169930,
+      "profileID": "f2115a22-b3fe-414a-9de3-cbdc251c6486",
+      "username": "Child38",
+      "teamIndex": 0,
+      "operator": {
+        "name": "Brava",
+        "id": 288200866821
+      },
+      "alliance": 0,
+      "spawn": "Ruins"
+    },
+    {
+      "id": 6074112719633833817,
+      "profileID": "d6dba413-9a34-41f9-941d-dc92d424ad2a",
+      "username": "ReithYT",
+      "teamIndex": 0,
+      "operator": {
+        "name": "Sledge",
+        "id": 92270642344
+      },
+      "alliance": 0,
+      "spawn": "Main Road"
+    },
+    {
+      "id": 11836937885265125700,
+      "profileID": "f1ef316d-f32c-484c-9dea-a40258343612",
+      "username": "llittletim1404",
+      "teamIndex": 0,
+      "operator": {
+        "name": "Iana",
+        "id": 104189664038
+      },
+      "alliance": 0,
+      "spawn": "Ruins"
+    },
+    {
+      "id": 7162876195275573085,
+      "profileID": "7e48ff43-2429-46d4-bfe0-0518dc6f5040",
+      "username": "childmlstr15848",
+      "teamIndex": 0,
+      "operator": {
+        "name": "Zero",
+        "id": 291191151607
+      },
+      "alliance": 0,
+      "spawn": "Fountain"
+    }
+  ],
+  "gmSettings": [
+    245225394751,
+    245225394752,
+    245225394901
+  ],
+  "playlistCategory": 245225348570,
+  "matchID": "1a9d58d5-56c3-413f-a506-aa33448def24",
+  "matchFeedback": [
+    {
+      "type": "Other",
+      "time": "0:00",
+      "timeInSeconds": 0,
+      "message": "Friendly Fire turned off until Action Phase"
+    },
+    {
+      "type": "LocateObjective",
+      "username": "redraskal",
+      "time": "0:26",
+      "timeInSeconds": 26
+    },
+    {
+      "type": "Other",
+      "time": "2:59",
+      "timeInSeconds": 179,
+      "message": "Friendly Fire is now active"
+    },
+    {
+      "type": "Kill",
+      "username": "ReithYT",
+      "target": "Ambatakum.",
+      "headshot": false,
+      "time": "1:51",
+      "timeInSeconds": 111
+    },
+    {
+      "type": "Kill",
+      "username": "IanFiftyForty",
+      "target": "llittletim1404",
+      "headshot": true,
+      "time": "1:50",
+      "timeInSeconds": 110
+    },
+    {
+      "type": "Kill",
+      "username": "redraskal",
+      "target": "Thugg.Shaker",
+      "headshot": false,
+      "time": "1:47",
+      "timeInSeconds": 107
+    },
+    {
+      "type": "Kill",
+      "username": "childmlstr15848",
+      "target": "Jcelaya123",
+      "headshot": false,
+      "time": "1:38",
+      "timeInSeconds": 98
+    },
+    {
+      "type": "Kill",
+      "username": "PaptheDap",
+      "target": "childmlstr15848",
+      "headshot": true,
+      "time": "1:34",
+      "timeInSeconds": 94
+    },
+    {
+      "type": "Kill",
+      "username": "redraskal",
+      "target": "IanFiftyForty",
+      "headshot": true,
+      "time": "1:26",
+      "timeInSeconds": 86
+    },
+    {
+      "type": "Kill",
+      "username": "ReithYT",
+      "target": "PaptheDap",
+      "headshot": false,
+      "time": "1:20",
+      "timeInSeconds": 80
+    }
+  ],
+  "stats": [
+    {
+      "username": "IanFiftyForty",
       "kills": 1,
       "died": true,
       "assists": 0,
@@ -238,9 +267,7 @@
       "headshotPercentage": 100
     },
     {
-      "username": "Cptbullettime",
-      "teamIndex": 1,
-      "operator": "MOZZIE",
+      "username": "Thugg.Shaker",
       "kills": 0,
       "died": true,
       "assists": 0,
@@ -248,19 +275,23 @@
       "headshotPercentage": 0
     },
     {
-      "username": "imZOZO420",
-      "teamIndex": 1,
-      "operator": "KAPKAN",
+      "username": "PaptheDap",
       "kills": 1,
+      "died": true,
+      "assists": 0,
+      "headshots": 1,
+      "headshotPercentage": 100
+    },
+    {
+      "username": "Ambatakum.",
+      "kills": 0,
       "died": true,
       "assists": 0,
       "headshots": 0,
       "headshotPercentage": 0
     },
     {
-      "username": "AnOriginalMango",
-      "teamIndex": 1,
-      "operator": "SMOKE",
+      "username": "Jcelaya123",
       "kills": 0,
       "died": true,
       "assists": 0,
@@ -269,28 +300,30 @@
     },
     {
       "username": "redraskal",
-      "teamIndex": 0,
-      "operator": "",
-      "kills": 0,
+      "kills": 2,
       "died": false,
-      "assists": 0,
-      "headshots": 0,
-      "headshotPercentage": 0
-    },
-    {
-      "username": "Eilifint.Ve",
-      "teamIndex": 0,
-      "operator": "",
-      "kills": 3,
-      "died": true,
       "assists": 0,
       "headshots": 1,
-      "headshotPercentage": 33.33333333333333
+      "headshotPercentage": 50
     },
     {
-      "username": "lwaxysl",
-      "teamIndex": 0,
-      "operator": "",
+      "username": "Child38",
+      "kills": 0,
+      "died": false,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "ReithYT",
+      "kills": 2,
+      "died": false,
+      "assists": 0,
+      "headshots": 0,
+      "headshotPercentage": 0
+    },
+    {
+      "username": "llittletim1404",
       "kills": 0,
       "died": true,
       "assists": 0,
@@ -298,21 +331,9 @@
       "headshotPercentage": 0
     },
     {
-      "username": "PilotSeeker2140",
-      "teamIndex": 0,
-      "operator": "",
+      "username": "childmlstr15848",
       "kills": 1,
-      "died": false,
-      "assists": 0,
-      "headshots": 0,
-      "headshotPercentage": 0
-    },
-    {
-      "username": "holyman54",
-      "teamIndex": 0,
-      "operator": "",
-      "kills": 1,
-      "died": false,
+      "died": true,
       "assists": 0,
       "headshots": 0,
       "headshotPercentage": 0
