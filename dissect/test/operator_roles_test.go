@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"go/types"
-	"log"
 	"strconv"
 	"testing"
 
@@ -96,8 +95,6 @@ func getOperatorDefs(pkg *packages.Package) ([]*types.Const, error) {
 		return nil, fmt.Errorf(`could not lookup type "%s"`, operatorTypeName)
 	}
 	operatorType := operatorTypeObj.Type()
-	underlying := operatorType.(*types.Named).Underlying()
-	log.Println(underlying)
 
 	operatorDefs := make([]*types.Const, 0, 100)
 	objDefs := pkg.TypesInfo.Defs
