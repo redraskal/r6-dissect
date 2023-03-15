@@ -92,10 +92,14 @@ func (g *Generator) parseSrcFile(file string) {
 		Mode:  packages.NeedName | packages.NeedTypes | packages.NeedTypesInfo,
 		Tests: false,
 	}
-	pkgs, err := packages.Load(cfg, file)
+	pkgs, err := packages.Load(cfg, "file="+file)
 	if err != nil {
 		log.Fatal(err)
 	}
+	if packages.PrintErrors(pkgs) > 0 {
+		log.Fatal("got errors during package load")
+	}
+
 	// validate we have exactly *one* package
 	// (since we only accept exactly one type, we should also only get one package)
 	if len(pkgs) == 0 {
