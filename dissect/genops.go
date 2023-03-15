@@ -212,6 +212,9 @@ func (g *Generator) printHeader() {
 }
 
 func (g *Generator) printGetter() {
+	// since we have a test validating that every operator has a role,
+	// it could be argued that this method does not need to return an error
+	// and instead could just panic if the role isnt found
 	g.printf("func (i Operator) Role() (%s, error) {\n", g.roleTypeName)
 	g.printf("if r, ok := _operatorRoles[i]; ok {\n")
 	g.printf("return r, nil\n")
