@@ -64,17 +64,14 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 func (r *DissectReader) Read() (err error) {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
-	defer func() {
-		if Ok(err) {
-			err = r.deriveTeamRoles()
-		}
-	}()
 	for {
 		_, err = r.compressed.Read(b)
 		r.offset++
 		if err != nil {
 			return
 		}
+		// need to derive team roles here because we depend on player data
+		r.deriveTeamRoles()
 		for i, query := range r.queries {
 			if b[0] == query[indexes[i]] {
 				indexes[i]++
