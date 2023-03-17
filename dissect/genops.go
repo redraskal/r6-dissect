@@ -18,6 +18,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/redraskal/r6-dissect/dissect/ubi"
@@ -133,6 +134,20 @@ func (g *Generator) loadPackage(pkg *packages.Package) {
 	if len(operatorConsts) == 0 {
 		log.Fatalf("error: did not find any constants of type \"%s\" in package %s", g.operatorTypeName, pkg.Name)
 	}
+
+	// sort to make diffing changes after regeneration easier.
+	// Otherwise, the generation would yield a different order each time since pkg.TypesInfo.Defs
+	// is a map and thus not sorted.
+	// Note that this obviously compares the string representation of our consts, not their actual values
+	// (most likely a uint).
+	// Since we are not interested in the correct numeric order though, but instead just want to have
+	// deterministic generation of our target file, it's ok if we sort the values as strings.
+	sort.Slice(operatorConsts, func(i, j int) bool {
+		return strings.Compare(
+			operatorConsts[i].Val().String(),
+			operatorConsts[j].Val().String(),
+		) == -1
+	})
 	g.operatorConsts = operatorConsts
 	g.roleTypeName = g.getRoleTypeName(pkg)
 }
