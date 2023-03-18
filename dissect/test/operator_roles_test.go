@@ -30,9 +30,14 @@ func Test_operatorRolesDefined(tt *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if _, err = convertedOp.Role(); err != nil {
-				t.Fatalf(`could not determine role for "%s": %v`, opName, err)
-			}
+			defer func() {
+				// recover panic, r is nil if haven't panicked
+				if r := recover(); r != nil {
+					t.Fatalf(`could not determine role for "%s": %v`, opName, r)
+				}
+			}()
+			// should panic if role undefined for operator
+			_ = convertedOp.Role()
 		})
 	}
 }

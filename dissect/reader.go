@@ -64,11 +64,8 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 func (r *DissectReader) Read() (err error) {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
-	defer func() {
-		if Ok(err) {
-			err = r.deriveTeamRoles()
-		}
-	}()
+	// can only derive team roles once read process is complete
+	defer r.deriveTeamRoles()
 	for {
 		_, err = r.compressed.Read(b)
 		r.offset++
