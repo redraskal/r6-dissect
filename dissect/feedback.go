@@ -3,8 +3,9 @@ package dissect
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/rs/zerolog/log"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 type MatchUpdateType int
@@ -36,7 +37,19 @@ type MatchUpdate struct {
 }
 
 func (i MatchUpdateType) MarshalJSON() (text []byte, err error) {
-	return json.Marshal(i.String())
+	return json.Marshal(stringerIntMarshal{
+		Name: i.String(),
+		ID:   int(i),
+	})
+}
+
+func (i *MatchUpdateType) UnmarshalJSON(data []byte) (err error) {
+	var x stringerIntMarshal
+	if err = json.Unmarshal(data, &x); err != nil {
+		return
+	}
+	*i = MatchUpdateType(x.ID)
+	return
 }
 
 var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
