@@ -105,6 +105,9 @@ func (r *Reader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
+	if p.Operator.Role() == Defense {
+		p.Spawn = "" // We cannot detect the spawn here on defense
+	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Interface("op", p.Operator).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
 	for i, existing := range r.Header.Players {
