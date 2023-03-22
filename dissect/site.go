@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (r *DissectReader) readSpawn() error {
+func (r *Reader) readSpawn() error {
 	log.Debug().Msg("site found")
 	location, err := r.readString()
 	if err != nil {
@@ -23,7 +23,7 @@ func (r *DissectReader) readSpawn() error {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
-			if p.Alliance == 4 {
+			if r.Header.Teams[p.TeamIndex].Role == Defense {
 				r.Header.Players[i].Spawn = formatted
 			}
 		}

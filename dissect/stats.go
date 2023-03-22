@@ -24,7 +24,7 @@ type PlayerMatchStats struct {
 }
 
 // OpeningKill returns the first player to kill.
-func (r *DissectReader) OpeningKill() MatchUpdate {
+func (r *Reader) OpeningKill() MatchUpdate {
 	for _, a := range r.MatchFeedback {
 		if a.Type == Kill {
 			return a
@@ -34,7 +34,7 @@ func (r *DissectReader) OpeningKill() MatchUpdate {
 }
 
 // OpeningDeath returns the first player to die (KILL or DEATH activity).
-func (r *DissectReader) OpeningDeath() MatchUpdate {
+func (r *Reader) OpeningDeath() MatchUpdate {
 	for _, a := range r.MatchFeedback {
 		if a.Type == Kill || a.Type == Death {
 			return a
@@ -44,7 +44,7 @@ func (r *DissectReader) OpeningDeath() MatchUpdate {
 }
 
 // Trades returns KILL Activity pairs of trades.
-func (r *DissectReader) Trades() [][]MatchUpdate {
+func (r *Reader) Trades() [][]MatchUpdate {
 	trades := make([][]MatchUpdate, 0)
 	var previous = MatchUpdate{}
 	for _, a := range r.MatchFeedback {
@@ -55,7 +55,7 @@ func (r *DissectReader) Trades() [][]MatchUpdate {
 	return trades
 }
 
-func (r *DissectReader) KillsAndDeaths() []MatchUpdate {
+func (r *Reader) KillsAndDeaths() []MatchUpdate {
 	MatchFeedback := make([]MatchUpdate, 0)
 	for _, a := range r.MatchFeedback {
 		if a.Type == Kill || a.Type == Death {
@@ -65,7 +65,7 @@ func (r *DissectReader) KillsAndDeaths() []MatchUpdate {
 	return MatchFeedback
 }
 
-func (r *DissectReader) NumPlayers(team int) int {
+func (r *Reader) NumPlayers(team int) int {
 	n := 0
 	for _, p := range r.Header.Players {
 		if p.TeamIndex == team {
@@ -75,7 +75,7 @@ func (r *DissectReader) NumPlayers(team int) int {
 	return n
 }
 
-func (r *DissectReader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
+func (r *Reader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 	stats := make([]PlayerRoundStats, 0)
 	index := make(map[string]int)
 	for i, p := range r.Header.Players {

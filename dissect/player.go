@@ -6,13 +6,18 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (r *DissectReader) readPlayer() error {
+func (r *Reader) readPlayer() error {
 	idIndicator := []byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}
 	spawnIndicator := []byte{0xAF, 0x98, 0x99, 0xCA}
 	usernameIndicator := []byte{0x22, 0x85, 0xCF, 0x36, 0x3A}
 	profileIDIndicator := []byte{0x8A, 0x50, 0x9B, 0xD0}
 	//unknownIndicator := []byte{0x22, 0xEE, 0xD4, 0x45, 0xC8, 0x08} // maybe player appearance?
 	r.playersRead++
+	defer func() {
+		if r.playersRead == 10 {
+			r.deriveTeamRoles()
+		}
+	}()
 	if _, err := r.read(8); err != nil {
 		return err
 	}
@@ -100,6 +105,9 @@ func (r *DissectReader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
+	if p.Operator.Role() == Defense {
+		p.Spawn = "" // We cannot detect the spawn here on defense
+	}
 	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Interface("op", p.Operator).Str("profileID", profileID).Hex("id", id).Send()
 	found := false
 	for i, existing := range r.Header.Players {
@@ -109,7 +117,6 @@ func (r *DissectReader) readPlayer() error {
 			r.Header.Players[i].Username = p.Username
 			r.Header.Players[i].TeamIndex = p.TeamIndex
 			r.Header.Players[i].Operator = p.Operator
-			r.Header.Players[i].Alliance = p.Alliance
 			r.Header.Players[i].Spawn = p.Spawn
 			r.Header.Players[i].id = p.id
 			found = true
@@ -126,7 +133,7 @@ func (r *DissectReader) readPlayer() error {
 	return err
 }
 
-func (r *DissectReader) readAtkOpSwap() error {
+func (r *Reader) readAtkOpSwap() error {
 	op, err := r.readUint64()
 	if err != nil {
 		return err
