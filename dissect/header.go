@@ -3,7 +3,6 @@ package dissect
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -449,22 +448,19 @@ func (r *Reader) readHeader() (Header, error) {
 
 // deriveTeamRoles uses the operators chosen by the players to
 // determine the team roles
-func (r *Reader) deriveTeamRoles() error {
+func (r *Reader) deriveTeamRoles() {
 	for _, p := range r.Header.Players {
-		if role, err := p.Operator.Role(); err == nil {
-			teamIndex := p.TeamIndex
-			oppositeTeamIndex := teamIndex ^ 1
-			if role == Attack {
-				r.Header.Teams[teamIndex].Role = Attack
-				r.Header.Teams[oppositeTeamIndex].Role = Defense
-			} else {
-				r.Header.Teams[teamIndex].Role = Defense
-				r.Header.Teams[oppositeTeamIndex].Role = Attack
-			}
-			return nil
+		role := p.Operator.Role()
+		teamIndex := p.TeamIndex
+		oppositeTeamIndex := teamIndex ^ 1
+		if role == Attack {
+			r.Header.Teams[teamIndex].Role = Attack
+			r.Header.Teams[oppositeTeamIndex].Role = Defense
+		} else {
+			r.Header.Teams[teamIndex].Role = Defense
+			r.Header.Teams[oppositeTeamIndex].Role = Attack
 		}
 	}
-	return fmt.Errorf("could not determine team roles (have %d players)", len(r.Header.Players))
 }
 
 func (r *Reader) readHeaderString() (string, error) {

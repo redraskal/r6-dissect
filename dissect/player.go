@@ -15,9 +15,7 @@ func (r *Reader) readPlayer() error {
 	r.playersRead++
 	defer func() {
 		if r.playersRead == 10 {
-			if err := r.deriveTeamRoles(); err != nil {
-				log.Fatal().Err(err).Send()
-			}
+			r.deriveTeamRoles()
 		}
 	}()
 	if _, err := r.read(8); err != nil {
