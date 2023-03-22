@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (r *DissectReader) readTime() error {
+func (r *Reader) readTime() error {
 	time, err := r.readUint32()
 	if err != nil {
 		return err
@@ -20,7 +20,7 @@ func (r *DissectReader) readTime() error {
 	return nil
 }
 
-func (r *DissectReader) readY7Time() error {
+func (r *Reader) readY7Time() error {
 	time, err := r.readString()
 	parts := strings.Split(time, ":")
 	if len(parts) == 1 {
@@ -48,15 +48,15 @@ func (r *DissectReader) readY7Time() error {
 	return nil
 }
 
-func (r *DissectReader) roundEnd() {
+func (r *Reader) roundEnd() {
 	log.Debug().Msg("round_end")
 	planter := -1
 	deaths := make([]int, 2)
 	sizes := make([]int, 2)
-	alliances := make([]int, 2)
+	roles := make([]TeamRole, 2)
 	for _, p := range r.Header.Players {
 		sizes[p.TeamIndex] = sizes[p.TeamIndex] + 1
-		alliances[p.TeamIndex] = p.Alliance
+		roles[p.TeamIndex] = r.Header.Teams[p.TeamIndex].Role
 	}
 	for _, u := range r.MatchFeedback {
 		if u.Type == Kill {
@@ -84,7 +84,7 @@ func (r *DissectReader) roundEnd() {
 		return
 	}
 	if deaths[0] == sizes[0] {
-		if planter > -1 && alliances[0] == 0 { // ignore attackers killed post-plant
+		if planter > -1 && roles[0] == Attack { // ignore attackers killed post-plant
 			return
 		}
 		r.Header.Teams[1].Won = true
@@ -92,7 +92,7 @@ func (r *DissectReader) roundEnd() {
 		return
 	}
 	if deaths[1] == sizes[1] {
-		if planter > -1 && alliances[1] == 0 { // ignore attackers killed post-plant
+		if planter > -1 && roles[1] == Attack { // ignore attackers killed post-plant
 			return
 		}
 		r.Header.Teams[0].Won = true
@@ -100,7 +100,7 @@ func (r *DissectReader) roundEnd() {
 		return
 	}
 	i := 0
-	if alliances[1] == 4 { // defender
+	if roles[1] == Defense {
 		i = 1
 	}
 	r.Header.Teams[i].Won = true

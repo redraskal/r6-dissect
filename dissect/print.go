@@ -4,7 +4,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (r *DissectReader) Head() {
+func (r *Reader) Head() {
 	username := "N/A"
 	for _, p := range r.Header.Players {
 		if p.ProfileID == r.Header.RecordingProfileID {

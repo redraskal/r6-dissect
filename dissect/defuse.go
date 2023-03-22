@@ -5,12 +5,12 @@ import (
 	"strings"
 )
 
-func (r *DissectReader) readDefuserTimer() error {
+func (r *Reader) readDefuserTimer() error {
 	timer, err := r.readString()
 	if err != nil {
 		return err
 	}
-	if _, err = r.read(34); err != nil {
+	if err = r.discard(34); err != nil {
 		return err
 	}
 	id, err := r.read(4)
