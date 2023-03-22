@@ -42,7 +42,7 @@ func (i MatchUpdateType) MarshalJSON() (text []byte, err error) {
 var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
-func (r *DissectReader) readMatchFeedback() error {
+func (r *Reader) readMatchFeedback() error {
 	bombIndicator, err := r.read(1)
 	if err != nil {
 		return err
@@ -74,8 +74,7 @@ func (r *DissectReader) readMatchFeedback() error {
 			log.Debug().Str("warn", "kill username empty").Send()
 		}
 		// No idea what these 15 bytes mean (kill type?)
-		_, err = r.read(15)
-		if err != nil {
+		if err = r.discard(15); err != nil {
 			return err
 		}
 		target, err := r.readString()
@@ -103,8 +102,7 @@ func (r *DissectReader) readMatchFeedback() error {
 			Time:          r.timeRaw,
 			TimeInSeconds: r.time,
 		}
-		_, err = r.read(56)
-		if err != nil {
+		if err = r.discard(56); err != nil {
 			return err
 		}
 		headshot, err := r.readInt()

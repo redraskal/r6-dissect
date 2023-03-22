@@ -227,7 +227,7 @@ func (h Header) RecordingPlayer() Player {
 // readHeaderMagic reads the header magic of the reader
 // and validates the dissect format.
 // If there is an error, it will be of type *ErrInvalidFile.
-func (r *DissectReader) readHeaderMagic() error {
+func (r *Reader) readHeaderMagic() error {
 	// Checks for the dissect header.
 	b, err := r.read(7)
 	if err != nil {
@@ -266,7 +266,7 @@ func (r *DissectReader) readHeaderMagic() error {
 	return nil
 }
 
-func (r *DissectReader) readHeader() (Header, error) {
+func (r *Reader) readHeader() (Header, error) {
 	props := make(map[string]string)
 	gmSettings := make([]int, 0)
 	players := make([]Player, 0)
@@ -449,7 +449,7 @@ func (r *DissectReader) readHeader() (Header, error) {
 
 // deriveTeamRoles uses the operators chosen by the players to
 // determine the team roles
-func (r *DissectReader) deriveTeamRoles() error {
+func (r *Reader) deriveTeamRoles() error {
 	for _, p := range r.Header.Players {
 		if role, err := p.Operator.Role(); err == nil {
 			teamIndex := p.TeamIndex
@@ -467,7 +467,7 @@ func (r *DissectReader) deriveTeamRoles() error {
 	return fmt.Errorf("could not determine team roles (have %d players)", len(r.Header.Players))
 }
 
-func (r *DissectReader) readHeaderString() (string, error) {
+func (r *Reader) readHeaderString() (string, error) {
 	b, err := r.read(1)
 	if err != nil {
 		return "", err

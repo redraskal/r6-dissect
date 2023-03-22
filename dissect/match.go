@@ -13,7 +13,7 @@ import (
 type MatchReader struct {
 	Root   string
 	files  []*os.File
-	rounds []*DissectReader
+	rounds []*Reader
 	read   bool
 }
 
@@ -54,15 +54,15 @@ func (m *MatchReader) Read() error {
 	return nil
 }
 
-func (m *MatchReader) FirstRound() *DissectReader {
+func (m *MatchReader) FirstRound() *Reader {
 	return m.RoundAt(0)
 }
 
-func (m *MatchReader) LastRound() *DissectReader {
+func (m *MatchReader) LastRound() *Reader {
 	return m.RoundAt(m.NumRounds() - 1)
 }
 
-func (m *MatchReader) RoundAt(i int) *DissectReader {
+func (m *MatchReader) RoundAt(i int) *Reader {
 	return m.rounds[i]
 }
 
