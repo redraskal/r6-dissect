@@ -27,14 +27,14 @@ func withFile(file string, run func(*os.File, *testing.T)) func(*testing.T) {
 	}
 }
 
-func readRoundExpected(roundFile string, t *testing.T) *dissect.DissectReader {
+func readRoundExpected(roundFile string, t *testing.T) *dissect.Reader {
 	t.Helper()
 	jsonFile := roundFile + ".json"
 	f, err := os.Open(jsonFile)
 	if err != nil {
 		t.Fatalf(`could not read "%s": %v`, jsonFile, err)
 	}
-	r := new(dissect.DissectReader)
+	r := new(dissect.Reader)
 	if err = json.NewDecoder(f).Decode(r); err != nil {
 		t.Fatalf(`could not decode "%s": %v`, jsonFile, err)
 	}
@@ -55,7 +55,7 @@ func TestInvalid(t *testing.T) {
 	})
 }
 
-// TestNewReader validates data in DissectReader after calling NewReader(), i.e. most header fields
+// TestNewReader validates data in Reader after calling NewReader(), i.e. most header fields
 func TestNewReader(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
@@ -67,7 +67,7 @@ func TestNewReader(t *testing.T) {
 				}
 				// should only be filled by calling .Read(Partial), not when calling NewReader
 				if len(gotR.MatchFeedback) > 0 {
-					t.Errorf("expected DissectReader.MatchFeedback to be empty, got len=%d", len(gotR.MatchFeedback))
+					t.Errorf("expected Reader.MatchFeedback to be empty, got len=%d", len(gotR.MatchFeedback))
 				}
 				wantJSON := readRoundExpected(path, t)
 				// only specifying fieldsCompare which are filled without calling .Read()
@@ -103,8 +103,8 @@ func TestNewReader(t *testing.T) {
 	})
 }
 
-// TestDissectReader_ReadPartial validates data in DissectReader after calling .ReadPartial()
-func TestDissectReader_ReadPartial(t *testing.T) {
+// TestReader_ReadPartial validates data in Reader after calling .ReadPartial()
+func TestReader_ReadPartial(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
 			t.Run(path, withFile(path, func(f *os.File, t *testing.T) {
@@ -156,7 +156,7 @@ func filterPlayerOps(players []dissect.Player, targetRole dissect.TeamRole) []di
 	return out
 }
 
-func TestDissectReader_Read(t *testing.T) {
+func TestReader_Read(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
 			t.Run(path, withFile(path, func(f *os.File, t *testing.T) {
@@ -171,7 +171,7 @@ func TestDissectReader_Read(t *testing.T) {
 				wantJSON := readRoundExpected(path, t)
 
 				if diffs := deep.Equal(gotR.Header, wantJSON.Header); diffs != nil {
-					t.Errorf("DissectReader fields mismatch (got, want):")
+					t.Errorf("Reader fields mismatch (got, want):")
 					for _, diff := range diffs {
 						t.Error("   " + diff)
 					}
