@@ -114,9 +114,12 @@ func TestReader_ReadPartial(t *testing.T) {
 					t.Fatalf("NewReader(): expected no error, got %v", err)
 				}
 				if err = gotR.ReadPartial(); !dissect.Ok(err) {
-					t.Fatalf("Read(): expected no error, got %v", err)
+					t.Fatalf("ReadPartial(): expected no error, got %v", err)
 				}
 				wantJSON := readRoundExpected(path, t)
+				if len(gotR.Header.Players) != len(wantJSON.Header.Players) {
+					t.Fatalf("player count mismatch: got %d, want %d", len(gotR.Header.Players), len(wantJSON.Header.Players))
+				}
 
 				// no need to validate header fields as already covered in different test
 
@@ -134,10 +137,29 @@ func TestReader_ReadPartial(t *testing.T) {
 					return wantDefenderPlayers[i].ID < wantDefenderPlayers[j].ID
 				})
 
-				if diffs := deep.Equal(gotDefenderPlayers, wantDefenderPlayers); diffs != nil {
-					t.Errorf("Header.Players mismatch (got, want):")
-					for _, diff := range diffs {
-						t.Error("   " + diff)
+				for i, gotP := range gotDefenderPlayers {
+					wantP := wantDefenderPlayers[i]
+					fieldsCompare := []struct {
+						name string
+						got  any
+						want any
+					}{
+						{"ID", gotP.ID, wantP.ID},
+						{"ProfileID", gotP.ProfileID, wantP.ProfileID},
+						{"Username", gotP.Username, wantP.Username},
+						{"TeamIndex", gotP.TeamIndex, wantP.TeamIndex},
+						{"Operator", gotP.Operator, wantP.Operator},
+						{"HeroName", gotP.HeroName, wantP.HeroName},
+						{"Alliance", gotP.Alliance, wantP.Alliance},
+						{"RoleImage", gotP.RoleImage, wantP.RoleImage},
+						{"RoleName", gotP.RoleName, wantP.RoleName},
+						{"RolePortrait", gotP.RolePortrait, wantP.RolePortrait},
+					}
+
+					for _, field := range fieldsCompare {
+						if diffs := deep.Equal(field.got, field.want); diffs != nil {
+							t.Errorf("Header.Players[%d].%s mismatch (got, want): %v", i, field.name, diffs)
+						}
 					}
 				}
 			}))
