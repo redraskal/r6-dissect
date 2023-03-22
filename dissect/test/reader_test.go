@@ -59,7 +59,7 @@ func TestInvalid(t *testing.T) {
 func TestNewReader(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
-			t.Run("valid replay file "+d.Name(), withFile(path, func(f *os.File, t *testing.T) {
+			t.Run(path, withFile(path, func(f *os.File, t *testing.T) {
 				t.Parallel()
 				gotR, err := dissect.NewReader(f)
 				if err != nil {
@@ -107,7 +107,7 @@ func TestNewReader(t *testing.T) {
 func TestDissectReader_ReadPartial(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
-			t.Run("valid replay file "+d.Name(), withFile(path, func(f *os.File, t *testing.T) {
+			t.Run(path, withFile(path, func(f *os.File, t *testing.T) {
 				t.Parallel()
 				gotR, err := dissect.NewReader(f)
 				if err != nil {
@@ -159,7 +159,7 @@ func filterPlayerOps(players []dissect.Player, targetRole dissect.TeamRole) []di
 func TestDissectReader_Read(t *testing.T) {
 	filepath.WalkDir("data/replays/valid", func(path string, d fs.DirEntry, err error) error {
 		if err == nil && !d.IsDir() && strings.HasSuffix(path, ".rec") {
-			t.Run("valid replay file "+d.Name(), withFile(path, func(f *os.File, t *testing.T) {
+			t.Run(path, withFile(path, func(f *os.File, t *testing.T) {
 				t.Parallel()
 				gotR, err := dissect.NewReader(f)
 				if err != nil {
