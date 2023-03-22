@@ -49,11 +49,10 @@
 					"id": 92270642682
 				},
 				"heroName": 423855917,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 1494825824,
 				"roleName": "CASTLE",
-				"rolePortrait": 27880706756,
-				"spawn": "Jewelry Front"
+				"rolePortrait": 27880706756
 			},
 			{
 				"id": 17668758393748689036,
@@ -65,11 +64,10 @@
 					"id": 174977508820
 				},
 				"heroName": 161356251582,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 183220539138,
 				"roleName": "MOZZIE",
-				"rolePortrait": 174977498152,
-				"spawn": "Jewelry Front"
+				"rolePortrait": 174977498152
 			},
 			{
 				"id": 1228046118657654424,
@@ -81,11 +79,10 @@
 					"id": 104189664273
 				},
 				"heroName": 255200031607,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 104189664208,
 				"roleName": "MELUSI",
-				"rolePortrait": 104189664234,
-				"spawn": "Jewelry Front"
+				"rolePortrait": 104189664234
 			},
 			{
 				"id": 11184268148855488270,
@@ -97,11 +94,10 @@
 					"id": 92270644059
 				},
 				"heroName": 350237839,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 1494825836,
 				"roleName": "ROOK",
-				"rolePortrait": 27880706877,
-				"spawn": "Alley Access"
+				"rolePortrait": 27880706877
 			},
 			{
 				"id": 7237043221017403435,
@@ -113,11 +109,10 @@
 					"id": 104189664704
 				},
 				"heroName": 282357287306,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 104189664639,
 				"roleName": "ARUNI",
-				"rolePortrait": 104189664665,
-				"spawn": "Alley Access"
+				"rolePortrait": 104189664665
 			},
 			{
 				"id": 17135695547652681161,

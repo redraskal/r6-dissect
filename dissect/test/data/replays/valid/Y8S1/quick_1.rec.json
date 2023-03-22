@@ -48,11 +48,11 @@
 					"id": 391752120891
 				},
 				"heroName": 387456821475,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 390305247296,
 				"roleName": "SOLIS",
 				"rolePortrait": 374667788145,
-				"spawn": "Construction Site"
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
 			},
 			{
 				"id": 7268091374703319803,
@@ -64,11 +64,11 @@
 					"id": 92270644241
 				},
 				"heroName": 36148868912,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 34075810132,
 				"roleName": "CAVEIRA",
 				"rolePortrait": 34075810140,
-				"spawn": "Street"
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
 			},
 			{
 				"id": 10313256902583971419,
@@ -80,11 +80,11 @@
 					"id": 92270644059
 				},
 				"heroName": 350237839,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 1494825836,
 				"roleName": "ROOK",
 				"rolePortrait": 27880706877,
-				"spawn": "Street"
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
 			},
 			{
 				"id": 16131051413548316910,
@@ -96,11 +96,11 @@
 					"id": 92270642396
 				},
 				"heroName": 423855853,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 1494825833,
 				"roleName": "SMOKE",
 				"rolePortrait": 27880743670,
-				"spawn": "Street"
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
 			},
 			{
 				"id": 17135695547652681161,
@@ -112,11 +112,11 @@
 					"id": 174977508820
 				},
 				"heroName": 161356251582,
-				"alliance": 0,
+				"alliance": 4,
 				"roleImage": 183220539138,
 				"roleName": "MOZZIE",
 				"rolePortrait": 174977498152,
-				"spawn": "Junkyard"
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
 			},
 			{
 				"id": 5232682387133492524,
