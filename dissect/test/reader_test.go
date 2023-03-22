@@ -120,16 +120,21 @@ func TestDissectReader_ReadPartial(t *testing.T) {
 
 				// no need to validate header fields as already covered in different test
 
+				// only look at defenders because .ReadPartial() doesn't include attacker swaps and
+				// could thus cause false negatives when comparing to the final output JSON.
+				gotDefenderPlayers := filterPlayerOps(gotR.Header.Players, dissect.Defense)
+				wantDefenderPlayers := filterPlayerOps(wantJSON.Header.Players, dissect.Defense)
+
 				// sort first; we are not interested in the order, but the content.
 				// deep.Equal cares about order, so let's sync the order of got and want
-				sort.SliceStable(gotR.Header.Players, func(i, j int) bool {
-					return gotR.Header.Players[i].ID < gotR.Header.Players[j].ID
+				sort.SliceStable(gotDefenderPlayers, func(i, j int) bool {
+					return gotDefenderPlayers[i].ID < gotDefenderPlayers[j].ID
 				})
-				sort.SliceStable(wantJSON.Header.Players, func(i, j int) bool {
-					return wantJSON.Header.Players[i].ID < wantJSON.Header.Players[j].ID
+				sort.SliceStable(wantDefenderPlayers, func(i, j int) bool {
+					return wantDefenderPlayers[i].ID < wantDefenderPlayers[j].ID
 				})
 
-				if diffs := deep.Equal(gotR.Header.Players, wantJSON.Header.Players); diffs != nil {
+				if diffs := deep.Equal(gotDefenderPlayers, wantDefenderPlayers); diffs != nil {
 					t.Errorf("Header.Players mismatch (got, want):")
 					for _, diff := range diffs {
 						t.Error("   " + diff)
@@ -139,6 +144,16 @@ func TestDissectReader_ReadPartial(t *testing.T) {
 		}
 		return err
 	})
+}
+
+func filterPlayerOps(players []dissect.Player, targetRole dissect.TeamRole) []dissect.Player {
+	out := make([]dissect.Player, 0, 5)
+	for _, p := range players {
+		if p.Operator.Role() == targetRole {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 func TestDissectReader_Read(t *testing.T) {
