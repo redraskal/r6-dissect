@@ -11,7 +11,7 @@ import (
 
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
-type DissectReader struct {
+type Reader struct {
 	reader                 *io.Reader
 	compressed             *zstd.Decoder
 	offset                 int
@@ -29,12 +29,12 @@ type DissectReader struct {
 
 // NewReader decompresses in using zstd and
 // validates the dissect header.
-func NewReader(in io.Reader) (r *DissectReader, err error) {
+func NewReader(in io.Reader) (r *Reader, err error) {
 	compressed, err := zstd.NewReader(in)
 	if err != nil {
 		return
 	}
-	r = &DissectReader{
+	r = &Reader{
 		compressed:  compressed,
 		reader:      &in,
 		readPartial: false,
@@ -61,14 +61,9 @@ func NewReader(in io.Reader) (r *DissectReader, err error) {
 }
 
 // Read continues reading the replay past the header until the EOF.
-func (r *DissectReader) Read() (err error) {
+func (r *Reader) Read() (err error) {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
-	defer func() {
-		if Ok(err) {
-			err = r.deriveTeamRoles()
-		}
-	}()
 	for {
 		_, err = r.compressed.Read(b)
 		r.offset++
@@ -95,7 +90,7 @@ func (r *DissectReader) Read() (err error) {
 }
 
 // ReadPartial continues reading the replay past the header until the full player list is read.
-func (r *DissectReader) ReadPartial() error {
+func (r *Reader) ReadPartial() error {
 	r.readPartial = true
 	log.Debug().Msg("using partial read")
 	err := r.Read()
@@ -103,12 +98,12 @@ func (r *DissectReader) ReadPartial() error {
 	return err
 }
 
-func (r *DissectReader) listen(query []byte, listener func() error) {
+func (r *Reader) listen(query []byte, listener func() error) {
 	r.queries = append(r.queries, query)
 	r.listeners = append(r.listeners, listener)
 }
 
-func (r *DissectReader) seek(query []byte) error {
+func (r *Reader) seek(query []byte) error {
 	start := r.offset
 	b := make([]byte, 1)
 	i := 0
@@ -138,7 +133,7 @@ func (r *DissectReader) seek(query []byte) error {
 	}
 }
 
-func (r *DissectReader) read(n int) ([]byte, error) {
+func (r *Reader) read(n int) ([]byte, error) {
 	b := make([]byte, n)
 	len, err := r.compressed.Read(b)
 	r.offset += len
@@ -151,7 +146,13 @@ func (r *DissectReader) read(n int) ([]byte, error) {
 	return b, nil
 }
 
-func (r *DissectReader) readInt() (int, error) {
+func (r *Reader) discard(n int) error {
+	written, err := io.CopyN(io.Discard, r.compressed, int64(n))
+	r.offset += int(written)
+	return err
+}
+
+func (r *Reader) readInt() (int, error) {
 	b, err := r.read(1)
 	if err != nil {
 		return -1, err
@@ -159,7 +160,7 @@ func (r *DissectReader) readInt() (int, error) {
 	return int(b[0]), nil
 }
 
-func (r *DissectReader) readString() (string, error) {
+func (r *Reader) readString() (string, error) {
 	size, err := r.readInt()
 	if err != nil {
 		return "", err
@@ -171,7 +172,7 @@ func (r *DissectReader) readString() (string, error) {
 	return string(b), nil
 }
 
-func (r *DissectReader) readUint32() (uint32, error) {
+func (r *Reader) readUint32() (uint32, error) {
 	_, err := r.read(1) // size- unnecessary since we already know the length
 	if err != nil {
 		return 0, err
@@ -183,7 +184,7 @@ func (r *DissectReader) readUint32() (uint32, error) {
 	return binary.LittleEndian.Uint32(b), nil
 }
 
-func (r *DissectReader) readUint64() (uint64, error) {
+func (r *Reader) readUint64() (uint64, error) {
 	_, err := r.read(1) // size- unnecessary since we already know the length
 	if err != nil {
 		return 0, err
