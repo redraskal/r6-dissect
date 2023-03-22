@@ -90,6 +90,8 @@ func (r *Reader) Read() (err error) {
 }
 
 // ReadPartial continues reading the replay past the header until the full player list is read.
+// This information does not include dynamic data, such as attack operator swaps.
+// Use ReadPartial for faster, minimal reads.
 func (r *Reader) ReadPartial() error {
 	r.readPartial = true
 	log.Debug().Msg("using partial read")
