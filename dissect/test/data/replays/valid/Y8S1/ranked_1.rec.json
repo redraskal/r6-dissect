@@ -1,0 +1,320 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7422506,
+		"timestamp": "2023-03-08T21:06:26Z",
+		"matchType": {
+			"name": "Ranked",
+			"id": 2
+		},
+		"map": {
+			"name": "Chalet",
+			"id": 259816839773
+		},
+		"site": "2F Master Bedroom, 2F Office",
+		"recordingPlayerID": 15960528403785102634,
+		"recordingProfileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 6,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 0,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "YOUR TEAM",
+				"score": 0,
+				"won": false,
+				"role": "Attack"
+			},
+			{
+				"name": "OPPONENTS",
+				"score": 1,
+				"won": true,
+				"winCondition": "Time",
+				"role": "Defense"
+			}
+		],
+		"players": [
+			{
+				"id": 7916498210716045712,
+				"profileID": "eb68b1db-0aec-4c1d-bf96-0d548db88c91",
+				"username": "andony._.",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Alibi",
+					"id": 104189662071
+				},
+				"heroName": 99407349245,
+				"alliance": 4,
+				"roleImage": 121604587892,
+				"roleName": "ALIBI",
+				"rolePortrait": 104189662084,
+				"spawn": "2F Master Bedroom, 2F Office"
+			},
+			{
+				"id": 8608583671224685073,
+				"profileID": "27a3ea4a-73db-4a3d-afba-b62273df6947",
+				"username": "escortbaby.",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Aruni",
+					"id": 104189664704
+				},
+				"heroName": 282357287306,
+				"alliance": 4,
+				"roleImage": 104189664639,
+				"roleName": "ARUNI",
+				"rolePortrait": 104189664665,
+				"spawn": "2F Master Bedroom, 2F Office"
+			},
+			{
+				"id": 3945277815685859181,
+				"profileID": "34e60dda-0389-47b9-ad81-7b1ea191528b",
+				"username": "QWERTUSZ",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Castle",
+					"id": 92270642682
+				},
+				"heroName": 423855917,
+				"alliance": 4,
+				"roleImage": 1494825824,
+				"roleName": "CASTLE",
+				"rolePortrait": 27880706756,
+				"spawn": "2F Master Bedroom, 2F Office"
+			},
+			{
+				"id": 3979437088795460895,
+				"profileID": "45a8fc6f-f325-4239-b78f-bcbc20ba3eef",
+				"username": "MilusANevem",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ela",
+					"id": 92270644163
+				},
+				"heroName": 38576460310,
+				"alliance": 4,
+				"roleImage": 39149215589,
+				"roleName": "ELA",
+				"rolePortrait": 39149215613
+			},
+			{
+				"id": 2545135856130398684,
+				"profileID": "bb43cb21-f128-4c5d-a3ed-470958a62b62",
+				"username": "Du-Simulant.",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mute",
+					"id": 92270642318
+				},
+				"heroName": 423855857,
+				"alliance": 4,
+				"roleImage": 1494825830,
+				"roleName": "MUTE",
+				"rolePortrait": 27880706844,
+				"spawn": "2F Master Bedroom, 2F Office"
+			},
+			{
+				"id": 15960528403785102634,
+				"profileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+				"username": "Knoblauch.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Sledge",
+					"id": 92270642344
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			},
+			{
+				"id": 5214547952360922830,
+				"profileID": "584c0cb8-3c04-4453-8a75-048acc44807c",
+				"username": "Metaxa.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Thermite",
+					"id": 92270642760
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			},
+			{
+				"id": 12885837037154839291,
+				"profileID": "f1080efc-58a1-4c15-aaad-f2ca8fad21a7",
+				"username": "Chili.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Brava",
+					"id": 288200866821
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			},
+			{
+				"id": 15688106071495581310,
+				"profileID": "1fec87fe-209f-4554-b3c5-9a1065fa3262",
+				"username": "Erdnuss.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Blitz",
+					"id": 92270642539
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			},
+			{
+				"id": 15357672536015324208,
+				"profileID": "bf597fa6-ca43-4ceb-9fd3-644aacf6fb99",
+				"username": "Vanille.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Gridlock",
+					"id": 174977508808
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			}
+		],
+		"gmSettings": [
+			245225394751,
+			245225394752,
+			245225394901
+		],
+		"playlistCategory": 245225348570,
+		"matchID": "d9be0e53-2016-4e24-ab65-a2cc0b403973"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Vanille.SOOS",
+			"time": "0:28",
+			"timeInSeconds": 28,
+			"operator": {
+				"name": "Gridlock",
+				"id": 174977508808
+			}
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "Metaxa.SOOS",
+			"time": "0:22",
+			"timeInSeconds": 22
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Knoblauch.SOOS",
+			"time": "0:22",
+			"timeInSeconds": 22,
+			"operator": {
+				"name": "Sledge",
+				"id": 92270642344
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "QWERTUSZ",
+			"target": "Metaxa.SOOS",
+			"headshot": true,
+			"time": "1:11",
+			"timeInSeconds": 71
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "QWERTUSZ",
+			"target": "Chili.SOOS",
+			"headshot": false,
+			"time": "0:44",
+			"timeInSeconds": 44
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "andony._.",
+			"target": "Erdnuss.SOOS",
+			"headshot": false,
+			"time": "0:12",
+			"timeInSeconds": 12
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Knoblauch.SOOS",
+			"target": "QWERTUSZ",
+			"headshot": false,
+			"time": "0:07",
+			"timeInSeconds": 7
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Vanille.SOOS",
+			"target": "MilusANevem",
+			"headshot": false,
+			"time": "0:07",
+			"timeInSeconds": 7
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Knoblauch.SOOS",
+			"target": "Du-Simulant.",
+			"headshot": true,
+			"time": "0:00",
+			"timeInSeconds": 0
+		},
+		{
+			"type": {
+				"name": "PlayerLeave",
+				"id": 9
+			},
+			"username": "QWERTUSZ",
+			"time": "0:07",
+			"timeInSeconds": 7
+		}
+	]
+}

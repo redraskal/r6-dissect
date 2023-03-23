@@ -186,11 +186,23 @@ const (
 	Clash       Operator = 104189662280
 )
 
+// duplicated code here could be avoided by defining a generic function accepting any Number type.
+// that kind of constraint is still experimental though (as of Go 1.20.2): https://pkg.go.dev/golang.org/x/exp/constraints
+
 func (i MatchType) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(stringerIntMarshal{
 		Name: i.String(),
 		ID:   int(i),
 	})
+}
+
+func (i *MatchType) UnmarshalJSON(data []byte) (err error) {
+	var x stringerIntMarshal
+	if err = json.Unmarshal(data, &x); err != nil {
+		return
+	}
+	*i = MatchType(x.ID)
+	return
 }
 
 func (i GameMode) MarshalJSON() (text []byte, err error) {
@@ -200,6 +212,15 @@ func (i GameMode) MarshalJSON() (text []byte, err error) {
 	})
 }
 
+func (i *GameMode) UnmarshalJSON(data []byte) (err error) {
+	var x stringerIntMarshal
+	if err = json.Unmarshal(data, &x); err != nil {
+		return
+	}
+	*i = GameMode(x.ID)
+	return
+}
+
 func (i Map) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(stringerIntMarshal{
 		Name: i.String(),
@@ -207,11 +228,29 @@ func (i Map) MarshalJSON() (text []byte, err error) {
 	})
 }
 
+func (i *Map) UnmarshalJSON(data []byte) (err error) {
+	var x stringerIntMarshal
+	if err = json.Unmarshal(data, &x); err != nil {
+		return
+	}
+	*i = Map(x.ID)
+	return
+}
+
 func (i Operator) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(stringerIntMarshal{
 		Name: i.String(),
 		ID:   int(i),
 	})
+}
+
+func (i *Operator) UnmarshalJSON(data []byte) (err error) {
+	var x stringerIntMarshal
+	if err = json.Unmarshal(data, &x); err != nil {
+		return
+	}
+	*i = Operator(x.ID)
+	return
 }
 
 func (h Header) RecordingPlayer() Player {

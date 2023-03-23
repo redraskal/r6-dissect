@@ -6,14 +6,14 @@
 *.dylib
 
 # Dissect replay files
-*.rec
+/*.rec
 # Dissect output files
 /*.json
 /*.xlsx
-*.bin
-*.txt
+/*.bin
+/*.txt
 # Memory dumps
-*.dmp
+/*.dmp
 
 # IDEs
 .vscode/launch.json

@@ -3,6 +3,7 @@ module github.com/redraskal/r6-dissect
 go 1.20
 
 require (
+	github.com/go-test/deep v1.1.0
 	github.com/klauspost/compress v1.16.3
 	github.com/rs/zerolog v1.29.0
 	github.com/spf13/pflag v1.0.5

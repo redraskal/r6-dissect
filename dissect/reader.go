@@ -23,8 +23,8 @@ type Reader struct {
 	planted                bool
 	readPartial            bool // reads up to the player info packets
 	playersRead            int
-	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
 	Header                 Header        `json:"header"`
+	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
 }
 
 // NewReader decompresses in using zstd and

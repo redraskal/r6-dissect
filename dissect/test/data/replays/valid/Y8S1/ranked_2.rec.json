@@ -1,0 +1,301 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7441957,
+		"timestamp": "2023-03-19T21:30:20Z",
+		"matchType": {
+			"name": "Ranked",
+			"id": 2
+		},
+		"map": {
+			"name": "Bank",
+			"id": 355496559878
+		},
+		"site": "1F Staff Room, 1F Open Area",
+		"recordingPlayerID": 17135695547652681161,
+		"recordingProfileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 6,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 5,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "OPPONENTS",
+				"score": 4,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Defense"
+			},
+			{
+				"name": "YOUR TEAM",
+				"score": 2,
+				"won": false,
+				"role": "Attack"
+			}
+		],
+		"players": [
+			{
+				"id": 8613773759464968686,
+				"profileID": "6e9eba1e-c277-49c4-b0f8-d767139b3319",
+				"username": "SZIATEBUZI3156",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Castle",
+					"id": 92270642682
+				},
+				"heroName": 423855917,
+				"alliance": 4,
+				"roleImage": 1494825824,
+				"roleName": "CASTLE",
+				"rolePortrait": 27880706756
+			},
+			{
+				"id": 17668758393748689036,
+				"profileID": "4a4d6bb7-c987-48ab-be8b-9d83088a0109",
+				"username": "Luckeyleader",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Mozzie",
+					"id": 174977508820
+				},
+				"heroName": 161356251582,
+				"alliance": 4,
+				"roleImage": 183220539138,
+				"roleName": "MOZZIE",
+				"rolePortrait": 174977498152
+			},
+			{
+				"id": 1228046118657654424,
+				"profileID": "d4aa9ee5-461f-4195-af74-d61136590bdb",
+				"username": "DejaVu_BTW",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Melusi",
+					"id": 104189664273
+				},
+				"heroName": 255200031607,
+				"alliance": 4,
+				"roleImage": 104189664208,
+				"roleName": "MELUSI",
+				"rolePortrait": 104189664234
+			},
+			{
+				"id": 11184268148855488270,
+				"profileID": "64efc6a4-d945-4a63-984e-26975a28315e",
+				"username": "lekurom50_16Hz",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Rook",
+					"id": 92270644059
+				},
+				"heroName": 350237839,
+				"alliance": 4,
+				"roleImage": 1494825836,
+				"roleName": "ROOK",
+				"rolePortrait": 27880706877
+			},
+			{
+				"id": 7237043221017403435,
+				"profileID": "5ca876e5-aee7-4b45-aeee-4510660368a7",
+				"username": "Hellcat352020",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Aruni",
+					"id": 104189664704
+				},
+				"heroName": 282357287306,
+				"alliance": 4,
+				"roleImage": 104189664639,
+				"roleName": "ARUNI",
+				"rolePortrait": 104189664665
+			},
+			{
+				"id": 17135695547652681161,
+				"profileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+				"username": "Knoblauch.SOOS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Hibana",
+					"id": 92270642240
+				},
+				"alliance": 0,
+				"spawn": "Parking Front"
+			},
+			{
+				"id": 2789079261592950566,
+				"profileID": "1fec87fe-209f-4554-b3c5-9a1065fa3262",
+				"username": "Erdnuss.SOOS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Blitz",
+					"id": 92270642539
+				},
+				"alliance": 0,
+				"spawn": "Alley Access"
+			},
+			{
+				"id": 8497140181552389952,
+				"profileID": "584c0cb8-3c04-4453-8a75-048acc44807c",
+				"username": "Metaxa.SOOS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ace",
+					"id": 104189664390
+				},
+				"alliance": 0,
+				"spawn": "Alley Access"
+			},
+			{
+				"id": 3393957052367340279,
+				"profileID": "f1080efc-58a1-4c15-aaad-f2ca8fad21a7",
+				"username": "Chili.SOOS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Brava",
+					"id": 288200866821
+				},
+				"alliance": 0,
+				"spawn": "Alley Access"
+			},
+			{
+				"id": 5494154366455852855,
+				"profileID": "bf597fa6-ca43-4ceb-9fd3-644aacf6fb99",
+				"username": "Vanille.SOOS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Lion",
+					"id": 104189661861
+				},
+				"alliance": 0,
+				"spawn": "Alley Access"
+			}
+		],
+		"gmSettings": [
+			245225394751,
+			245225394752,
+			245225394901
+		],
+		"playlistCategory": 245225348570,
+		"matchID": "86bff96d-ce91-481c-95d7-41bb7eb0a940"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "3"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "Chili.SOOS",
+			"time": "0:11",
+			"timeInSeconds": 11
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "SZIATEBUZI3156",
+			"target": "Metaxa.SOOS",
+			"headshot": false,
+			"time": "1:11",
+			"timeInSeconds": 71
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Hellcat352020",
+			"target": "Chili.SOOS",
+			"headshot": true,
+			"time": "0:52",
+			"timeInSeconds": 52
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "DejaVu_BTW",
+			"target": "Erdnuss.SOOS",
+			"headshot": true,
+			"time": "0:45",
+			"timeInSeconds": 45
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Knoblauch.SOOS",
+			"target": "DejaVu_BTW",
+			"headshot": true,
+			"time": "0:40",
+			"timeInSeconds": 40
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Hellcat352020",
+			"target": "Knoblauch.SOOS",
+			"headshot": false,
+			"time": "0:40",
+			"timeInSeconds": 40
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Vanille.SOOS",
+			"target": "SZIATEBUZI3156",
+			"headshot": false,
+			"time": "0:37",
+			"timeInSeconds": 37
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Luckeyleader",
+			"target": "Vanille.SOOS",
+			"headshot": false,
+			"time": "0:35",
+			"timeInSeconds": 35
+		}
+	]
+}

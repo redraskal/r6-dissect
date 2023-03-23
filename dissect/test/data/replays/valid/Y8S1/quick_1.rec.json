@@ -1,0 +1,347 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7441957,
+		"timestamp": "2023-03-19T17:49:08Z",
+		"matchType": {
+			"name": "QuickMatch",
+			"id": 1
+		},
+		"map": {
+			"name": "Oregon",
+			"id": 231702797556
+		},
+		"site": "2F Kids' Dorms, 2F Dorms Main Hall",
+		"recordingPlayerID": 17135695547652681161,
+		"recordingProfileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 4,
+		"roundsPerMatchOvertime": 1,
+		"roundNumber": 2,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "YOUR TEAM",
+				"score": 0,
+				"won": false,
+				"role": "Defense"
+			},
+			{
+				"name": "OPPONENTS",
+				"score": 3,
+				"won": false,
+				"role": "Attack"
+			}
+		],
+		"players": [
+			{
+				"id": 1642218077967960499,
+				"profileID": "38b7404a-384d-4f9b-b25f-d602b498e10f",
+				"username": "prooviic3",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Solis",
+					"id": 391752120891
+				},
+				"heroName": 387456821475,
+				"alliance": 4,
+				"roleImage": 390305247296,
+				"roleName": "SOLIS",
+				"rolePortrait": 374667788145,
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
+			},
+			{
+				"id": 7268091374703319803,
+				"profileID": "1fec87fe-209f-4554-b3c5-9a1065fa3262",
+				"username": "Erdnuss.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Caveira",
+					"id": 92270644241
+				},
+				"heroName": 36148868912,
+				"alliance": 4,
+				"roleImage": 34075810132,
+				"roleName": "CAVEIRA",
+				"rolePortrait": 34075810140,
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
+			},
+			{
+				"id": 10313256902583971419,
+				"profileID": "ec75993e-3082-4f0e-a48e-79609b614103",
+				"username": "MrLezzident",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Rook",
+					"id": 92270644059
+				},
+				"heroName": 350237839,
+				"alliance": 4,
+				"roleImage": 1494825836,
+				"roleName": "ROOK",
+				"rolePortrait": 27880706877,
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
+			},
+			{
+				"id": 16131051413548316910,
+				"profileID": "2d96d3e0-7d20-4a15-9487-fa67f6a558c5",
+				"username": "xb034",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Smoke",
+					"id": 92270642396
+				},
+				"heroName": 423855853,
+				"alliance": 4,
+				"roleImage": 1494825833,
+				"roleName": "SMOKE",
+				"rolePortrait": 27880743670,
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
+			},
+			{
+				"id": 17135695547652681161,
+				"profileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+				"username": "Knoblauch.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Mozzie",
+					"id": 174977508820
+				},
+				"heroName": 161356251582,
+				"alliance": 4,
+				"roleImage": 183220539138,
+				"roleName": "MOZZIE",
+				"rolePortrait": 174977498152,
+				"spawn": "2F Kids' Dorms, 2F Dorms Main Hall"
+			},
+			{
+				"id": 5232682387133492524,
+				"profileID": "0740fae0-6419-4c9c-b14b-4046c057376f",
+				"username": "Sex34151",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Amaru",
+					"id": 104189663607
+				},
+				"alliance": 0,
+				"spawn": "Junkyard"
+			},
+			{
+				"id": 10777326292752180301,
+				"profileID": "19b48b44-a55e-496c-92e4-b38dbd17e7c3",
+				"username": "Perskules",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Glaz",
+					"id": 92270642084
+				},
+				"alliance": 0,
+				"spawn": "Street"
+			},
+			{
+				"id": 5222607504660848273,
+				"profileID": "5c868586-3e84-4425-8c16-3a7f56a60204",
+				"username": "Hampsterdamn",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Capitao",
+					"id": 92270644215
+				},
+				"alliance": 0,
+				"spawn": "Construction Site"
+			},
+			{
+				"id": 15861013724445182745,
+				"profileID": "0bd76195-3f49-42d6-b65a-43a2a052423c",
+				"username": "Ekkarus",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Lion",
+					"id": 104189661861
+				},
+				"alliance": 0,
+				"spawn": "Street"
+			},
+			{
+				"id": 17626061292433592815,
+				"profileID": "6103c80b-20dc-4a57-b7a3-24b81194b3cb",
+				"username": "Squilllll",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Blitz",
+					"id": 92270642539
+				},
+				"alliance": 0,
+				"spawn": "Street"
+			}
+		],
+		"gmSettings": [
+			245225395053,
+			245225395057,
+			245225395054
+		],
+		"playlistCategory": 245225348295,
+		"matchID": "2b626adc-76da-4ddc-b105-fe0eec141e42"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Squilllll",
+			"time": "0:29",
+			"timeInSeconds": 29,
+			"operator": {
+				"name": "Blitz",
+				"id": 92270642539
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Sex34151",
+			"time": "0:15",
+			"timeInSeconds": 15,
+			"operator": {
+				"name": "Amaru",
+				"id": 104189663607
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "Squilllll",
+			"time": "2:41",
+			"timeInSeconds": 161
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Squilllll",
+			"target": "Knoblauch.SOOS",
+			"headshot": false,
+			"time": "2:38",
+			"timeInSeconds": 158
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "Squilllll",
+			"time": "2:38",
+			"timeInSeconds": 158
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Ekkarus",
+			"target": "xb034",
+			"headshot": false,
+			"time": "2:34",
+			"timeInSeconds": 154
+		},
+		{
+			"type": {
+				"name": "DefuserPlantStart",
+				"id": 2
+			},
+			"username": "Hampsterdamn",
+			"time": "2:30",
+			"timeInSeconds": 150
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Sex34151",
+			"target": "MrLezzident",
+			"headshot": false,
+			"time": "2:28",
+			"timeInSeconds": 148
+		},
+		{
+			"type": {
+				"name": "DefuserPlantComplete",
+				"id": 3
+			},
+			"username": "Hampsterdamn",
+			"time": "2:23",
+			"timeInSeconds": 143
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Sex34151",
+			"target": "Erdnuss.SOOS",
+			"headshot": false,
+			"time": "0:44",
+			"timeInSeconds": 44
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Sex34151",
+			"target": "Perskules",
+			"headshot": false,
+			"time": "0:43",
+			"timeInSeconds": 43
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Hampsterdamn",
+			"target": "prooviic3",
+			"headshot": true,
+			"time": "0:00",
+			"timeInSeconds": 0
+		},
+		{
+			"type": {
+				"name": "PlayerLeave",
+				"id": 9
+			},
+			"username": "prooviic3",
+			"time": "0:23",
+			"timeInSeconds": 23
+		}
+	]
+}

@@ -1,0 +1,321 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7441957,
+		"timestamp": "2023-03-19T17:24:50Z",
+		"matchType": {
+			"name": "QuickMatch",
+			"id": 1
+		},
+		"map": {
+			"name": "House",
+			"id": 237873412352
+		},
+		"site": "1F TV Room, 1F Music Room",
+		"recordingPlayerID": 17135695547652681161,
+		"recordingProfileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 4,
+		"roundsPerMatchOvertime": 1,
+		"roundNumber": 1,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "YOUR TEAM",
+				"score": 0,
+				"won": false,
+				"role": "Attack"
+			},
+			{
+				"name": "OPPONENTS",
+				"score": 2,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Defense"
+			}
+		],
+		"players": [
+			{
+				"id": 7727172759881991606,
+				"profileID": "3249a748-15f2-4f50-818a-57b06481e156",
+				"username": "Kabelband",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ela",
+					"id": 92270644163
+				},
+				"heroName": 38576460310,
+				"alliance": 4,
+				"roleImage": 39149215589,
+				"roleName": "ELA",
+				"rolePortrait": 39149215613,
+				"spawn": "1F TV Room, 1F Music Room"
+			},
+			{
+				"id": 2478914071629594230,
+				"profileID": "6fbec39d-21c8-4ea6-b4b9-92a8e86d05e0",
+				"username": "hello182",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Azami",
+					"id": 378305069945
+				},
+				"heroName": 373332356036,
+				"alliance": 4,
+				"roleImage": 375628889901,
+				"roleName": "AZAMI",
+				"rolePortrait": 378305072064,
+				"spawn": "1F TV Room, 1F Music Room"
+			},
+			{
+				"id": 7413827518290198821,
+				"profileID": "35e7ff07-058e-4ca3-8e16-cd71ee5355fa",
+				"username": "Jordan96791",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mozzie",
+					"id": 174977508820
+				},
+				"heroName": 161356251582,
+				"alliance": 4,
+				"roleImage": 183220539138,
+				"roleName": "MOZZIE",
+				"rolePortrait": 174977498152,
+				"spawn": "1F TV Room, 1F Music Room"
+			},
+			{
+				"id": 16377708134349837188,
+				"profileID": "ee4b9578-6525-4e3e-9a50-c37d552eecfd",
+				"username": "A-._",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Smoke",
+					"id": 92270642396
+				},
+				"heroName": 423855853,
+				"alliance": 4,
+				"roleImage": 1494825833,
+				"roleName": "SMOKE",
+				"rolePortrait": 27880743670,
+				"spawn": "1F TV Room, 1F Music Room"
+			},
+			{
+				"id": 17456111544074548895,
+				"profileID": "f75a5e4a-40a9-4840-9a4e-9ea1ea6e30d0",
+				"username": "SCP-31870",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Warden",
+					"id": 104189662920
+				},
+				"heroName": 189095391481,
+				"alliance": 4,
+				"roleImage": 104189662842,
+				"roleName": "WARDEN",
+				"rolePortrait": 104189662868,
+				"spawn": "1F TV Room, 1F Music Room"
+			},
+			{
+				"id": 17135695547652681161,
+				"profileID": "fa94e165-6328-4a9b-8581-81735ffaba27",
+				"username": "Knoblauch.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Flores",
+					"id": 328397386974
+				},
+				"alliance": 0,
+				"spawn": "APC Area"
+			},
+			{
+				"id": 7268091374703319803,
+				"profileID": "1fec87fe-209f-4554-b3c5-9a1065fa3262",
+				"username": "Erdnuss.SOOS",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Osa",
+					"id": 288200867444
+				},
+				"alliance": 0,
+				"spawn": "Side Street"
+			},
+			{
+				"id": 13208408804188310900,
+				"profileID": "e2cbcac7-454f-40fa-8d33-bd06dd75bfe2",
+				"username": "Clampett_",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Thermite",
+					"id": 92270642760
+				},
+				"alliance": 0,
+				"spawn": "Side Street"
+			},
+			{
+				"id": 218166518535962488,
+				"profileID": "7ed350a0-002d-4ef0-a2ff-50d1b740cd0c",
+				"username": "gbarna.djk",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Nomad",
+					"id": 161289666248
+				},
+				"alliance": 0,
+				"spawn": "Side Street"
+			},
+			{
+				"id": 7618074269752155582,
+				"profileID": "d8ffbc03-06b9-4bdd-8aa4-0c069c32a19e",
+				"username": "itsrafaelgotu",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Kali",
+					"id": 104189663920
+				},
+				"alliance": 0,
+				"spawn": "APC Area"
+			}
+		],
+		"gmSettings": [
+			245225395053,
+			245225395057,
+			245225395054
+		],
+		"playlistCategory": 245225348295,
+		"matchID": "06659973-6323-47f3-9024-7df88d907e2a"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "Knoblauch.SOOS",
+			"time": "0:38",
+			"timeInSeconds": 38
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Knoblauch.SOOS",
+			"time": "0:14",
+			"timeInSeconds": 14,
+			"operator": {
+				"name": "Flores",
+				"id": 328397386974
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "A-._",
+			"target": "Clampett_",
+			"headshot": false,
+			"time": "2:34",
+			"timeInSeconds": 154
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "itsrafaelgotu",
+			"target": "A-._",
+			"headshot": false,
+			"time": "2:28",
+			"timeInSeconds": 148
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "hello182",
+			"target": "itsrafaelgotu",
+			"headshot": false,
+			"time": "2:17",
+			"timeInSeconds": 137
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "gbarna.djk",
+			"target": "hello182",
+			"headshot": true,
+			"time": "2:16",
+			"timeInSeconds": 136
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "gbarna.djk",
+			"target": "SCP-31870",
+			"headshot": true,
+			"time": "2:06",
+			"timeInSeconds": 126
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Kabelband",
+			"target": "Erdnuss.SOOS",
+			"headshot": false,
+			"time": "2:05",
+			"timeInSeconds": 125
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Jordan96791",
+			"target": "gbarna.djk",
+			"headshot": false,
+			"time": "1:11",
+			"timeInSeconds": 71
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Jordan96791",
+			"target": "Knoblauch.SOOS",
+			"headshot": true,
+			"time": "0:30",
+			"timeInSeconds": 30
+		}
+	]
+}
