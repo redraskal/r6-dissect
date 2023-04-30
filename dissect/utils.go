@@ -15,6 +15,9 @@ func (r *Reader) playerIndexById(id []byte) int {
 			return i
 		}
 	}
+	if !bytes.Equal(id, []byte{0x00, 0x00, 0x00, 0x00}) {
+		log.Debug().Hex("id", id).Msg("warn: could not index player by id")
+	}
 	return -1
 }
 
@@ -24,6 +27,7 @@ func (r *Reader) playerIndexByUsername(username string) int {
 			return i
 		}
 	}
+	log.Debug().Str("username", username).Msg("warn: could not index player by username")
 	return -1
 }
 
