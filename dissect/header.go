@@ -488,6 +488,13 @@ func (r *Reader) readHeader() (Header, error) {
 // deriveTeamRoles uses the operators chosen by the players to
 // determine the team roles
 func (r *Reader) deriveTeamRoles() {
+	log.Debug().Int("players", len(r.Header.Players)).Msg("deriving team roles")
+	if len(r.Header.Players) > 10 {
+		log.Warn().Msg("tracked players greater than 10")
+		for _, p := range r.Header.Players {
+			log.Debug().Str("username", p.Username).Hex("id", p.id).Send()
+		}
+	}
 	for _, p := range r.Header.Players {
 		role := p.Operator.Role()
 		teamIndex := p.TeamIndex

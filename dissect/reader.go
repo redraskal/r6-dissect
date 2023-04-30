@@ -47,7 +47,8 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	if err != nil {
 		return
 	}
-	r.listen([]byte{0x40, 0xF2, 0x15, 0x04}, r.readPlayer)
+	log.Debug().Str("season", r.Header.GameVersion).Int("code", r.Header.CodeVersion).Send()
+	r.listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, r.readPlayer)
 	r.listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
 	r.listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
 	if h.CodeVersion >= 7408213 { // Y8S1
@@ -64,6 +65,9 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 func (r *Reader) Read() (err error) {
 	b := make([]byte, 1)
 	indexes := make([]int, len(r.queries))
+	if !r.readPartial {
+		defer r.roundEnd()
+	}
 	for {
 		_, err = r.compressed.Read(b)
 		r.offset++
