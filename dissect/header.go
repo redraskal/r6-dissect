@@ -87,7 +87,7 @@ const (
 	Kanal             Map = 1460220617
 	Yacht             Map = 1767965020
 	PresidentialPlane Map = 2609218856
-	Consulate         Map = 2609221242
+	ConsulateY7       Map = 2609221242
 	BartlettU         Map = 2697268122
 	Coastline         Map = 42090092951
 	Tower             Map = 53627213396
@@ -106,6 +106,7 @@ const (
 	EmeraldPlains     Map = 365284490964
 	StadiumBravo      Map = 270063334510
 	NighthavenLabs    Map = 378595635123
+	Consulate         Map = 379218689149
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
@@ -184,6 +185,7 @@ const (
 	Frost       Operator = 92270642500
 	Maestro     Operator = 104189662175
 	Clash       Operator = 104189662280
+	Fenrir      Operator = 288200867339
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.

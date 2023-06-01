@@ -13,7 +13,7 @@ func _() {
 	_ = x[Kanal-1460220617]
 	_ = x[Yacht-1767965020]
 	_ = x[PresidentialPlane-2609218856]
-	_ = x[Consulate-2609221242]
+	_ = x[ConsulateY7-2609221242]
 	_ = x[BartlettU-2697268122]
 	_ = x[Coastline-42090092951]
 	_ = x[Tower-53627213396]
@@ -32,9 +32,10 @@ func _() {
 	_ = x[EmeraldPlains-365284490964]
 	_ = x[StadiumBravo-270063334510]
 	_ = x[NighthavenLabs-378595635123]
+	_ = x[Consulate-379218689149]
 }
 
-const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateBartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabs"
+const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateY7BartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabsConsulate"
 
 var _Map_map = map[Map]string{
 	837214085:    _Map_name[0:9],
@@ -42,25 +43,26 @@ var _Map_map = map[Map]string{
 	1460220617:   _Map_name[24:29],
 	1767965020:   _Map_name[29:34],
 	2609218856:   _Map_name[34:51],
-	2609221242:   _Map_name[51:60],
-	2697268122:   _Map_name[60:69],
-	42090092951:  _Map_name[69:78],
-	53627213396:  _Map_name[78:83],
-	88107330328:  _Map_name[83:88],
-	126196841359: _Map_name[88:96],
-	127951053400: _Map_name[96:108],
-	199824623654: _Map_name[108:117],
-	231702797556: _Map_name[117:123],
-	237873412352: _Map_name[123:128],
-	259816839773: _Map_name[128:134],
-	270063334510: _Map_name[134:146],
-	276279025182: _Map_name[146:156],
-	305979357167: _Map_name[156:162],
-	329867321446: _Map_name[162:168],
-	355496559878: _Map_name[168:172],
-	362605108559: _Map_name[172:179],
-	365284490964: _Map_name[179:192],
-	378595635123: _Map_name[192:206],
+	2609221242:   _Map_name[51:62],
+	2697268122:   _Map_name[62:71],
+	42090092951:  _Map_name[71:80],
+	53627213396:  _Map_name[80:85],
+	88107330328:  _Map_name[85:90],
+	126196841359: _Map_name[90:98],
+	127951053400: _Map_name[98:110],
+	199824623654: _Map_name[110:119],
+	231702797556: _Map_name[119:125],
+	237873412352: _Map_name[125:130],
+	259816839773: _Map_name[130:136],
+	270063334510: _Map_name[136:148],
+	276279025182: _Map_name[148:158],
+	305979357167: _Map_name[158:164],
+	329867321446: _Map_name[164:170],
+	355496559878: _Map_name[170:174],
+	362605108559: _Map_name[174:181],
+	365284490964: _Map_name[181:194],
+	378595635123: _Map_name[194:208],
+	379218689149: _Map_name[208:217],
 }
 
 func (i Map) String() string {
