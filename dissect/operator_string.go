@@ -75,9 +75,10 @@ func _() {
 	_ = x[Frost-92270642500]
 	_ = x[Maestro-104189662175]
 	_ = x[Clash-104189662280]
+	_ = x[Fenrir-288200867339]
 }
 
-const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaThunderbirdOsaZeroTachankaFloresThornGrimAzamiSensSolis"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaZeroTachankaFloresThornGrimAzamiSensSolis"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
@@ -137,16 +138,17 @@ var _Operator_map = map[Operator]string{
 	174977508808: _Operator_name[283:291],
 	174977508820: _Operator_name[291:297],
 	288200866821: _Operator_name[297:302],
-	288200867351: _Operator_name[302:313],
-	288200867444: _Operator_name[313:316],
-	291191151607: _Operator_name[316:320],
-	291437347686: _Operator_name[320:328],
-	328397386974: _Operator_name[328:334],
-	373711624351: _Operator_name[334:339],
-	374667788042: _Operator_name[339:343],
-	378305069945: _Operator_name[343:348],
-	384797789346: _Operator_name[348:352],
-	391752120891: _Operator_name[352:357],
+	288200867339: _Operator_name[302:308],
+	288200867351: _Operator_name[308:319],
+	288200867444: _Operator_name[319:322],
+	291191151607: _Operator_name[322:326],
+	291437347686: _Operator_name[326:334],
+	328397386974: _Operator_name[334:340],
+	373711624351: _Operator_name[340:345],
+	374667788042: _Operator_name[345:349],
+	378305069945: _Operator_name[349:354],
+	384797789346: _Operator_name[354:358],
+	391752120891: _Operator_name[358:363],
 }
 
 func (i Operator) String() string {

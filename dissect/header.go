@@ -87,7 +87,7 @@ const (
 	Kanal             Map = 1460220617
 	Yacht             Map = 1767965020
 	PresidentialPlane Map = 2609218856
-	Consulate         Map = 2609221242
+	ConsulateY7       Map = 2609221242
 	BartlettU         Map = 2697268122
 	Coastline         Map = 42090092951
 	Tower             Map = 53627213396
@@ -106,6 +106,7 @@ const (
 	EmeraldPlains     Map = 365284490964
 	StadiumBravo      Map = 270063334510
 	NighthavenLabs    Map = 378595635123
+	Consulate         Map = 379218689149
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
@@ -184,6 +185,7 @@ const (
 	Frost       Operator = 92270642500
 	Maestro     Operator = 104189662175
 	Clash       Operator = 104189662280
+	Fenrir      Operator = 288200867339
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
@@ -488,6 +490,13 @@ func (r *Reader) readHeader() (Header, error) {
 // deriveTeamRoles uses the operators chosen by the players to
 // determine the team roles
 func (r *Reader) deriveTeamRoles() {
+	log.Debug().Int("players", len(r.Header.Players)).Msg("deriving team roles")
+	if len(r.Header.Players) > 10 {
+		log.Warn().Msg("tracked players greater than 10")
+		for _, p := range r.Header.Players {
+			log.Debug().Str("username", p.Username).Hex("id", p.id).Send()
+		}
+	}
 	for _, p := range r.Header.Players {
 		role := p.Operator.Role()
 		teamIndex := p.TeamIndex

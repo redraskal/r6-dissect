@@ -12,9 +12,6 @@ func (r *Reader) readTime() error {
 	if err != nil {
 		return err
 	}
-	if r.time == 0 && time == 11 {
-		r.roundEnd()
-	}
 	r.time = float64(time)
 	r.timeRaw = fmt.Sprintf("%d:%02d", time/60, time%60)
 	return nil
@@ -39,9 +36,6 @@ func (r *Reader) readY7Time() error {
 	seconds, err := strconv.Atoi(parts[1])
 	if err != nil {
 		return err
-	}
-	if r.time == 0 && time == "0:11" {
-		r.roundEnd()
 	}
 	r.time = float64((minutes * 60) + seconds)
 	r.timeRaw = time
