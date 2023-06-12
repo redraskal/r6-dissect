@@ -125,10 +125,19 @@ func (r *Reader) readPlayer() error {
 	if p.Operator.Role() == Defense {
 		p.Spawn = "" // We cannot detect the spawn here on defense
 	}
-	log.Debug().Str("username", username).Int("teamIndex", teamIndex).Interface("op", p.Operator).Str("profileID", profileID).Hex("id", id).Uint64("ID", p.ID).Str("spawn", spawn).Send()
+	log.Debug().Str("username", username).
+		Int("teamIndex", teamIndex).
+		Interface("op", p.Operator).
+		Str("profileID", profileID).
+		Hex("id", id).
+		Uint64("ID", p.ID).
+		Str("spawn", spawn).Send()
 	found := false
 	for i, existing := range r.Header.Players {
-		if existing.Username == p.Username || (existing.ID == p.ID && p.ID != 0) || (r.Header.CodeVersion <= 7040830 && strings.HasPrefix(p.Username, existing.Username)) {
+		if existing.Username == p.Username ||
+			(r.Header.CodeVersion < 7601998 && existing.ID == p.ID && p.ID != 0) || // 7601998 = Y8S2
+			(r.Header.CodeVersion >= 7601998 && bytes.Equal(existing.id, p.id)) ||
+			(r.Header.CodeVersion <= 7040830 && strings.HasPrefix(p.Username, existing.Username)) {
 			r.Header.Players[i].ID = p.ID
 			r.Header.Players[i].ProfileID = p.ProfileID
 			r.Header.Players[i].Username = p.Username

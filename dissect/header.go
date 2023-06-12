@@ -493,9 +493,16 @@ func (r *Reader) deriveTeamRoles() {
 	log.Debug().Int("players", len(r.Header.Players)).Msg("deriving team roles")
 	if len(r.Header.Players) > 10 {
 		log.Warn().Msg("tracked players greater than 10")
+		players := r.Header.Players[:0]
 		for _, p := range r.Header.Players {
-			log.Debug().Str("username", p.Username).Hex("id", p.id).Send()
+			log.Debug().Interface("player", p).Send()
+			if p.Operator != 0 {
+				players = append(players, p)
+			} else {
+				log.Warn().Str("username", p.Username).Msg("operator id was 0, removing from list")
+			}
 		}
+		r.Header.Players = players
 	}
 	for _, p := range r.Header.Players {
 		role := p.Operator.Role()
