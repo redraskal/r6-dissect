@@ -92,7 +92,7 @@ func (c *hexEventComparison) Flush() {
 
 var headerFont = &excelize.Font{
 	Family: "Arial",
-	Size:   24,
+	Size:   18,
 }
 
 type excelCompass struct {
