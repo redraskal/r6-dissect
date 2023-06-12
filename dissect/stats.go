@@ -82,7 +82,7 @@ func (r *Reader) PlayerStats(roundWinTeamIndex int) []PlayerRoundStats {
 		stats = append(stats, PlayerRoundStats{
 			Username:  p.Username,
 			TeamIndex: p.TeamIndex,
-			Operator:  p.RoleName,
+			Operator:  p.Operator.String(),
 		})
 		index[p.Username] = i
 	}
