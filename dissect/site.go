@@ -19,7 +19,7 @@ func (r *Reader) readSpawn() error {
 	if err != nil {
 		return err
 	}
-	if bytes.Equal(site, []byte{0x02}) {
+	if r.Header.Site == "" && (bytes.Equal(site, []byte{0x02}) || bytes.Equal(site, []byte{0x04})) {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
