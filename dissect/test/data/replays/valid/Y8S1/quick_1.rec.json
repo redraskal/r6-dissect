@@ -33,7 +33,8 @@
 			{
 				"name": "OPPONENTS",
 				"score": 3,
-				"won": false,
+				"won": true,
+				"winCondition": "DefusedBomb",
 				"role": "Attack"
 			}
 		],
