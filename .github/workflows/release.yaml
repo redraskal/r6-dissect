@@ -13,11 +13,11 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - shell: bash
         run: |
           c=$(git rev-parse --short HEAD); b=$(git name-rev --name-only "$c"); echo -n "version=$c ($b branch)" >> $GITHUB_ENV
-      - uses: wangyoucao577/go-release-action@v1.35
+      - uses: wangyoucao577/go-release-action@v1.38
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
