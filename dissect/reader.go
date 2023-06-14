@@ -51,7 +51,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	r.listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, r.readPlayer)
 	r.listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
 	r.listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
-	if h.CodeVersion >= 7408213 { // Y8S1
+	if h.CodeVersion >= Y8S1 {
 		r.listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
 	} else {
 		r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
@@ -179,8 +179,7 @@ func (r *Reader) readString() (string, error) {
 }
 
 func (r *Reader) readUint32() (uint32, error) {
-	_, err := r.read(1) // size- unnecessary since we already know the length
-	if err != nil {
+	if err := r.discard(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
 	b, err := r.read(4)
@@ -191,8 +190,7 @@ func (r *Reader) readUint32() (uint32, error) {
 }
 
 func (r *Reader) readUint64() (uint64, error) {
-	_, err := r.read(1) // size- unnecessary since we already know the length
-	if err != nil {
+	if err := r.discard(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
 	b, err := r.read(8)

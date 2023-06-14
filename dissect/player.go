@@ -9,7 +9,7 @@ import (
 
 func (r *Reader) readPlayer() error {
 	idIndicator := []byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}
-	if r.Header.CodeVersion <= 7040830 { // Y7S2
+	if r.Header.CodeVersion <= Y7S2 {
 		idIndicator = []byte{0xE6, 0xF9, 0x7D, 0x86}
 	}
 	spawnIndicator := []byte{0xAF, 0x98, 0x99, 0xCA}
@@ -25,7 +25,7 @@ func (r *Reader) readPlayer() error {
 	if err != nil {
 		return err
 	}
-	if r.Header.CodeVersion >= 7338571 { // Y7S4
+	if r.Header.CodeVersion >= Y7S4 {
 		if err := r.seek([]byte{0x40, 0xF2, 0x15, 0x04}); err != nil {
 			return err
 		}
@@ -76,7 +76,7 @@ func (r *Reader) readPlayer() error {
 		return err
 	}
 	if spawn == "" {
-		if _, err := r.read(10); err != nil {
+		if err = r.discard(10); err != nil {
 			return err
 		}
 		valid, err := r.read(1)
@@ -102,8 +102,7 @@ func (r *Reader) readPlayer() error {
 		if err != nil {
 			return err
 		}
-		_, err := r.read(5) // 22eed445c8
-		if err != nil {
+		if err = r.discard(5); err != nil { // 22eed445c8
 			return err
 		}
 		unknownId, err = r.readUint64()
@@ -135,9 +134,9 @@ func (r *Reader) readPlayer() error {
 	found := false
 	for i, existing := range r.Header.Players {
 		if existing.Username == p.Username ||
-			(r.Header.CodeVersion < 7601998 && existing.ID == p.ID && p.ID != 0) || // 7601998 = Y8S2
-			(r.Header.CodeVersion >= 7601998 && bytes.Equal(existing.id, p.id)) ||
-			(r.Header.CodeVersion <= 7040830 && strings.HasPrefix(p.Username, existing.Username)) {
+			(r.Header.CodeVersion < Y8S2 && existing.ID == p.ID && p.ID != 0) ||
+			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.id, p.id)) ||
+			(r.Header.CodeVersion <= Y7S2 && strings.HasPrefix(p.Username, existing.Username)) {
 			r.Header.Players[i].ID = p.ID
 			r.Header.Players[i].ProfileID = p.ProfileID
 			r.Header.Players[i].Username = p.Username
@@ -164,7 +163,7 @@ func (r *Reader) readAtkOpSwap() error {
 	if err != nil {
 		return err
 	}
-	if _, err := r.read(5); err != nil {
+	if err = r.discard(5); err != nil {
 		return err
 	}
 	id, err := r.read(4)

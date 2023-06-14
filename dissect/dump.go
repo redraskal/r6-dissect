@@ -55,8 +55,7 @@ func (r *Reader) Dump(w io.StringWriter) error {
 			usernameIndex++
 			if usernameIndex == 3 {
 				usernameIndex = 0
-				_, err := r.read(2)
-				if err != nil {
+				if err = r.discard(2); err != nil {
 					return err
 				}
 				u, err := r.readString()
