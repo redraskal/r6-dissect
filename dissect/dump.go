@@ -34,7 +34,7 @@ func (r *Reader) Dump(w io.StringWriter) error {
 			timeIndex++
 			if timeIndex == 4 {
 				timeIndex = 0
-				if r.Header.CodeVersion >= 7408213 { // Y8S1
+				if r.Header.CodeVersion >= Y8S1 {
 					if err := r.readTime(); err != nil {
 						return err
 					}
