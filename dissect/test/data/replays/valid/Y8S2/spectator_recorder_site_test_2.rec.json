@@ -1,0 +1,403 @@
+{
+	"header": {
+		"gameVersion": "Y8S2",
+		"codeVersion": 7601998,
+		"timestamp": "2023-06-08T21:04:24Z",
+		"matchType": {
+			"name": "CustomGameOnline",
+			"id": 8
+		},
+		"map": {
+			"name": "ClubHouse",
+			"id": 837214085
+		},
+		"site": "2F Gym, 2F Bedroom",
+		"recordingPlayerID": 2297729590035685774,
+		"recordingProfileID": "e8adc4a8-084f-4a13-a184-38e8a8295bd1",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 12,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 7,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "VEGA ESPORTS",
+				"score": 3,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Defense"
+			},
+			{
+				"name": "NEEDONE AGENCY",
+				"score": 5,
+				"won": false,
+				"role": "Attack"
+			}
+		],
+		"players": [
+			{
+				"id": 5031908513475985408,
+				"profileID": "62e8b09b-77ca-4f29-a97f-bfb08e1f99f6",
+				"username": "ilyPozo.Vega",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Mira",
+					"id": 92270644319
+				},
+				"heroName": 38576458766,
+				"alliance": 4,
+				"roleImage": 39149215445,
+				"roleName": "MIRA",
+				"rolePortrait": 39149215469
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "72f93592-eabc-43d4-9020-57585b27c38a",
+				"username": "yMk.Vega",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Azami",
+					"id": 378305069945
+				},
+				"heroName": 373332356036,
+				"alliance": 4,
+				"roleImage": 375628889901,
+				"roleName": "AZAMI",
+				"rolePortrait": 378305072064
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "3d4c2337-ad71-4429-a44f-f63b7111e877",
+				"username": "qtNolf.Vega",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Kaid",
+					"id": 161289666230
+				},
+				"heroName": 153816116120,
+				"alliance": 4,
+				"roleImage": 161289666176,
+				"roleName": "KAID",
+				"rolePortrait": 161289666206
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "907ee8ab-022d-4761-b94d-001ad812fc5a",
+				"username": "prvx.Vega",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Castle",
+					"id": 92270642682
+				},
+				"heroName": 423855917,
+				"alliance": 4,
+				"roleImage": 1494825824,
+				"roleName": "CASTLE",
+				"rolePortrait": 27880706756
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "e7303a9c-5c58-4ee0-aa60-7fe96852f2c5",
+				"username": "OxyD.Vega",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Wamai",
+					"id": 104189663803
+				},
+				"heroName": 222844205628,
+				"alliance": 4,
+				"roleImage": 104189663738,
+				"roleName": "WAMAI",
+				"rolePortrait": 104189663764
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "3fbd8a1c-fde0-45db-8f4c-0cd3e46e0719",
+				"username": "MaTaroX.ND1",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ash",
+					"id": 92270642656
+				},
+				"alliance": 0,
+				"spawn": "Warehouse"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "5c0911f3-51f9-4327-8b0e-ad6dc9432f87",
+				"username": "zTHMS.ND1",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Sledge",
+					"id": 92270642344
+				},
+				"alliance": 0,
+				"spawn": "Construction Site"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "0c93ae3f-3f81-4561-8b18-61a3a91c09d8",
+				"username": "Bashaa.ND1",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Thermite",
+					"id": 92270642760
+				},
+				"alliance": 0,
+				"spawn": "Warehouse"
+			},
+			{
+				"id": 5031908513475985419,
+				"profileID": "3608622c-1dd7-4d74-8e11-f3b0831f651f",
+				"username": "Axrzen.ND1",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Iana",
+					"id": 104189664038
+				},
+				"alliance": 0,
+				"spawn": "Shipping Dock"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "622c09b6-1a27-40b5-8699-92084e3d05df",
+				"username": "Ben.ND1",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Thatcher",
+					"id": 92270642422
+				},
+				"alliance": 0,
+				"spawn": "Warehouse"
+			}
+		],
+		"gmSettings": [
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			105840262360,
+			130522292564,
+			130522292573,
+			130522292582,
+			105840262521,
+			78755046862,
+			78755046852,
+			78755046872,
+			78755046842,
+			78755047171,
+			78755047172,
+			78755047173,
+			78755047174,
+			256357289827,
+			256357289835,
+			256357289843,
+			32950246394,
+			32950246414,
+			32950246434,
+			46704783375,
+			100403906336,
+			100403906338,
+			100403906340,
+			105840275843,
+			105840277782,
+			105840280624,
+			105840263107,
+			105840263110,
+			105840263109,
+			105840267519,
+			105840269182,
+			105840272663,
+			144346974590,
+			144346974620,
+			144346974584,
+			371595133456,
+			371595133461,
+			371595133463,
+			215036121816,
+			368855647276,
+			360152024014,
+			24649450715,
+			383000043243,
+			383000043269,
+			383000043254,
+			383000148931,
+			383000148946,
+			383000148961,
+			383000242418,
+			383000243323,
+			383000243310,
+			24649477363,
+			24649493050,
+			24649491325,
+			38039355806,
+			24649469014,
+			24649469737,
+			24649468293,
+			46460990289,
+			24649473011,
+			24649471035,
+			24649474968,
+			46460992624
+		],
+		"matchID": "98ea92e1-2285-47a2-8e03-f17f96557640"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "0"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "zTHMS.ND1",
+			"time": "0:38",
+			"timeInSeconds": 38,
+			"operator": {
+				"name": "Buck",
+				"id": 92270642474
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Bashaa.ND1",
+			"time": "0:21",
+			"timeInSeconds": 21,
+			"operator": {
+				"name": "Thermite",
+				"id": 92270642760
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "zTHMS.ND1",
+			"time": "0:11",
+			"timeInSeconds": 11,
+			"operator": {
+				"name": "Sledge",
+				"id": 92270642344
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "prvx.Vega",
+			"target": "MaTaroX.ND1",
+			"headshot": true,
+			"time": "2:29",
+			"timeInSeconds": 149
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "qtNolf.Vega",
+			"target": "Axrzen.ND1",
+			"headshot": false,
+			"time": "1:38",
+			"timeInSeconds": 98
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Bashaa.ND1",
+			"target": "ilyPozo.Vega",
+			"headshot": false,
+			"time": "1:35",
+			"timeInSeconds": 95
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Ben.ND1",
+			"target": "qtNolf.Vega",
+			"headshot": false,
+			"time": "1:34",
+			"timeInSeconds": 94
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "OxyD.Vega",
+			"target": "Ben.ND1",
+			"headshot": false,
+			"time": "1:33",
+			"timeInSeconds": 93
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "yMk.Vega",
+			"target": "Bashaa.ND1",
+			"headshot": true,
+			"time": "1:27",
+			"timeInSeconds": 87
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "prvx.Vega",
+			"target": "zTHMS.ND1",
+			"headshot": false,
+			"time": "0:00",
+			"timeInSeconds": 0
+		}
+	]
+}

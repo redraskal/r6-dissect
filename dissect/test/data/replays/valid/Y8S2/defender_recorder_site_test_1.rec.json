@@ -1,0 +1,338 @@
+{
+	"header": {
+		"gameVersion": "Y8S2",
+		"codeVersion": 7601998,
+		"timestamp": "2023-06-09T23:24:50Z",
+		"matchType": {
+			"name": "Ranked",
+			"id": 2
+		},
+		"map": {
+			"name": "Oregon",
+			"id": 231702797556
+		},
+		"site": "B Laundry Room, B Supply Room",
+		"recordingPlayerID": 12423407926057464446,
+		"recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 6,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 0,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "OPPONENTS",
+				"score": 1,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Attack"
+			},
+			{
+				"name": "YOUR TEAM",
+				"score": 0,
+				"won": false,
+				"role": "Defense"
+			}
+		],
+		"players": [
+			{
+				"id": 5031908513475985408,
+				"profileID": "1d889641-21d2-4e11-9e81-7a794691258a",
+				"username": "FunTimeSpacey",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mira",
+					"id": 92270644319
+				},
+				"heroName": 38576458766,
+				"alliance": 4,
+				"roleImage": 39149215445,
+				"roleName": "MIRA",
+				"rolePortrait": 39149215469,
+				"spawn": "B Laundry Room, B Supply Room"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "4274af08-6ebe-4967-ac8f-7ef91a5966be",
+				"username": "clikx_",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mozzie",
+					"id": 174977508820
+				},
+				"heroName": 161356251582,
+				"alliance": 4,
+				"roleImage": 183220539138,
+				"roleName": "MOZZIE",
+				"rolePortrait": 174977498152,
+				"spawn": "B Laundry Room, B Supply Room"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+				"username": "redraskal",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Wamai",
+					"id": 104189663803
+				},
+				"heroName": 222844205628,
+				"alliance": 4,
+				"roleImage": 104189663738,
+				"roleName": "WAMAI",
+				"rolePortrait": 104189663764,
+				"spawn": "B Laundry Room, B Supply Room"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "46a90b45-6884-4303-85d2-d7d8c4201ab1",
+				"username": "Dyslexic-Batnam",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Bandit",
+					"id": 92270642526
+				},
+				"heroName": 350237879,
+				"alliance": 4,
+				"roleImage": 1326495671,
+				"roleName": "BANDIT",
+				"rolePortrait": 27880706734,
+				"spawn": "B Laundry Room, B Supply Room"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "28168ff8-ca34-44ac-88d9-2180f1822551",
+				"username": "reclown6",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Vigil",
+					"id": 92270644293
+				},
+				"heroName": 38576461081,
+				"alliance": 4,
+				"roleImage": 39149215661,
+				"roleName": "VIGIL",
+				"rolePortrait": 39149215685,
+				"spawn": "B Laundry Room, B Supply Room"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "68572f57-fc07-4169-8c1b-29134210e7ee",
+				"username": "dragonslayer_cp",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Iana",
+					"id": 104189664038
+				},
+				"alliance": 0,
+				"spawn": "Junkyard"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "737b7f7d-7f36-4492-b8e3-da181b476be2",
+				"username": "D0n4ldDuck69",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Sledge",
+					"id": 92270642344
+				},
+				"alliance": 0,
+				"spawn": "Construction Site"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "5f98b7f3-d56c-41a1-8c17-fadb0cdde45a",
+				"username": "phsVB.mid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Ash",
+					"id": 92270642656
+				},
+				"alliance": 0,
+				"spawn": "Street"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "6a7ac015-7c2a-4203-8a72-c28a27fddd66",
+				"username": "phsVB.lib",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Ace",
+					"id": 104189664390
+				},
+				"alliance": 0,
+				"spawn": "Construction Site"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "436873cd-3d1d-4cf3-a66f-9eaaefa1c7d0",
+				"username": "Kmgraytrone747",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Thermite",
+					"id": 92270642760
+				},
+				"alliance": 0,
+				"spawn": "Construction Site"
+			}
+		],
+		"gmSettings": [
+			245225394751,
+			245225394752,
+			245225394901
+		],
+		"playlistCategory": 245225348570,
+		"matchID": "5ed20bab-cc2b-433e-890d-60a22a825378"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "D0n4ldDuck69",
+			"time": "0:28",
+			"timeInSeconds": 28
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "phsVB.lib",
+			"time": "0:21",
+			"timeInSeconds": 21,
+			"operator": {
+				"name": "Lion",
+				"id": 104189661861
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "phsVB.mid",
+			"time": "0:17",
+			"timeInSeconds": 17,
+			"operator": {
+				"name": "Hibana",
+				"id": 92270642240
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "phsVB.mid",
+			"time": "0:14",
+			"timeInSeconds": 14,
+			"operator": {
+				"name": "Ash",
+				"id": 92270642656
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "phsVB.lib",
+			"time": "0:13",
+			"timeInSeconds": 13,
+			"operator": {
+				"name": "Ace",
+				"id": 104189664390
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "phsVB.lib",
+			"target": "clikx_",
+			"headshot": true,
+			"time": "2:40",
+			"timeInSeconds": 160
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "D0n4ldDuck69",
+			"target": "redraskal",
+			"headshot": false,
+			"time": "2:26",
+			"timeInSeconds": 146
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "phsVB.mid",
+			"target": "reclown6",
+			"headshot": true,
+			"time": "2:23",
+			"timeInSeconds": 143
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "phsVB.mid",
+			"target": "Dyslexic-Batnam",
+			"headshot": true,
+			"time": "2:13",
+			"timeInSeconds": 133
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "FunTimeSpacey",
+			"target": "D0n4ldDuck69",
+			"headshot": false,
+			"time": "2:10",
+			"timeInSeconds": 130
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Kmgraytrone747",
+			"target": "FunTimeSpacey",
+			"headshot": false,
+			"time": "2:07",
+			"timeInSeconds": 127
+		}
+	]
+}

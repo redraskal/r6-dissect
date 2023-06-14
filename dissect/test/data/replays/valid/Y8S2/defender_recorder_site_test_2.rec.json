@@ -1,0 +1,301 @@
+{
+	"header": {
+		"gameVersion": "Y8S2",
+		"codeVersion": 7601998,
+		"timestamp": "2023-06-11T19:14:15Z",
+		"matchType": {
+			"name": "Ranked",
+			"id": 2
+		},
+		"map": {
+			"name": "Chalet",
+			"id": 259816839773
+		},
+		"site": "B Wine Cellar, B Snowmobile Garage",
+		"recordingPlayerID": 6515507923820359514,
+		"recordingProfileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 6,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 4,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "YOUR TEAM",
+				"score": 2,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Defense"
+			},
+			{
+				"name": "OPPONENTS",
+				"score": 3,
+				"won": false,
+				"role": "Attack"
+			}
+		],
+		"players": [
+			{
+				"id": 5031908513475985408,
+				"profileID": "3d38f1d4-9146-4617-b98b-936c5a90f3ba",
+				"username": "BlackTakis69",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Mira",
+					"id": 92270644319
+				},
+				"heroName": 38576458766,
+				"alliance": 4,
+				"roleImage": 39149215445,
+				"roleName": "MIRA",
+				"rolePortrait": 39149215469
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "1f63af29-7ebe-48e7-b570-e820632d9565",
+				"username": "redraskal",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Melusi",
+					"id": 104189664273
+				},
+				"heroName": 255200031607,
+				"alliance": 4,
+				"roleImage": 104189664208,
+				"roleName": "MELUSI",
+				"rolePortrait": 104189664234
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "0d63a57c-8040-4ee1-a066-c3bdf23fdb16",
+				"username": "Shives007",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Azami",
+					"id": 378305069945
+				},
+				"heroName": 373332356036,
+				"alliance": 4,
+				"roleImage": 375628889901,
+				"roleName": "AZAMI",
+				"rolePortrait": 378305072064
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "7a5037d6-1eb6-4ae3-8e0d-96babb662149",
+				"username": "FORIIEGNER",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Aruni",
+					"id": 104189664704
+				},
+				"heroName": 282357287306,
+				"alliance": 4,
+				"roleImage": 104189664639,
+				"roleName": "ARUNI",
+				"rolePortrait": 104189664665
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "2d786435-37d0-4a28-962f-688815fc7d9d",
+				"username": "Melon_.-",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Ela",
+					"id": 92270644163
+				},
+				"heroName": 38576460310,
+				"alliance": 4,
+				"roleImage": 39149215589,
+				"roleName": "ELA",
+				"rolePortrait": 39149215613
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "22aed70d-d30b-4161-abf4-541e6cd997cf",
+				"username": "weasil4211",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ace",
+					"id": 104189664390
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "ba27a5ab-624f-4e9d-8a7d-120760b53c98",
+				"username": "MUSTARD691",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Ash",
+					"id": 92270642656
+				},
+				"alliance": 0,
+				"spawn": "RANDOM"
+			},
+			{
+				"id": 5031908513475985419,
+				"profileID": "626e6e58-133d-4b83-9fd6-46863498be9f",
+				"username": "Mr.Cuhh",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Blitz",
+					"id": 92270642539
+				},
+				"alliance": 0,
+				"spawn": "Lakeside"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "ce119a75-b76e-438b-8d08-245005165136",
+				"username": "BleisusChrist",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Amaru",
+					"id": 104189663607
+				},
+				"alliance": 0,
+				"spawn": "Campfire"
+			},
+			{
+				"id": 5031908513475985408,
+				"profileID": "34940734-e7d5-425f-bfd6-da0b92f81896",
+				"username": "IllIIllIlIlIll",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Osa",
+					"id": 288200867444
+				},
+				"alliance": 0,
+				"spawn": "Cliffside"
+			}
+		],
+		"gmSettings": [
+			245225394751,
+			245225394752,
+			245225394901
+		],
+		"playlistCategory": 245225348570,
+		"matchID": "25dc64e0-3bf4-4b5e-beda-7672627490f6"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "3"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Friendly Fire turned off until Action Phase"
+		},
+		{
+			"type": {
+				"name": "LocateObjective",
+				"id": 6
+			},
+			"username": "IllIIllIlIlIll",
+			"time": "0:21",
+			"timeInSeconds": 21
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Friendly Fire is now active"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "BlackTakis69",
+			"target": "BleisusChrist",
+			"headshot": true,
+			"time": "2:28",
+			"timeInSeconds": 148
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "redraskal",
+			"target": "Mr.Cuhh",
+			"headshot": false,
+			"time": "2:21",
+			"timeInSeconds": 141
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "BlackTakis69",
+			"target": "IllIIllIlIlIll",
+			"headshot": true,
+			"time": "2:20",
+			"timeInSeconds": 140
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "MUSTARD691",
+			"target": "Shives007",
+			"headshot": true,
+			"time": "2:04",
+			"timeInSeconds": 124
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "weasil4211",
+			"target": "redraskal",
+			"headshot": true,
+			"time": "2:00",
+			"timeInSeconds": 120
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Melon_.-",
+			"target": "weasil4211",
+			"headshot": true,
+			"time": "1:46",
+			"timeInSeconds": 106
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "BlackTakis69",
+			"target": "MUSTARD691",
+			"headshot": true,
+			"time": "1:40",
+			"timeInSeconds": 100
+		}
+	]
+}
