@@ -25,6 +25,7 @@ type Reader struct {
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
 	planted                bool
+	readPartial            bool // reads up to the player info packets
 	playersRead            int
 	Header                 Header        `json:"header"`
 	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
@@ -38,8 +39,9 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		return
 	}
 	r = &Reader{
-		compressed: compressed,
-		reader:     &in,
+		compressed:  compressed,
+		reader:      &in,
+		readPartial: false,
 	}
 	b, err := io.ReadAll(r.compressed)
 	if err != nil && !(len(b) > 0 && err == zstd.ErrMagicMismatch) {
@@ -96,20 +98,25 @@ func (r *Reader) worker(start int, end int, wg *sync.WaitGroup, matches chan<- m
 func (r *Reader) Read() (err error) {
 	numWorkers := 5
 	var wg sync.WaitGroup
-	channel := make(chan match, numWorkers)
-	blockSize := int(math.Floor(float64(len(r.b)-r.offset) / float64(numWorkers)))
+	channel := make(chan match)
+	start := r.offset
+	end := len(r.b)
+	if r.readPartial {
+		end /= 3
+	}
+	blockSize := int(math.Floor(float64(end-start) / float64(numWorkers)))
 	log.Debug().Int("workers", numWorkers).Int("blockSize", blockSize).Send()
 	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
-		start := r.offset + (i * blockSize)
-		end := start + blockSize
+		blockStart := r.offset + (i * blockSize)
+		blockEnd := blockStart + blockSize
 		if i > 0 {
-			start += 1
+			blockStart += 1
 		}
 		if i == numWorkers-1 {
-			end = len(r.b) - 1
+			blockEnd = end - 1
 		}
-		go r.worker(start, end, &wg, channel)
+		go r.worker(blockStart, blockEnd, &wg, channel)
 	}
 	go func() {
 		wg.Wait()
@@ -130,6 +137,18 @@ func (r *Reader) Read() (err error) {
 			return
 		}
 	}
+	r.b = nil
+	return err
+}
+
+// ReadPartial continues reading the replay past the header until the full player list is read.
+// This information does not include dynamic data, such as attack operator swaps.
+// Use ReadPartial for faster, minimal reads.
+func (r *Reader) ReadPartial() error {
+	r.readPartial = true
+	log.Debug().Msg("using partial read")
+	err := r.Read()
+	r.readPartial = false
 	return err
 }
 

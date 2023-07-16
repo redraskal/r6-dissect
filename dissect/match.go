@@ -12,9 +12,8 @@ import (
 
 type MatchReader struct {
 	Root   string
-	files  []*os.File
+	paths  []string
 	rounds []*Reader
-	read   bool
 }
 
 func NewMatchReader(root string) (m *MatchReader, err error) {
@@ -23,66 +22,61 @@ func NewMatchReader(root string) (m *MatchReader, err error) {
 		return
 	}
 	m = &MatchReader{
-		Root: root,
-	}
-	for _, p := range paths {
-		f, err := os.Open(p)
-		if err != nil {
-			return m, err
-		}
-		r, err := NewReader(f)
-		if err != nil {
-			return m, err
-		}
-		m.rounds = append(m.rounds, r)
+		Root:   root,
+		paths:  paths,
+		rounds: make([]*Reader, len(paths)),
 	}
 	return
 }
 
+func (m *MatchReader) read(i int) error {
+	if i < 0 || i >= len(m.paths) {
+		return ErrInvalidFile
+	}
+	if m.rounds[i] != nil {
+		return nil
+	}
+	f, err := os.Open(m.paths[i])
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	r, err := NewReader(f)
+	if err != nil {
+		return err
+	}
+	m.rounds[i] = r
+	return r.Read()
+}
+
 func (m *MatchReader) Read() error {
 	total := m.NumRounds()
-	for i, r := range m.rounds {
+	for i := range m.paths {
 		log.Info().Msgf("Reading round %d/%d...", i+1, total)
-		if err := r.Read(); !Ok(err) {
-			return err
-		}
+		m.read(i)
 	}
-	m.read = true
 	return nil
 }
 
-func (m *MatchReader) FirstRound() *Reader {
+func (m *MatchReader) FirstRound() (r *Reader, err error) {
 	return m.RoundAt(0)
 }
 
-func (m *MatchReader) LastRound() *Reader {
+func (m *MatchReader) LastRound() (r *Reader, err error) {
 	return m.RoundAt(m.NumRounds() - 1)
 }
 
-func (m *MatchReader) RoundAt(i int) *Reader {
-	return m.rounds[i]
+func (m *MatchReader) RoundAt(i int) (r *Reader, err error) {
+	if m.rounds[i] == nil {
+		if err := m.read(i); err != nil {
+			return nil, err
+		}
+	}
+	return m.rounds[i], nil
 }
 
 func (m *MatchReader) NumRounds() int {
-	return len(m.rounds)
-}
-
-func (m *MatchReader) WinningTeamIndex(round int) int {
-	if m.NumRounds() == 0 || !m.read {
-		return -1
-	}
-	teams := m.RoundAt(round).Header.Teams
-	if round == 0 {
-		if teams[0].Score > teams[1].Score {
-			return 0
-		}
-		return 1
-	}
-	previous := m.RoundAt(round - 1).Header.Teams
-	if teams[0].Score > previous[0].Score {
-		return 0
-	}
-	return 1
+	return len(m.paths)
 }
 
 func (m *MatchReader) Export(path string) error {
@@ -120,8 +114,11 @@ func (m *MatchReader) Export(path string) error {
 		c.Right(1).Str("Headshots")
 		c.Right(1).Str("1vX")
 		c.Right(1).Str("Operator")
-		winningTeamIndex := m.WinningTeamIndex(i)
-		for _, s := range r.PlayerStats(winningTeamIndex) {
+		winningTeamIndex := 0
+		if r.Header.Teams[1].Won {
+			winningTeamIndex = 1
+		}
+		for _, s := range r.PlayerStats() {
 			c.Down(1).Left(8).Str(s.Username)
 			c.Right(1).Int(s.TeamIndex)
 			c.Right(1).Int(s.Kills)
@@ -232,26 +229,17 @@ func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
 		PlayerStats []PlayerMatchStats `json:"stats"`
 	}
 	rounds := make([]round, 0)
-	for i, r := range m.rounds {
+	for _, r := range m.rounds {
 		rounds = append(rounds, round{
 			Header:        r.Header,
 			MatchFeedback: r.MatchFeedback,
-			PlayerStats:   r.PlayerStats(m.WinningTeamIndex(i)),
+			PlayerStats:   r.PlayerStats(),
 		})
 	}
 	return encoder.Encode(output{
 		Rounds:      rounds,
 		PlayerStats: m.PlayerStats(),
 	})
-}
-
-func (m *MatchReader) Close() error {
-	for _, f := range m.files {
-		if err := f.Close(); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func listReplayFiles(root string) ([]string, error) {
