@@ -1,7 +1,6 @@
 package dissect
 
 import (
-	"bytes"
 	"github.com/rs/zerolog/log"
 	"strings"
 )
@@ -15,26 +14,10 @@ func (r *Reader) readSpawn() error {
 	if err = r.skip(6); err != nil {
 		return err
 	}
-	site, err := r.read(1)
-	if err != nil {
-		return err
-	}
-	recordingRoleFlag := []byte{0x04}
-	for _, p := range r.Header.Players {
-		if p.ProfileID != r.Header.RecordingProfileID {
-			continue
-		}
-		if p.Operator.Role() == Attack {
-			recordingRoleFlag[0] = 0x02
-		} else {
-			recordingRoleFlag[0] = 0x03
-		}
-	}
-	log.Debug().Hex("site", site).Str("location", location).Hex("role", recordingRoleFlag).Send()
 	if !strings.Contains(location, "<br/>") {
 		return nil
 	}
-	if r.Header.Site == "" && bytes.Equal(site, recordingRoleFlag) {
+	if r.Header.Site == "" {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
