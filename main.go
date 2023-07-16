@@ -109,7 +109,7 @@ func head(input string, dir bool) (err error) {
 	if err != nil {
 		return
 	}
-	if err := r.ReadPartial(); !dissect.Ok(err) {
+	if err := r.Read(); !dissect.Ok(err) {
 		return err
 	}
 	r.Head()

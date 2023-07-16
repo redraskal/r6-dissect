@@ -34,9 +34,6 @@ func NewMatchReader(root string) (m *MatchReader, err error) {
 		if err != nil {
 			return m, err
 		}
-		if err := r.ReadPartial(); !Ok(err) {
-			return m, err
-		}
 		m.rounds = append(m.rounds, r)
 	}
 	return

@@ -12,7 +12,7 @@ func (r *Reader) readSpawn() error {
 	if err != nil {
 		return err
 	}
-	if err = r.discard(6); err != nil {
+	if err = r.skip(6); err != nil {
 		return err
 	}
 	site, err := r.read(1)

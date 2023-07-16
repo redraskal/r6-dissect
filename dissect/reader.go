@@ -3,7 +3,10 @@ package dissect
 import (
 	"encoding/binary"
 	"io"
+	"math"
 	"runtime"
+	"sort"
+	"sync"
 
 	"github.com/klauspost/compress/zstd"
 	"github.com/rs/zerolog/log"
@@ -14,6 +17,7 @@ var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 type Reader struct {
 	reader                 *io.Reader
 	compressed             *zstd.Decoder
+	b                      []byte
 	offset                 int
 	queries                [][]byte
 	listeners              []func() error
@@ -21,7 +25,6 @@ type Reader struct {
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
 	planted                bool
-	readPartial            bool // reads up to the player info packets
 	playersRead            int
 	Header                 Header        `json:"header"`
 	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
@@ -35,10 +38,15 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		return
 	}
 	r = &Reader{
-		compressed:  compressed,
-		reader:      &in,
-		readPartial: false,
+		compressed: compressed,
+		reader:     &in,
 	}
+	b, err := io.ReadAll(r.compressed)
+	if err != nil && !(len(b) > 0 && err == zstd.ErrMagicMismatch) {
+		return
+	}
+	r.b = b
+	log.Debug().Int("size", len(r.b)).Send()
 	if err = r.readHeaderMagic(); err != nil {
 		return
 	}
@@ -61,46 +69,67 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	return
 }
 
-// Read continues reading the replay past the header until the EOF.
-func (r *Reader) Read() (err error) {
-	b := make([]byte, 1)
+type match struct {
+	offset        int
+	listenerIndex int
+}
+
+func (r *Reader) worker(start int, end int, wg *sync.WaitGroup, matches chan<- match) {
+	defer wg.Done()
 	indexes := make([]int, len(r.queries))
-	if !r.readPartial {
-		defer r.roundEnd()
-	}
-	for {
-		_, err = r.compressed.Read(b)
-		r.offset++
-		if err != nil {
-			return
-		}
-		for i, query := range r.queries {
-			if b[0] == query[indexes[i]] {
-				indexes[i]++
-				if indexes[i] == len(query) {
-					indexes[i] = 0
-					if err = r.listeners[i](); err != nil {
-						return
-					}
+	for i := start; i <= end; i++ {
+		for j, query := range r.queries {
+			if r.b[i] == query[indexes[j]] {
+				indexes[j]++
+				if indexes[j] == len(query) {
+					indexes[j] = 0
+					matches <- match{i, j}
 				}
 			} else {
-				indexes[i] = 0
+				indexes[j] = 0
 			}
-		}
-		if r.readPartial && r.playersRead == 10 {
-			return
 		}
 	}
 }
 
-// ReadPartial continues reading the replay past the header until the full player list is read.
-// This information does not include dynamic data, such as attack operator swaps.
-// Use ReadPartial for faster, minimal reads.
-func (r *Reader) ReadPartial() error {
-	r.readPartial = true
-	log.Debug().Msg("using partial read")
-	err := r.Read()
-	r.readPartial = false
+// Read continues reading the replay past the header until the EOF.
+func (r *Reader) Read() (err error) {
+	numWorkers := 5
+	var wg sync.WaitGroup
+	channel := make(chan match, numWorkers)
+	blockSize := int(math.Floor(float64(len(r.b)-r.offset) / float64(numWorkers)))
+	log.Debug().Int("workers", numWorkers).Int("blockSize", blockSize).Send()
+	for i := 0; i < numWorkers; i++ {
+		wg.Add(1)
+		start := r.offset + (i * blockSize)
+		end := start + blockSize
+		if i > 0 {
+			start += 1
+		}
+		if i == numWorkers-1 {
+			end = len(r.b) - 1
+		}
+		go r.worker(start, end, &wg, channel)
+	}
+	go func() {
+		wg.Wait()
+		close(channel)
+	}()
+	matches := make([]match, 0)
+	log.Debug().Msg("reading from channel")
+	for match := range channel {
+		matches = append(matches, match)
+	}
+	sort.Slice(matches, func(i, j int) bool {
+		return matches[i].offset < matches[j].offset
+	})
+	log.Debug().Int("matches", len(matches)).Msg("calling listeners")
+	for _, entry := range matches {
+		r.offset = entry.offset + 1
+		if err = r.listeners[entry.listenerIndex](); err != nil {
+			return
+		}
+	}
 	return err
 }
 
@@ -111,11 +140,9 @@ func (r *Reader) listen(query []byte, listener func() error) {
 
 func (r *Reader) seek(query []byte) error {
 	start := r.offset
-	b := make([]byte, 1)
 	i := 0
 	for {
-		_, err := r.compressed.Read(b)
-		r.offset++
+		b, err := r.read(1)
 		if err != nil {
 			if Ok(err) {
 				pc, _, _, ok := runtime.Caller(1)
@@ -139,23 +166,19 @@ func (r *Reader) seek(query []byte) error {
 	}
 }
 
-func (r *Reader) read(n int) ([]byte, error) {
-	b := make([]byte, n)
-	len, err := r.compressed.Read(b)
-	r.offset += len
-	if err != nil {
-		return nil, err
+func (r *Reader) skip(n int) error {
+	r.offset += n
+	if r.offset >= len(r.b) {
+		return ErrInvalidLength
 	}
-	if len != n {
-		return nil, ErrInvalidLength
-	}
-	return b, nil
+	return nil
 }
 
-func (r *Reader) discard(n int) error {
-	written, err := io.CopyN(io.Discard, r.compressed, int64(n))
-	r.offset += int(written)
-	return err
+func (r *Reader) read(n int) ([]byte, error) {
+	if err := r.skip(n); err != nil {
+		return []byte{}, err
+	}
+	return r.b[r.offset-n : r.offset], nil
 }
 
 func (r *Reader) readInt() (int, error) {
@@ -179,7 +202,7 @@ func (r *Reader) readString() (string, error) {
 }
 
 func (r *Reader) readUint32() (uint32, error) {
-	if err := r.discard(1); err != nil { // size- unnecessary since we already know the length
+	if err := r.skip(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
 	b, err := r.read(4)
@@ -190,7 +213,7 @@ func (r *Reader) readUint32() (uint32, error) {
 }
 
 func (r *Reader) readUint64() (uint64, error) {
-	if err := r.discard(1); err != nil { // size- unnecessary since we already know the length
+	if err := r.skip(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
 	b, err := r.read(8)

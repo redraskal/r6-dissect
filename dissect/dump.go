@@ -16,7 +16,6 @@ func (r *Reader) Dump(w io.StringWriter) error {
 	timeIndex := 0
 	username := []byte{0x22, 0x07, 0x94}
 	usernameIndex := 0
-	b := make([]byte, 1)
 	i := 0
 	playerIdIndex := make(map[string]string, 0)
 	var sb strings.Builder
@@ -25,7 +24,8 @@ func (r *Reader) Dump(w io.StringWriter) error {
 		return err
 	}
 	for {
-		if _, err := r.compressed.Read(b); err != nil {
+		b, err := r.read(1)
+		if err != nil {
 			return err
 		}
 		if b[0] != time[timeIndex] {
@@ -55,14 +55,14 @@ func (r *Reader) Dump(w io.StringWriter) error {
 			usernameIndex++
 			if usernameIndex == 3 {
 				usernameIndex = 0
-				if err = r.discard(2); err != nil {
+				if err = r.skip(2); err != nil {
 					return err
 				}
 				u, err := r.readString()
 				if err != nil {
 					return err
 				}
-				if err = r.discard(67); err != nil {
+				if err = r.skip(67); err != nil {
 					return err
 				}
 				id, err := r.read(4)
@@ -78,7 +78,7 @@ func (r *Reader) Dump(w io.StringWriter) error {
 		} else {
 			i = 0
 		}
-		_, err := sb.WriteString(strings.ToUpper(hex.EncodeToString(b)))
+		_, err = sb.WriteString(strings.ToUpper(hex.EncodeToString(b)))
 		if err != nil {
 			return err
 		}
