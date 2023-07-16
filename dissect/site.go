@@ -24,14 +24,13 @@ func (r *Reader) readSpawn() error {
 		if p.ProfileID != r.Header.RecordingProfileID {
 			continue
 		}
-		if r.Header.Teams[p.TeamIndex].Role == Attack {
+		if p.Operator.Role() == Attack {
 			recordingRoleFlag[0] = 0x02
-		}
-		if r.Header.Teams[p.TeamIndex].Role == Defense {
+		} else {
 			recordingRoleFlag[0] = 0x03
 		}
 	}
-	log.Debug().Hex("site", site).Str("location", location).Send()
+	log.Debug().Hex("site", site).Str("location", location).Hex("role", recordingRoleFlag).Send()
 	if !strings.Contains(location, "<br/>") {
 		return nil
 	}
