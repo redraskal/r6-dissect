@@ -87,7 +87,7 @@ func (r *Reader) readMatchFeedback() error {
 			log.Debug().Str("warn", "kill username empty").Send()
 		}
 		// No idea what these 15 bytes mean (kill type?)
-		if err = r.discard(15); err != nil {
+		if err = r.skip(15); err != nil {
 			return err
 		}
 		target, err := r.readString()
@@ -115,7 +115,7 @@ func (r *Reader) readMatchFeedback() error {
 			Time:          r.timeRaw,
 			TimeInSeconds: r.time,
 		}
-		if err = r.discard(56); err != nil {
+		if err = r.skip(56); err != nil {
 			return err
 		}
 		headshot, err := r.readInt()

@@ -45,26 +45,27 @@ func (r *Reader) readY7Time() error {
 func (r *Reader) roundEnd() {
 	log.Debug().Msg("round_end")
 	planter := -1
-	deaths := make([]int, 2)
-	sizes := make([]int, 2)
-	roles := make([]TeamRole, 2)
+	deaths := make(map[int]int)
+	sizes := make(map[int]int)
+	roles := make(map[int]TeamRole)
 	for _, p := range r.Header.Players {
-		sizes[p.TeamIndex] = sizes[p.TeamIndex] + 1
+		sizes[p.TeamIndex] += 1
 		roles[p.TeamIndex] = r.Header.Teams[p.TeamIndex].Role
 	}
 	for _, u := range r.MatchFeedback {
-		if u.Type == Kill {
+		switch u.Type {
+		case Kill:
 			i := r.Header.Players[r.playerIndexByUsername(u.Target)].TeamIndex
 			deaths[i] = deaths[i] + 1
-		}
-		if u.Type == Death {
+			break
+		case Death:
 			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
 			deaths[i] = deaths[i] + 1
-		}
-		if u.Type == DefuserPlantComplete {
+			break
+		case DefuserPlantComplete:
 			planter = r.playerIndexByUsername(u.Username)
-		}
-		if u.Type == DefuserDisableComplete {
+			break
+		case DefuserDisableComplete:
 			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
 			r.Header.Teams[i].Won = true
 			r.Header.Teams[i].WinCondition = DisabledDefuser
@@ -72,9 +73,8 @@ func (r *Reader) roundEnd() {
 		}
 	}
 	if planter > -1 {
-		i := r.Header.Players[planter].TeamIndex
-		r.Header.Teams[i].Won = true
-		r.Header.Teams[i].WinCondition = DefusedBomb
+		r.Header.Teams[r.Header.Players[planter].TeamIndex].Won = true
+		r.Header.Teams[r.Header.Players[planter].TeamIndex].WinCondition = DefusedBomb
 		return
 	}
 	if deaths[0] == sizes[0] {

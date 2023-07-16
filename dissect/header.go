@@ -280,17 +280,12 @@ func (r *Reader) readHeaderMagic() error {
 	// Probably will be replaced later when more info is uncovered.
 	// We are skipping to the end of the second sequence of 7 0x00 bytes
 	// where the string values are stored.
-	b = make([]byte, 1)
 	n := 0
 	t := 0
 	for t != 2 {
-		len, err := r.compressed.Read(b)
-		r.offset += len
+		b, err := r.read(1)
 		if err != nil {
 			return err
-		}
-		if len != 1 {
-			return ErrInvalidFile
 		}
 		if b[0] == 0x00 {
 			if n != 6 {

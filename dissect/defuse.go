@@ -10,7 +10,7 @@ func (r *Reader) readDefuserTimer() error {
 	if err != nil {
 		return err
 	}
-	if err = r.discard(34); err != nil {
+	if err = r.skip(34); err != nil {
 		return err
 	}
 	id, err := r.read(4)

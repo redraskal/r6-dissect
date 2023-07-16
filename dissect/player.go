@@ -29,7 +29,7 @@ func (r *Reader) readPlayer() error {
 		if err := r.seek([]byte{0x40, 0xF2, 0x15, 0x04}); err != nil {
 			return err
 		}
-		if err = r.discard(8); err != nil {
+		if err = r.skip(8); err != nil {
 			return err
 		}
 		swap, err := r.read(1)
@@ -76,7 +76,7 @@ func (r *Reader) readPlayer() error {
 		return err
 	}
 	if spawn == "" {
-		if err = r.discard(10); err != nil {
+		if err = r.skip(10); err != nil {
 			return err
 		}
 		valid, err := r.read(1)
@@ -102,7 +102,7 @@ func (r *Reader) readPlayer() error {
 		if err != nil {
 			return err
 		}
-		if err = r.discard(5); err != nil { // 22eed445c8
+		if err = r.skip(5); err != nil { // 22eed445c8
 			return err
 		}
 		unknownId, err = r.readUint64()
@@ -163,7 +163,7 @@ func (r *Reader) readAtkOpSwap() error {
 	if err != nil {
 		return err
 	}
-	if err = r.discard(5); err != nil {
+	if err = r.skip(5); err != nil {
 		return err
 	}
 	id, err := r.read(4)

@@ -96,9 +96,12 @@ func head(input string, dir bool) (err error) {
 		if err != nil {
 			return err
 		}
-		defer m.Close()
-		m.FirstRound().Head()
-		return err
+		r, err := m.FirstRound()
+		if err != nil {
+			return err
+		}
+		r.Head()
+		return nil
 	}
 	f, err := os.Open(input)
 	if err != nil {
@@ -121,7 +124,6 @@ func exportMatch(input, export string) (err error) {
 	if err != nil {
 		return
 	}
-	defer m.Close()
 	if err := m.Read(); !dissect.Ok(err) {
 		return err
 	}
@@ -167,7 +169,7 @@ func exportRound(input, export string) (err error) {
 	err = encoder.Encode(output{
 		r.Header,
 		r.MatchFeedback,
-		r.PlayerStats(-1),
+		r.PlayerStats(),
 	})
 	return
 }
