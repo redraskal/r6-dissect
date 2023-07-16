@@ -137,6 +137,9 @@ func (r *Reader) Read() (err error) {
 			return
 		}
 	}
+	if !r.readPartial {
+		r.roundEnd()
+	}
 	r.b = nil
 	return err
 }
