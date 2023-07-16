@@ -19,7 +19,23 @@ func (r *Reader) readSpawn() error {
 	if err != nil {
 		return err
 	}
-	if r.Header.Site == "" && (bytes.Equal(site, []byte{0x02}) || bytes.Equal(site, []byte{0x03}) || bytes.Equal(site, []byte{0x04})) {
+	recordingRoleFlag := []byte{0x04}
+	for _, p := range r.Header.Players {
+		if p.ProfileID != r.Header.RecordingProfileID {
+			continue
+		}
+		if r.Header.Teams[p.TeamIndex].Role == Attack {
+			recordingRoleFlag[0] = 0x02
+		}
+		if r.Header.Teams[p.TeamIndex].Role == Defense {
+			recordingRoleFlag[0] = 0x03
+		}
+	}
+	log.Debug().Hex("site", site).Str("location", location).Send()
+	if !strings.Contains(location, "<br/>") {
+		return nil
+	}
+	if r.Header.Site == "" && bytes.Equal(site, recordingRoleFlag) {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
