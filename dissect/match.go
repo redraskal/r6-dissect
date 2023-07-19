@@ -218,7 +218,7 @@ func (m *MatchReader) ExportStdout() error {
 	return m.exportJSON(encoder)
 }
 
-func (m *MatchReader) export() any {
+func (m *MatchReader) Data() any {
 	type round struct {
 		Header
 		MatchFeedback []MatchUpdate      `json:"matchFeedback"`
@@ -242,12 +242,8 @@ func (m *MatchReader) export() any {
 	}
 }
 
-func (m *MatchReader) ToJSON() ([]byte, error) {
-	return json.Marshal(m.export())
-}
-
 func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
-	return encoder.Encode(m.export())
+	return encoder.Encode(m.Data())
 }
 
 func listReplayFiles(root string) ([]string, error) {

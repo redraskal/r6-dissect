@@ -55,7 +55,7 @@ func dissect_read(input *C.char) *C.char {
 			res := convertErrorForExport(err)
 			return C.CString(res)
 		}
-		j, err := m.ToJSON()
+		j := m.Data()
 		if err != nil {
 			res := convertErrorForExport(err)
 			return C.CString(res)
@@ -93,3 +93,5 @@ func dissect_read(input *C.char) *C.char {
 		return C.CString(res)
 	}
 }
+
+func main() {}
