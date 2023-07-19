@@ -93,5 +93,3 @@ func dissect_read(input *C.char) *C.char {
 		return C.CString(res)
 	}
 }
-
-func main() {}
