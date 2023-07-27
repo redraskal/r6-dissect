@@ -218,7 +218,7 @@ func (m *MatchReader) ExportStdout() error {
 	return m.exportJSON(encoder)
 }
 
-func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
+func (m *MatchReader) Data() any {
 	type round struct {
 		Header
 		MatchFeedback []MatchUpdate      `json:"matchFeedback"`
@@ -236,10 +236,14 @@ func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
 			PlayerStats:   r.PlayerStats(),
 		})
 	}
-	return encoder.Encode(output{
+	return output{
 		Rounds:      rounds,
 		PlayerStats: m.PlayerStats(),
-	})
+	}
+}
+
+func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
+	return encoder.Encode(m.Data())
 }
 
 func listReplayFiles(root string) ([]string, error) {

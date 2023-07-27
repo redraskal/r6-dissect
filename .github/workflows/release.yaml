@@ -2,7 +2,8 @@ name: Release Go Binaries
 
 on:
   release:
-    types: [created, published]
+    types: [published]
+  workflow_dispatch:
 
 jobs:
   releases-matrix:
@@ -15,13 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - shell: bash
+        name: Set env variables
         run: |
-          c=$(git rev-parse --short HEAD); b=$(git name-rev --name-only "$c"); echo -n "version=$c ($b branch)" >> $GITHUB_ENV
+          c=$(git rev-parse --short HEAD); b=$(git name-rev --name-only "$c"); echo "version=$c ($b branch)" >> $GITHUB_ENV
+          echo "ext=$( if [ '${{ matrix.goos }}' = 'windows' ]; then echo 'dll'; elif [ '${{ matrix.goos }}' = 'darwin' ]; then echo 'dylib'; elif [ '${{ matrix.goos }}' = 'linux' ]; then echo 'so'; fi )" >> $GITHUB_ENV
       - uses: wangyoucao577/go-release-action@v1.38
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           goversion: "1.20"
-          extra_files: LICENSE README.md
+          pre_command: "go build -o libr6dissect.${{ env.ext }} -buildmode=c-shared exports/exports.go"
+          extra_files: "LICENSE README.md libr6dissect.h libr6dissect.${{ env.ext }}"
           ldflags: "-X 'main.Version=${{ env.version }}'"
