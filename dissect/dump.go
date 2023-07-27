@@ -62,7 +62,8 @@ func (r *Reader) Dump(w io.StringWriter) error {
 				if err != nil {
 					return err
 				}
-				if err = r.Skip(67); err != nil {
+				idIndicator := []byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}
+				if err := r.Seek(idIndicator); err != nil {
 					return err
 				}
 				id, err := r.Bytes(4)
