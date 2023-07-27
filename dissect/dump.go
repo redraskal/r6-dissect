@@ -24,7 +24,7 @@ func (r *Reader) Dump(w io.StringWriter) error {
 		return err
 	}
 	for {
-		b, err := r.read(1)
+		b, err := r.Bytes(1)
 		if err != nil {
 			return err
 		}
@@ -55,17 +55,17 @@ func (r *Reader) Dump(w io.StringWriter) error {
 			usernameIndex++
 			if usernameIndex == 3 {
 				usernameIndex = 0
-				if err = r.skip(2); err != nil {
+				if err = r.Skip(2); err != nil {
 					return err
 				}
-				u, err := r.readString()
+				u, err := r.String()
 				if err != nil {
 					return err
 				}
-				if err = r.skip(67); err != nil {
+				if err = r.Skip(67); err != nil {
 					return err
 				}
-				id, err := r.read(4)
+				id, err := r.Bytes(4)
 				if err != nil {
 					return err
 				}

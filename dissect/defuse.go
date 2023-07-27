@@ -6,14 +6,14 @@ import (
 )
 
 func (r *Reader) readDefuserTimer() error {
-	timer, err := r.readString()
+	timer, err := r.String()
 	if err != nil {
 		return err
 	}
-	if err = r.skip(34); err != nil {
+	if err = r.Skip(34); err != nil {
 		return err
 	}
-	id, err := r.read(4)
+	id, err := r.Bytes(4)
 	if err != nil {
 		return err
 	}
