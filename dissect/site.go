@@ -7,11 +7,11 @@ import (
 
 func (r *Reader) readSpawn() error {
 	log.Debug().Msg("site found")
-	location, err := r.readString()
+	location, err := r.String()
 	if err != nil {
 		return err
 	}
-	if err = r.skip(6); err != nil {
+	if err = r.Skip(6); err != nil {
 		return err
 	}
 	if !strings.Contains(location, "<br/>") {

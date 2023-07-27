@@ -56,21 +56,21 @@ var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
 func (r *Reader) readMatchFeedback() error {
-	bombIndicator, err := r.read(1)
+	bombIndicator, err := r.Bytes(1)
 	if err != nil {
 		return err
 	}
 	_ = bytes.Equal(bombIndicator, []byte{0x01}) // TODO, figure out meaning
-	err = r.seek(activity2)
+	err = r.Seek(activity2)
 	if err != nil {
 		return err
 	}
-	size, err := r.readInt()
+	size, err := r.Int()
 	if err != nil {
 		return err
 	}
 	if size == 0 { // kill or an unknown indicator at start of match
-		killTrace, err := r.read(5)
+		killTrace, err := r.Bytes(5)
 		if err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func (r *Reader) readMatchFeedback() error {
 			log.Debug().Hex("killTrace", killTrace).Send()
 			return nil
 		}
-		username, err := r.readString()
+		username, err := r.String()
 		if err != nil {
 			return err
 		}
@@ -87,10 +87,10 @@ func (r *Reader) readMatchFeedback() error {
 			log.Debug().Str("warn", "kill username empty").Send()
 		}
 		// No idea what these 15 bytes mean (kill type?)
-		if err = r.skip(15); err != nil {
+		if err = r.Skip(15); err != nil {
 			return err
 		}
-		target, err := r.readString()
+		target, err := r.String()
 		if err != nil {
 			return err
 		}
@@ -115,10 +115,10 @@ func (r *Reader) readMatchFeedback() error {
 			Time:          r.timeRaw,
 			TimeInSeconds: r.time,
 		}
-		if err = r.skip(56); err != nil {
+		if err = r.Skip(56); err != nil {
 			return err
 		}
-		headshot, err := r.readInt()
+		headshot, err := r.Int()
 		if err != nil {
 			return err
 		}
@@ -137,7 +137,7 @@ func (r *Reader) readMatchFeedback() error {
 		log.Debug().Interface("match_update", u).Send()
 		return nil
 	}
-	b, err := r.read(size)
+	b, err := r.Bytes(size)
 	if err != nil {
 		return err
 	}

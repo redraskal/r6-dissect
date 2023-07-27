@@ -58,16 +58,16 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		return
 	}
 	log.Debug().Str("season", r.Header.GameVersion).Int("code", r.Header.CodeVersion).Send()
-	r.listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, r.readPlayer)
-	r.listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
-	r.listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
+	r.Listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, r.readPlayer)
+	r.Listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
+	r.Listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
 	if h.CodeVersion >= Y8S1 {
-		r.listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
+		r.Listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
 	} else {
-		r.listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
+		r.Listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
 	}
-	r.listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readMatchFeedback)
-	r.listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
+	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readMatchFeedback)
+	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
 	return
 }
 
@@ -155,16 +155,19 @@ func (r *Reader) ReadPartial() error {
 	return err
 }
 
-func (r *Reader) listen(query []byte, listener func() error) {
-	r.queries = append(r.queries, query)
-	r.listeners = append(r.listeners, listener)
+// Listen registers a callback to be run during Read whenever
+// the pattern is found.
+func (r *Reader) Listen(pattern []byte, callback func() error) {
+	r.queries = append(r.queries, pattern)
+	r.listeners = append(r.listeners, callback)
 }
 
-func (r *Reader) seek(query []byte) error {
+// Seek skips through the replay until the pattern is found.
+func (r *Reader) Seek(pattern []byte) error {
 	start := r.offset
 	i := 0
 	for {
-		b, err := r.read(1)
+		b, err := r.Bytes(1)
 		if err != nil {
 			if Ok(err) {
 				pc, _, _, ok := runtime.Caller(1)
@@ -177,18 +180,19 @@ func (r *Reader) seek(query []byte) error {
 			}
 			return err
 		}
-		if b[0] != query[i] {
+		if b[0] != pattern[i] {
 			i = 0
 			continue
 		}
 		i++
-		if i == len(query) {
+		if i == len(pattern) {
 			return nil
 		}
 	}
 }
 
-func (r *Reader) skip(n int) error {
+// Skip increases the replay offset by n bytes.
+func (r *Reader) Skip(n int) error {
 	r.offset += n
 	if r.offset >= len(r.b) {
 		return ErrInvalidLength
@@ -196,49 +200,49 @@ func (r *Reader) skip(n int) error {
 	return nil
 }
 
-func (r *Reader) read(n int) ([]byte, error) {
-	if err := r.skip(n); err != nil {
+func (r *Reader) Bytes(n int) ([]byte, error) {
+	if err := r.Skip(n); err != nil {
 		return []byte{}, err
 	}
 	return r.b[r.offset-n : r.offset], nil
 }
 
-func (r *Reader) readInt() (int, error) {
-	b, err := r.read(1)
+func (r *Reader) Int() (int, error) {
+	b, err := r.Bytes(1)
 	if err != nil {
 		return -1, err
 	}
 	return int(b[0]), nil
 }
 
-func (r *Reader) readString() (string, error) {
-	size, err := r.readInt()
+func (r *Reader) String() (string, error) {
+	size, err := r.Int()
 	if err != nil {
 		return "", err
 	}
-	b, err := r.read(size)
+	b, err := r.Bytes(size)
 	if err != nil {
 		return "", err
 	}
 	return string(b), nil
 }
 
-func (r *Reader) readUint32() (uint32, error) {
-	if err := r.skip(1); err != nil { // size- unnecessary since we already know the length
+func (r *Reader) Uint32() (uint32, error) {
+	if err := r.Skip(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
-	b, err := r.read(4)
+	b, err := r.Bytes(4)
 	if err != nil {
 		return 0, err
 	}
 	return binary.LittleEndian.Uint32(b), nil
 }
 
-func (r *Reader) readUint64() (uint64, error) {
-	if err := r.skip(1); err != nil { // size- unnecessary since we already know the length
+func (r *Reader) Uint64() (uint64, error) {
+	if err := r.Skip(1); err != nil { // size- unnecessary since we already know the length
 		return 0, err
 	}
-	b, err := r.read(8)
+	b, err := r.Bytes(8)
 	if err != nil {
 		return 0, err
 	}

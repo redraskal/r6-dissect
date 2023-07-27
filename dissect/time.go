@@ -8,7 +8,7 @@ import (
 )
 
 func (r *Reader) readTime() error {
-	time, err := r.readUint32()
+	time, err := r.Uint32()
 	if err != nil {
 		return err
 	}
@@ -18,7 +18,7 @@ func (r *Reader) readTime() error {
 }
 
 func (r *Reader) readY7Time() error {
-	time, err := r.readString()
+	time, err := r.String()
 	parts := strings.Split(time, ":")
 	if len(parts) == 1 {
 		seconds, err := strconv.ParseFloat(parts[0], 64)

@@ -21,18 +21,18 @@ func (r *Reader) readPlayer() error {
 			r.deriveTeamRoles()
 		}
 	}()
-	username, err := r.readString()
+	username, err := r.String()
 	if err != nil {
 		return err
 	}
 	if r.Header.CodeVersion >= Y7S4 {
-		if err := r.seek([]byte{0x40, 0xF2, 0x15, 0x04}); err != nil {
+		if err := r.Seek([]byte{0x40, 0xF2, 0x15, 0x04}); err != nil {
 			return err
 		}
-		if err = r.skip(8); err != nil {
+		if err = r.Skip(8); err != nil {
 			return err
 		}
-		swap, err := r.read(1)
+		swap, err := r.Bytes(1)
 		if err != nil {
 			return err
 		}
@@ -42,18 +42,18 @@ func (r *Reader) readPlayer() error {
 			return nil
 		}
 	} else {
-		if err := r.seek([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}); err != nil {
+		if err := r.Seek([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}); err != nil {
 			return err
 		}
 	}
-	op, err := r.readUint64() // Op before atk role swaps
+	op, err := r.Uint64() // Op before atk role swaps
 	if err != nil {
 		return err
 	}
 	if op == 0 { // Empty player slot
 		return nil
 	}
-	validPlayer, err := r.read(1)
+	validPlayer, err := r.Bytes(1)
 	if err != nil {
 		return err
 	}
@@ -61,25 +61,25 @@ func (r *Reader) readPlayer() error {
 		log.Warn().Uint64("op", op).Msg("strange invalid player located")
 		return nil
 	}
-	if err := r.seek(idIndicator); err != nil {
+	if err := r.Seek(idIndicator); err != nil {
 		return err
 	}
-	id, err := r.read(4)
+	id, err := r.Bytes(4)
 	if err != nil {
 		return err
 	}
-	if err := r.seek(spawnIndicator); err != nil {
+	if err := r.Seek(spawnIndicator); err != nil {
 		return err
 	}
-	spawn, err := r.readString()
+	spawn, err := r.String()
 	if err != nil {
 		return err
 	}
 	if spawn == "" {
-		if err = r.skip(10); err != nil {
+		if err = r.Skip(10); err != nil {
 			return err
 		}
-		valid, err := r.read(1)
+		valid, err := r.Bytes(1)
 		if err != nil {
 			return err
 		}
@@ -95,17 +95,17 @@ func (r *Reader) readPlayer() error {
 	profileID := ""
 	var unknownId uint64
 	if len(r.Header.RecordingProfileID) > 0 {
-		if err = r.seek(profileIDIndicator); err != nil {
+		if err = r.Seek(profileIDIndicator); err != nil {
 			return err
 		}
-		profileID, err = r.readString()
+		profileID, err = r.String()
 		if err != nil {
 			return err
 		}
-		if err = r.skip(5); err != nil { // 22eed445c8
+		if err = r.Skip(5); err != nil { // 22eed445c8
 			return err
 		}
-		unknownId, err = r.readUint64()
+		unknownId, err = r.Uint64()
 		if err != nil {
 			return err
 		}
@@ -159,14 +159,14 @@ func (r *Reader) readPlayer() error {
 }
 
 func (r *Reader) readAtkOpSwap() error {
-	op, err := r.readUint64()
+	op, err := r.Uint64()
 	if err != nil {
 		return err
 	}
-	if err = r.skip(5); err != nil {
+	if err = r.Skip(5); err != nil {
 		return err
 	}
-	id, err := r.read(4)
+	id, err := r.Bytes(4)
 	if err != nil {
 		return err
 	}

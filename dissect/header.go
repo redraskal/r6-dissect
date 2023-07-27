@@ -269,7 +269,7 @@ func (h Header) RecordingPlayer() Player {
 // If there is an error, it will be of type *ErrInvalidFile.
 func (r *Reader) readHeaderMagic() error {
 	// Checks for the dissect header.
-	b, err := r.read(7)
+	b, err := r.Bytes(7)
 	if err != nil {
 		return err
 	}
@@ -283,7 +283,7 @@ func (r *Reader) readHeaderMagic() error {
 	n := 0
 	t := 0
 	for t != 2 {
-		b, err := r.read(1)
+		b, err := r.Bytes(1)
 		if err != nil {
 			return err
 		}
@@ -514,19 +514,19 @@ func (r *Reader) deriveTeamRoles() {
 }
 
 func (r *Reader) readHeaderString() (string, error) {
-	b, err := r.read(1)
+	b, err := r.Bytes(1)
 	if err != nil {
 		return "", err
 	}
 	len := int(b[0])
-	b, err = r.read(7)
+	b, err = r.Bytes(7)
 	if err != nil {
 		return "", err
 	}
 	if !bytes.Equal(b, strSep) {
 		return "", ErrInvalidStringSep
 	}
-	b, err = r.read(len)
+	b, err = r.Bytes(len)
 	if err != nil {
 		return "", err
 	}
