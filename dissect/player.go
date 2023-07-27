@@ -121,7 +121,7 @@ func (r *Reader) readPlayer() error {
 		Spawn:     spawn,
 		id:        id,
 	}
-	if p.Operator.Role() == Defense {
+	if p.Operator != Recruit && p.Operator.Role() == Defense {
 		p.Spawn = "" // We cannot detect the spawn here on defense
 	}
 	log.Debug().Str("username", username).
