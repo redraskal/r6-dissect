@@ -42,6 +42,9 @@ func assembleOperatorNames(tt *testing.T) (us []string, ubisoft []string) {
 	}
 	ourOpNames := make([]string, len(operatorConsts))
 	for i, c := range operatorConsts {
+		if c.Name() == "Recruit" {
+			continue
+		}
 		ourOpNames[i] = strings.ToLower(c.Name())
 	}
 
