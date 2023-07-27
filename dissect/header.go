@@ -118,6 +118,7 @@ const (
 	Attack  TeamRole = "Attack"
 	Defense TeamRole = "Defense"
 
+	Recruit     Operator = 359656345734
 	Castle      Operator = 92270642682 // May technically refer to the op icon?
 	Aruni       Operator = 104189664704
 	Kaid        Operator = 161289666230
@@ -500,6 +501,9 @@ func (r *Reader) deriveTeamRoles() {
 		r.Header.Players = players
 	}
 	for _, p := range r.Header.Players {
+		if p.Operator == Recruit {
+			continue
+		}
 		role := p.Operator.Role()
 		teamIndex := p.TeamIndex
 		oppositeTeamIndex := teamIndex ^ 1
@@ -510,6 +514,7 @@ func (r *Reader) deriveTeamRoles() {
 			r.Header.Teams[teamIndex].Role = Defense
 			r.Header.Teams[oppositeTeamIndex].Role = Attack
 		}
+		break
 	}
 }
 

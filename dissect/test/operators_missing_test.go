@@ -40,9 +40,20 @@ func assembleOperatorNames(tt *testing.T) (us []string, ubisoft []string) {
 	if err != nil {
 		tt.Fatalf("could not determine operator consts: %v", err)
 	}
-	ourOpNames := make([]string, len(operatorConsts))
-	for i, c := range operatorConsts {
+	ourOpNames := make([]string, len(operatorConsts)-1)
+	recruitFound := false
+	i := 0
+	for _, c := range operatorConsts {
+		if c.Name() == "Recruit" {
+			recruitFound = true
+			continue
+		}
 		ourOpNames[i] = strings.ToLower(c.Name())
+		i++
+	}
+
+	if !recruitFound {
+		tt.Fatalf("recruit operator not present")
 	}
 
 	ubiOpsMap, err := ubi.GetOperatorMap()
@@ -50,7 +61,7 @@ func assembleOperatorNames(tt *testing.T) (us []string, ubisoft []string) {
 		tt.Fatalf("could not get operators from Ubisoft")
 	}
 	ubiOpNames := make([]string, len(ubiOpsMap))
-	i := 0
+	i = 0
 	for n := range ubiOpsMap {
 		ubiOpNames[i] = strings.ToLower(n)
 		i++

@@ -204,6 +204,7 @@ func (g *Generator) generate() {
 		if !exists {
 			log.Printf("WARNING: operator const \"%s\" not present in Ubisoft data\n", c.Name())
 			log.Println("         either add it manually or check the const name")
+			continue
 		}
 
 		var roleVal string
