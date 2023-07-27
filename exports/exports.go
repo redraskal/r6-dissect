@@ -7,7 +7,6 @@ import (
 	"github.com/redraskal/r6-dissect/dissect"
 	"github.com/rs/zerolog"
 	"os"
-	"unsafe"
 )
 
 func marshalToString(v any) string {
@@ -72,9 +71,7 @@ func dissect_read(input *C.char) *C.char {
 		r, err := dissect.NewReader(f)
 		if err != nil {
 			res := convertErrorForExport(err)
-			out := C.CString(res)
-			defer C.free(unsafe.Pointer(out))
-			return out
+			return C.CString(res)
 		}
 		if err := r.Read(); !dissect.Ok(err) {
 			res := convertErrorForExport(err)
