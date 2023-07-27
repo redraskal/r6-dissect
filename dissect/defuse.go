@@ -17,7 +17,7 @@ func (r *Reader) readDefuserTimer() error {
 	if err != nil {
 		return err
 	}
-	i := r.playerIndexById(id)
+	i := r.PlayerIndexByID(id)
 	a := DefuserPlantStart
 	if r.planted {
 		a = DefuserDisableStart
