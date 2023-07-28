@@ -55,18 +55,18 @@ func (r *Reader) roundEnd() {
 	for _, u := range r.MatchFeedback {
 		switch u.Type {
 		case Kill:
-			i := r.Header.Players[r.playerIndexByUsername(u.Target)].TeamIndex
+			i := r.Header.Players[r.PlayerIndexByUsername(u.Target)].TeamIndex
 			deaths[i] = deaths[i] + 1
 			break
 		case Death:
-			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
+			i := r.Header.Players[r.PlayerIndexByUsername(u.Username)].TeamIndex
 			deaths[i] = deaths[i] + 1
 			break
 		case DefuserPlantComplete:
-			planter = r.playerIndexByUsername(u.Username)
+			planter = r.PlayerIndexByUsername(u.Username)
 			break
 		case DefuserDisableComplete:
-			i := r.Header.Players[r.playerIndexByUsername(u.Username)].TeamIndex
+			i := r.Header.Players[r.PlayerIndexByUsername(u.Username)].TeamIndex
 			r.Header.Teams[i].Won = true
 			r.Header.Teams[i].WinCondition = DisabledDefuser
 			return

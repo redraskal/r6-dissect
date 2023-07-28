@@ -1,0 +1,516 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7457292,
+		"timestamp": "2023-03-25T14:45:14Z",
+		"matchType": {
+			"name": "CustomGameLocal",
+			"id": 7
+		},
+		"map": {
+			"name": "Oregon",
+			"id": 231702797556
+		},
+		"site": "2º Dormitório infantil, 2º Entrada dos dormitórios",
+		"recordingPlayerID": 14249234866650878597,
+		"recordingProfileID": "00000000-0000-0000-0000-000000000000",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 12,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 7,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "TEAM LIQUID",
+				"score": 6,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Attack"
+			},
+			{
+				"name": "MAGIC SQUAD",
+				"score": 2,
+				"won": false,
+				"role": "Defense"
+			}
+		],
+		"players": [
+			{
+				"id": 2683075794056013352,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "R4re.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Warden",
+					"id": 104189662920
+				},
+				"heroName": 189095391481,
+				"alliance": 4,
+				"roleImage": 104189662842,
+				"roleName": "WARDEN",
+				"rolePortrait": 104189662868,
+				"spawn": "2º Dormitório infantil, 2º Entrada dos dormitórios"
+			},
+			{
+				"id": 5903794887330266907,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Hatez.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Solis",
+					"id": 391752120891
+				},
+				"heroName": 387456821475,
+				"alliance": 4,
+				"roleImage": 390305247296,
+				"roleName": "SOLIS",
+				"rolePortrait": 374667788145,
+				"spawn": "2º Dormitório infantil, 2º Entrada dos dormitórios"
+			},
+			{
+				"id": 8068966686555883115,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "hornet.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Valkyrie",
+					"id": 92270642188
+				},
+				"heroName": 9147189187,
+				"alliance": 4,
+				"roleImage": 32822532305,
+				"roleName": "VALKYRIE",
+				"rolePortrait": 27880747293,
+				"spawn": "2º Dormitório infantil, 2º Entrada dos dormitórios"
+			},
+			{
+				"id": 5772926403565512178,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "GdNN1.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mute",
+					"id": 92270642318
+				},
+				"heroName": 423855857,
+				"alliance": 4,
+				"roleImage": 1494825830,
+				"roleName": "MUTE",
+				"rolePortrait": 27880706844,
+				"spawn": "2º Dormitório infantil, 2º Entrada dos dormitórios"
+			},
+			{
+				"id": 606735427098452851,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Gomess7.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Jager",
+					"id": 92270642604
+				},
+				"heroName": 350237875,
+				"alliance": 4,
+				"roleImage": 1326495639,
+				"roleName": "JÄGER",
+				"rolePortrait": 27880706811,
+				"spawn": "2º Dormitório infantil, 2º Entrada dos dormitórios"
+			},
+			{
+				"id": 8647387088017697311,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Lagonis.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Ace",
+					"id": 104189664390
+				},
+				"alliance": 0,
+				"spawn": "Rua"
+			},
+			{
+				"id": 423059609487334073,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "volpz.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Lion",
+					"id": 104189661861
+				},
+				"alliance": 0,
+				"spawn": "Descarte"
+			},
+			{
+				"id": 12246689978983031096,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "NESKWGA.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Iana",
+					"id": 104189664038
+				},
+				"alliance": 0,
+				"spawn": "Descarte"
+			},
+			{
+				"id": 15299134193977100767,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Paluh.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Capitao",
+					"id": 92270644215
+				},
+				"alliance": 0,
+				"spawn": "Descarte"
+			},
+			{
+				"id": 214508485753035926,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "resetz.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Hibana",
+					"id": 92270642240
+				},
+				"alliance": 0,
+				"spawn": "Área de obras"
+			}
+		],
+		"gmSettings": [
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			105840262360,
+			130522292564,
+			130522292573,
+			130522292582,
+			105840262521,
+			78755046862,
+			78755046852,
+			78755046872,
+			78755046842,
+			78755047171,
+			78755047172,
+			78755047173,
+			78755047174,
+			256357289827,
+			256357289835,
+			256357289843,
+			32950246394,
+			32950246414,
+			32950246434,
+			46704783375,
+			100403906336,
+			100403906338,
+			100403906340,
+			105840275843,
+			105840277782,
+			105840280624,
+			105840263107,
+			105840263110,
+			105840263109,
+			105840267519,
+			105840269182,
+			105840272663,
+			144346974590,
+			144346974620,
+			144346974584,
+			371595133456,
+			371595133461,
+			371595133463,
+			215036121816,
+			368855647276,
+			360152026833,
+			24649450715,
+			383000043243,
+			383000043269,
+			383000043254,
+			383000148956,
+			383000148941,
+			383000148921,
+			383000242418,
+			383000243323,
+			383000243310,
+			24649477363,
+			24649493050,
+			24649491325,
+			38039355806,
+			24649469014,
+			24649469737,
+			24649468293,
+			46460990289,
+			24649473011,
+			24649471035,
+			24649474968,
+			46460992624
+		],
+		"matchID": "441fd4da-8dc9-4f19-98cb-0315180c5c69"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "0"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Fogo Amigo desligado até a Fase de Ação"
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Lagonis.Liquid",
+			"time": "0:22",
+			"timeInSeconds": 22,
+			"operator": {
+				"name": "Ace",
+				"id": 104189664390
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "volpz.Liquid",
+			"time": "0:15",
+			"timeInSeconds": 15,
+			"operator": {
+				"name": "Dokkaebi",
+				"id": 92270644267
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "resetz.Liquid",
+			"time": "0:12",
+			"timeInSeconds": 12,
+			"operator": {
+				"name": "Hibana",
+				"id": 92270642240
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "Paluh.Liquid",
+			"time": "0:11",
+			"timeInSeconds": 11,
+			"operator": {
+				"name": "Capitao",
+				"id": 92270644215
+			}
+		},
+		{
+			"type": {
+				"name": "OperatorSwap",
+				"id": 7
+			},
+			"username": "volpz.Liquid",
+			"time": "0:06",
+			"timeInSeconds": 6,
+			"operator": {
+				"name": "Lion",
+				"id": 104189661861
+			}
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Fogo Amigo ativo"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "Hatez.MGS",
+			"headshot": true,
+			"time": "2:47",
+			"timeInSeconds": 167
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "NESKWGA.Liquid",
+			"target": "GdNN1.MGS",
+			"headshot": true,
+			"time": "1:40",
+			"timeInSeconds": 100
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "R4re.MGS",
+			"target": "Paluh.Liquid",
+			"headshot": true,
+			"time": "1:39",
+			"timeInSeconds": 99
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Gomess7.MGS",
+			"target": "resetz.Liquid",
+			"headshot": true,
+			"time": "1:38",
+			"timeInSeconds": 98
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Lagonis.Liquid",
+			"target": "R4re.MGS",
+			"headshot": false,
+			"time": "1:26",
+			"timeInSeconds": 86
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "NESKWGA.Liquid",
+			"target": "Gomess7.MGS",
+			"headshot": false,
+			"time": "1:26",
+			"timeInSeconds": 86
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "hornet.MGS",
+			"headshot": false,
+			"time": "1:22",
+			"timeInSeconds": 82
+		}
+	],
+	"stats": [
+		{
+			"username": "R4re.MGS",
+			"kills": 1,
+			"died": true,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 100
+		},
+		{
+			"username": "Hatez.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "hornet.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "GdNN1.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "Gomess7.MGS",
+			"kills": 1,
+			"died": true,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 100
+		},
+		{
+			"username": "Lagonis.Liquid",
+			"kills": 1,
+			"died": false,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "volpz.Liquid",
+			"kills": 2,
+			"died": false,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 50
+		},
+		{
+			"username": "NESKWGA.Liquid",
+			"kills": 2,
+			"died": false,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 50
+		},
+		{
+			"username": "Paluh.Liquid",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "resetz.Liquid",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		}
+	]
+}

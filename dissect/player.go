@@ -170,7 +170,7 @@ func (r *Reader) readAtkOpSwap() error {
 	if err != nil {
 		return err
 	}
-	i := r.playerIndexById(id)
+	i := r.PlayerIndexByID(id)
 	o := Operator(op)
 	log.Debug().Hex("id", id).Interface("op", op).Msg("atk_op_swap")
 	if i > -1 {

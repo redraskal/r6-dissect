@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (r *Reader) playerIndexById(id []byte) int {
+func (r *Reader) PlayerIndexByID(id []byte) int {
 	for i, p := range r.Header.Players {
 		if bytes.Equal(id, p.id) {
 			return i
@@ -21,7 +21,7 @@ func (r *Reader) playerIndexById(id []byte) int {
 	return -1
 }
 
-func (r *Reader) playerIndexByUsername(username string) int {
+func (r *Reader) PlayerIndexByUsername(username string) int {
 	for i, p := range r.Header.Players {
 		if p.Username == username {
 			return i

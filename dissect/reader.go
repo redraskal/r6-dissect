@@ -1,6 +1,7 @@
 package dissect
 
 import (
+	"bytes"
 	"encoding/binary"
 	"io"
 	"math"
@@ -20,7 +21,7 @@ type Reader struct {
 	b                      []byte
 	offset                 int
 	queries                [][]byte
-	listeners              []func() error
+	listeners              [][]func() error
 	time                   float64 // in seconds
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
@@ -132,9 +133,11 @@ func (r *Reader) Read() (err error) {
 	})
 	log.Debug().Int("matches", len(matches)).Msg("calling listeners")
 	for _, entry := range matches {
-		r.offset = entry.offset + 1
-		if err = r.listeners[entry.listenerIndex](); err != nil {
-			return
+		for _, listener := range r.listeners[entry.listenerIndex] {
+			r.offset = entry.offset + 1
+			if err = listener(); err != nil {
+				return
+			}
 		}
 	}
 	if !r.readPartial {
@@ -158,8 +161,15 @@ func (r *Reader) ReadPartial() error {
 // Listen registers a callback to be run during Read whenever
 // the pattern is found.
 func (r *Reader) Listen(pattern []byte, callback func() error) {
+	var i int
+	for i = 0; i < len(r.queries); i++ {
+		if bytes.Equal(r.queries[i], pattern) {
+			r.listeners[i] = append(r.listeners[i], callback)
+			break
+		}
+	}
 	r.queries = append(r.queries, pattern)
-	r.listeners = append(r.listeners, callback)
+	r.listeners = append(r.listeners, []func() error{callback})
 }
 
 // Seek skips through the replay until the pattern is found.
