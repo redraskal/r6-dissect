@@ -1,0 +1,460 @@
+{
+	"header": {
+		"gameVersion": "Y8S1",
+		"codeVersion": 7457292,
+		"timestamp": "2023-03-25T14:52:06Z",
+		"matchType": {
+			"name": "CustomGameLocal",
+			"id": 7
+		},
+		"map": {
+			"name": "Oregon",
+			"id": 231702797556
+		},
+		"site": "P Lavanderia, P Sala de fornecimento",
+		"recordingPlayerID": 14249234866650878597,
+		"recordingProfileID": "00000000-0000-0000-0000-000000000000",
+		"additionalTags": "423855620",
+		"gamemode": {
+			"name": "Bomb",
+			"id": 327933806
+		},
+		"roundsPerMatch": 12,
+		"roundsPerMatchOvertime": 3,
+		"roundNumber": 9,
+		"overtimeRoundNumber": 0,
+		"teams": [
+			{
+				"name": "TEAM LIQUID",
+				"score": 7,
+				"won": true,
+				"winCondition": "KilledOpponents",
+				"role": "Attack"
+			},
+			{
+				"name": "MAGIC SQUAD",
+				"score": 3,
+				"won": false,
+				"role": "Defense"
+			}
+		],
+		"players": [
+			{
+				"id": 2683075794056013352,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "R4re.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Wamai",
+					"id": 104189663803
+				},
+				"heroName": 222844205628,
+				"alliance": 4,
+				"roleImage": 104189663738,
+				"roleName": "WAMAI",
+				"rolePortrait": 104189663764,
+				"spawn": "P Lavanderia, P Sala de fornecimento"
+			},
+			{
+				"id": 5903794887330266907,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Hatez.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Warden",
+					"id": 104189662920
+				},
+				"heroName": 189095391481,
+				"alliance": 4,
+				"roleImage": 104189662842,
+				"roleName": "WARDEN",
+				"rolePortrait": 104189662868,
+				"spawn": "P Lavanderia, P Sala de fornecimento"
+			},
+			{
+				"id": 8068966686555883115,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "hornet.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Jager",
+					"id": 92270642604
+				},
+				"heroName": 350237875,
+				"alliance": 4,
+				"roleImage": 1326495639,
+				"roleName": "JÄGER",
+				"rolePortrait": 27880706811,
+				"spawn": "P Lavanderia, P Sala de fornecimento"
+			},
+			{
+				"id": 5772926403565512178,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "GdNN1.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Mute",
+					"id": 92270642318
+				},
+				"heroName": 423855857,
+				"alliance": 4,
+				"roleImage": 1494825830,
+				"roleName": "MUTE",
+				"rolePortrait": 27880706844,
+				"spawn": "P Lavanderia, P Sala de fornecimento"
+			},
+			{
+				"id": 606735427098452851,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Gomess7.MGS",
+				"teamIndex": 1,
+				"operator": {
+					"name": "Kaid",
+					"id": 161289666230
+				},
+				"heroName": 153816116120,
+				"alliance": 4,
+				"roleImage": 161289666176,
+				"roleName": "KAID",
+				"rolePortrait": 161289666206,
+				"spawn": "P Lavanderia, P Sala de fornecimento"
+			},
+			{
+				"id": 8647387088017697311,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Lagonis.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Hibana",
+					"id": 92270642240
+				},
+				"alliance": 0,
+				"spawn": "Rua"
+			},
+			{
+				"id": 423059609487334073,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "volpz.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Lion",
+					"id": 104189661861
+				},
+				"alliance": 0,
+				"spawn": "Descarte"
+			},
+			{
+				"id": 12246689978983031096,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "NESKWGA.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Iana",
+					"id": 104189664038
+				},
+				"alliance": 0,
+				"spawn": "Descarte"
+			},
+			{
+				"id": 15299134193977100767,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "Paluh.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Flores",
+					"id": 328397386974
+				},
+				"alliance": 0,
+				"spawn": "Rua"
+			},
+			{
+				"id": 214508485753035926,
+				"profileID": "00000000-0000-0000-0000-000000000000",
+				"username": "resetz.Liquid",
+				"teamIndex": 0,
+				"operator": {
+					"name": "Maverick",
+					"id": 104189662384
+				},
+				"alliance": 0,
+				"spawn": "Área de obras"
+			}
+		],
+		"gmSettings": [
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			33993530151,
+			105840262360,
+			130522292564,
+			130522292573,
+			130522292582,
+			105840262521,
+			78755046862,
+			78755046852,
+			78755046872,
+			78755046842,
+			78755047171,
+			78755047172,
+			78755047173,
+			78755047174,
+			256357289827,
+			256357289835,
+			256357289843,
+			32950246394,
+			32950246414,
+			32950246434,
+			46704783375,
+			100403906336,
+			100403906338,
+			100403906340,
+			105840275843,
+			105840277782,
+			105840280624,
+			105840263107,
+			105840263110,
+			105840263109,
+			105840267519,
+			105840269182,
+			105840272663,
+			144346974590,
+			144346974620,
+			144346974584,
+			371595133456,
+			371595133461,
+			371595133463,
+			215036121816,
+			368855647276,
+			360152026833,
+			24649450715,
+			383000043243,
+			383000043269,
+			383000043254,
+			383000148956,
+			383000148941,
+			383000148921,
+			383000242418,
+			383000243323,
+			383000243310,
+			24649477363,
+			24649493050,
+			24649491325,
+			38039355806,
+			24649469014,
+			24649469737,
+			24649468293,
+			46460990289,
+			24649473011,
+			24649471035,
+			24649474968,
+			46460992624
+		],
+		"matchID": "441fd4da-8dc9-4f19-98cb-0315180c5c69"
+	},
+	"matchFeedback": [
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "0"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "0:00",
+			"timeInSeconds": 0,
+			"message": "Fogo Amigo desligado até a Fase de Ação"
+		},
+		{
+			"type": {
+				"name": "Other",
+				"id": 10
+			},
+			"time": "2:59",
+			"timeInSeconds": 179,
+			"message": "Fogo Amigo ativo"
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "Hatez.MGS",
+			"headshot": false,
+			"time": "2:07",
+			"timeInSeconds": 127
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "hornet.MGS",
+			"headshot": false,
+			"time": "2:04",
+			"timeInSeconds": 124
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Gomess7.MGS",
+			"target": "Paluh.Liquid",
+			"headshot": true,
+			"time": "1:42",
+			"timeInSeconds": 102
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "R4re.MGS",
+			"headshot": true,
+			"time": "1:16",
+			"timeInSeconds": 76
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Gomess7.MGS",
+			"target": "NESKWGA.Liquid",
+			"headshot": false,
+			"time": "1:07",
+			"timeInSeconds": 67
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "Lagonis.Liquid",
+			"target": "Gomess7.MGS",
+			"headshot": true,
+			"time": "1:03",
+			"timeInSeconds": 63
+		},
+		{
+			"type": {
+				"name": "DefuserPlantStart",
+				"id": 2
+			},
+			"username": "Lagonis.Liquid",
+			"time": "0:56",
+			"timeInSeconds": 56
+		},
+		{
+			"type": {
+				"name": "Kill",
+				"id": 0
+			},
+			"username": "volpz.Liquid",
+			"target": "GdNN1.MGS",
+			"headshot": true,
+			"time": "0:51",
+			"timeInSeconds": 51
+		}
+	],
+	"stats": [
+		{
+			"username": "R4re.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "Hatez.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "hornet.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "GdNN1.MGS",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "Gomess7.MGS",
+			"kills": 2,
+			"died": true,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 50
+		},
+		{
+			"username": "Lagonis.Liquid",
+			"kills": 1,
+			"died": false,
+			"assists": 0,
+			"headshots": 1,
+			"headshotPercentage": 100
+		},
+		{
+			"username": "volpz.Liquid",
+			"kills": 4,
+			"died": false,
+			"assists": 0,
+			"headshots": 2,
+			"headshotPercentage": 50
+		},
+		{
+			"username": "NESKWGA.Liquid",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "Paluh.Liquid",
+			"kills": 0,
+			"died": true,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		},
+		{
+			"username": "resetz.Liquid",
+			"kills": 0,
+			"died": false,
+			"assists": 0,
+			"headshots": 0,
+			"headshotPercentage": 0
+		}
+	]
+}

@@ -11,7 +11,7 @@ import (
 
 func (r *Reader) PlayerIndexByID(id []byte) int {
 	for i, p := range r.Header.Players {
-		if bytes.Equal(id, p.DissectID) {
+		if bytes.Equal(id, p.id) {
 			return i
 		}
 	}

@@ -51,7 +51,7 @@ type Player struct {
 	RoleName     string   `json:"roleName,omitempty"`
 	RolePortrait int      `json:"rolePortrait,omitempty"`
 	Spawn        string   `json:"spawn,omitempty"`
-	DissectID    []byte   `json:"-"` // dissect player id at end of packet (4 bytes)
+	id           []byte   // dissect player id at end of packet (4 bytes)
 }
 
 type stringerIntMarshal struct {

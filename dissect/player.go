@@ -119,7 +119,7 @@ func (r *Reader) readPlayer() error {
 		TeamIndex: teamIndex,
 		Operator:  Operator(op),
 		Spawn:     spawn,
-		DissectID: id,
+		id:        id,
 	}
 	if p.Operator != Recruit && p.Operator.Role() == Defense {
 		p.Spawn = "" // We cannot detect the spawn here on defense
@@ -135,7 +135,7 @@ func (r *Reader) readPlayer() error {
 	for i, existing := range r.Header.Players {
 		if existing.Username == p.Username ||
 			(r.Header.CodeVersion < Y8S2 && existing.ID == p.ID && p.ID != 0) ||
-			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.DissectID, p.DissectID)) ||
+			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.id, p.id)) ||
 			(r.Header.CodeVersion <= Y7S2 && strings.HasPrefix(p.Username, existing.Username)) {
 			r.Header.Players[i].ID = p.ID
 			r.Header.Players[i].ProfileID = p.ProfileID
@@ -143,7 +143,7 @@ func (r *Reader) readPlayer() error {
 			r.Header.Players[i].TeamIndex = p.TeamIndex
 			r.Header.Players[i].Operator = p.Operator
 			r.Header.Players[i].Spawn = p.Spawn
-			r.Header.Players[i].DissectID = p.DissectID
+			r.Header.Players[i].id = p.id
 			found = true
 			break
 		}
