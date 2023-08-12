@@ -69,6 +69,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	}
 	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readMatchFeedback)
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
+	r.Listen([]byte{0x77, 0xCA, 0x96, 0xDE}, r.readAmmo)
 	return
 }
 
