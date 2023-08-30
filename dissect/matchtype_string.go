@@ -12,13 +12,13 @@ func _() {
 	_ = x[Ranked-2]
 	_ = x[CustomGameLocal-7]
 	_ = x[CustomGameOnline-8]
-	_ = x[Unranked-12]
+	_ = x[Standard-12]
 }
 
 const (
 	_MatchType_name_0 = "QuickMatchRanked"
 	_MatchType_name_1 = "CustomGameLocalCustomGameOnline"
-	_MatchType_name_2 = "Unranked"
+	_MatchType_name_2 = "Standard"
 )
 
 var (
