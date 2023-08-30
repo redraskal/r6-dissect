@@ -76,7 +76,7 @@ const (
 	Ranked           MatchType = 2
 	CustomGameLocal  MatchType = 7
 	CustomGameOnline MatchType = 8
-	Unranked         MatchType = 12
+	Standard         MatchType = 12
 
 	Bomb       GameMode = 327933806
 	SecureArea GameMode = 1983085217
@@ -187,6 +187,7 @@ const (
 	Maestro     Operator = 104189662175
 	Clash       Operator = 104189662280
 	Fenrir      Operator = 288200867339
+	Ram         Operator = 395943091136
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.

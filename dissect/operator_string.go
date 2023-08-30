@@ -8,6 +8,7 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
+	_ = x[Recruit-359656345734]
 	_ = x[Castle-92270642682]
 	_ = x[Aruni-104189664704]
 	_ = x[Kaid-161289666230]
@@ -76,9 +77,10 @@ func _() {
 	_ = x[Maestro-104189662175]
 	_ = x[Clash-104189662280]
 	_ = x[Fenrir-288200867339]
+	_ = x[Ram-395943091136]
 }
 
-const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaZeroTachankaFloresThornGrimAzamiSensSolis"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaZeroTachankaFloresRecruitThornGrimAzamiSensSolisRam"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
@@ -144,11 +146,13 @@ var _Operator_map = map[Operator]string{
 	291191151607: _Operator_name[322:326],
 	291437347686: _Operator_name[326:334],
 	328397386974: _Operator_name[334:340],
-	373711624351: _Operator_name[340:345],
-	374667788042: _Operator_name[345:349],
-	378305069945: _Operator_name[349:354],
-	384797789346: _Operator_name[354:358],
-	391752120891: _Operator_name[358:363],
+	359656345734: _Operator_name[340:347],
+	373711624351: _Operator_name[347:352],
+	374667788042: _Operator_name[352:356],
+	378305069945: _Operator_name[356:361],
+	384797789346: _Operator_name[361:365],
+	391752120891: _Operator_name[365:370],
+	395943091136: _Operator_name[370:373],
 }
 
 func (i Operator) String() string {
