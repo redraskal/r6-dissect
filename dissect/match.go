@@ -115,6 +115,7 @@ func (m *MatchReader) Export(path string) error {
 		return err
 	}
 	c := newExcelCompass(f, "Match")
+
 	for i, r := range m.rounds {
 		sheet := fmt.Sprintf("Round %d", i+1)
 		_, err := f.NewSheet(sheet)
@@ -122,13 +123,16 @@ func (m *MatchReader) Export(path string) error {
 			return err
 		}
 		c.Sheet(sheet)
+
 		// Conditional stats
 		openingKill := r.OpeningKill()
 		openingDeath := r.OpeningDeath()
 		openingDeathUsername := openingDeath.Username
+
 		if openingDeath.Type == Kill {
 			openingDeathUsername = openingDeath.Target
 		}
+
 		c.Heading("Statistics")
 		c.Down(1).Str("Player")
 		c.Right(1).Str("Team Index")
@@ -139,10 +143,12 @@ func (m *MatchReader) Export(path string) error {
 		c.Right(1).Str("Headshots")
 		c.Right(1).Str("1vX")
 		c.Right(1).Str("Operator")
+
 		winningTeamIndex := 0
 		if r.Header.Teams[1].Won {
 			winningTeamIndex = 1
 		}
+
 		for _, s := range r.PlayerStats() {
 			c.Down(1).Left(8).Str(s.Username)
 			c.Right(1).Int(s.TeamIndex)
@@ -155,6 +161,7 @@ func (m *MatchReader) Export(path string) error {
 			c.Right(1).Str(s.Operator)
 			log.Debug().Interface("round_player_stats", s).Send()
 		}
+
 		c.Down(2).Left(8).Heading("Round info")
 		c.Down(1).Str("Name")
 		c.Right(1).Str("Value")
@@ -171,11 +178,37 @@ func (m *MatchReader) Export(path string) error {
 		c.Down(1).Left(3).Str("Opening death")
 		c.Right(1).Str(openingDeathUsername)
 		c.Right(1).Str(openingDeath.Time)
+
+		if r.Header.GameMode == Bomb {
+			var plant MatchUpdate
+			var defuse MatchUpdate
+			for _, update := range r.MatchFeedback {
+				if update.Type == DefuserPlantComplete {
+					plant = update
+				} else if update.Type == DefuserDisableComplete {
+					defuse = update
+				}
+			}
+			c.Down(1).Left(2).Str("Planted at")
+			if plant.Time != "" {
+				c.Right(1).Str(plant.Time)
+			} else {
+				c.Right(1).Str("")
+			}
+			c.Down(1).Left(2).Str("Defused at")
+			if defuse.Time != "" {
+				c.Right(1).Str(defuse.Time)
+			} else {
+				c.Right(1).Str("")
+			}
+		}
+
 		c.Down(2).Left(2).Heading("Kill/death feed")
 		c.Down(1).Str("Player")
 		c.Right(1).Str("Target")
 		c.Right(1).Str("Time")
 		c.Right(1).Str("Headshot")
+
 		for _, a := range r.KillsAndDeaths() {
 			c.Down(1).Left(3)
 			if a.Type == Kill {
@@ -192,17 +225,20 @@ func (m *MatchReader) Export(path string) error {
 			}
 			c.Right(1).Bool(headshot)
 		}
+
 		c.Reset().Right(10).Heading("Trades")
 		c.Down(1).Str("Player 1")
 		c.Right(1).Str("Player 2")
 		c.Right(1).Str("Time")
 		trades := r.Trades()
+
 		for _, trade := range trades {
 			c.Down(1).Left(3).Str(trade[0].Username)
 			c.Right(1).Str(trade[0].Target)
 			c.Right(1).Str(trade[0].Time)
 		}
 	}
+
 	c.Sheet("Match")
 	c.Heading("Statistics")
 	c.Down(1).Str("Player")
@@ -213,6 +249,7 @@ func (m *MatchReader) Export(path string) error {
 	c.Right(1).Str("Assists (TODO)")
 	c.Right(1).Str("Hs%")
 	c.Right(1).Str("Headshots")
+
 	for _, s := range m.PlayerStats() {
 		c.Down(1).Left(8).Str(s.Username)
 		c.Right(1).Int(s.TeamIndex)
@@ -224,6 +261,7 @@ func (m *MatchReader) Export(path string) error {
 		c.Right(1).Int(s.Headshots)
 		log.Debug().Interface("match_player_stats", s).Send()
 	}
+
 	f.SetActiveSheet(first)
 	return f.SaveAs(path)
 }
