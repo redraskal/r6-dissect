@@ -1,6 +1,7 @@
 package dissect
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"errors"
@@ -17,8 +18,6 @@ import (
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
 type Reader struct {
-	reader                 *io.Reader
-	compressed             *zstd.Decoder
 	b                      []byte
 	offset                 int
 	queries                [][]byte
@@ -36,41 +35,110 @@ type Reader struct {
 // NewReader decompresses in using zstd and
 // validates the dissect header.
 func NewReader(in io.Reader) (r *Reader, err error) {
-	compressed, err := zstd.NewReader(in)
+	internalReader := bufio.NewReader(in)
+	chunkedCompression, err := testFileCompression(internalReader)
 	if err != nil {
-		return
+		return nil, err
 	}
+	log.Debug().Bool("chunkedCompression (>=Y8S4)", chunkedCompression).Send()
 	r = &Reader{
-		compressed:  compressed,
-		reader:      &in,
 		readPartial: false,
 	}
-	b, err := io.ReadAll(r.compressed)
-	if err != nil && !(len(b) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
-		return
+	if chunkedCompression {
+		log.Debug().Msg("creating header buffer")
+		headerBuffer := make([]byte, 2000)
+		n, err := internalReader.Read(headerBuffer)
+		if err != nil {
+			return nil, err
+		}
+		if n != 2000 {
+			return nil, ErrInvalidFile
+		}
+		r.b = headerBuffer
+		log.Debug().Msg("reading header magic")
+		if err = r.readHeaderMagic(); err != nil {
+			return nil, err
+		}
+		log.Debug().Msg("reading header")
+		h, err := r.readHeader()
+		r.Header = h
+		if err != nil {
+			return nil, err
+		}
+		pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
+		i := 0
+		r.b = []byte{}
+		zstdReader, _ := zstd.NewReader(internalReader)
+		for !errors.Is(err, io.EOF) {
+			log.Debug().Msg("scanning for dissect frame")
+			for i != 8 {
+				b, scanErr := internalReader.ReadByte()
+				if errors.Is(scanErr, io.EOF) {
+					err = scanErr
+					break
+				}
+				if scanErr != nil {
+					return nil, scanErr
+				}
+				if b == pattern[i] {
+					i++
+				} else {
+					i = 0
+				}
+			}
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			i = 0
+			_, err := internalReader.Discard(8)
+			if err != nil {
+				return nil, err
+			}
+			log.Debug().Msg("reading zstd frame")
+			if err = zstdReader.Reset(internalReader); err != nil {
+				return nil, err
+			}
+			decompressed, err := io.ReadAll(zstdReader)
+			if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
+				return nil, err
+			}
+			log.Debug().Msg("writing decompressed frame")
+			for _, b := range decompressed {
+				r.b = append(r.b, b)
+			}
+		}
+	} else {
+		zstdReader, err := zstd.NewReader(internalReader)
+		if err != nil {
+			return nil, err
+		}
+		decompressed, err := io.ReadAll(zstdReader)
+		if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
+			return nil, err
+		}
+		r.b = decompressed
+		if err = r.readHeaderMagic(); err != nil {
+			return nil, err
+		}
+		h, err := r.readHeader()
+		r.Header = h
+		if err != nil {
+			return nil, err
+		}
 	}
-	r.b = b
 	log.Debug().Int("size", len(r.b)).Send()
-	if err = r.readHeaderMagic(); err != nil {
-		return
-	}
-	h, err := r.readHeader()
-	r.Header = h
-	if err != nil {
-		return
-	}
 	log.Debug().Str("season", r.Header.GameVersion).Int("code", r.Header.CodeVersion).Send()
 	r.Listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, readPlayer)
 	r.Listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, readAtkOpSwap)
 	r.Listen([]byte{0xAF, 0x98, 0x99, 0xCA}, readSpawn)
-	if h.CodeVersion >= Y8S1 {
+	if r.Header.CodeVersion >= Y8S1 {
 		r.Listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, readTime)
 	} else {
 		r.Listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, readY7Time)
 	}
 	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, readMatchFeedback)
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
-	return
+	return r, err
 }
 
 type match struct {

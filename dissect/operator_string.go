@@ -78,9 +78,10 @@ func _() {
 	_ = x[Clash-104189662280]
 	_ = x[Fenrir-288200867339]
 	_ = x[Ram-395943091136]
+	_ = x[Tubarao-288200867549]
 }
 
-const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaZeroTachankaFloresRecruitThornGrimAzamiSensSolisRam"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaTubaraoZeroTachankaFloresRecruitThornGrimAzamiSensSolisRam"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
@@ -143,16 +144,17 @@ var _Operator_map = map[Operator]string{
 	288200867339: _Operator_name[302:308],
 	288200867351: _Operator_name[308:319],
 	288200867444: _Operator_name[319:322],
-	291191151607: _Operator_name[322:326],
-	291437347686: _Operator_name[326:334],
-	328397386974: _Operator_name[334:340],
-	359656345734: _Operator_name[340:347],
-	373711624351: _Operator_name[347:352],
-	374667788042: _Operator_name[352:356],
-	378305069945: _Operator_name[356:361],
-	384797789346: _Operator_name[361:365],
-	391752120891: _Operator_name[365:370],
-	395943091136: _Operator_name[370:373],
+	288200867549: _Operator_name[322:329],
+	291191151607: _Operator_name[329:333],
+	291437347686: _Operator_name[333:341],
+	328397386974: _Operator_name[341:347],
+	359656345734: _Operator_name[347:354],
+	373711624351: _Operator_name[354:359],
+	374667788042: _Operator_name[359:363],
+	378305069945: _Operator_name[363:368],
+	384797789346: _Operator_name[368:372],
+	391752120891: _Operator_name[372:377],
+	395943091136: _Operator_name[377:380],
 }
 
 func (i Operator) String() string {

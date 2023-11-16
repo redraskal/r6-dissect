@@ -1,6 +1,7 @@
 package dissect
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"strconv"
@@ -107,6 +108,7 @@ const (
 	StadiumBravo      Map = 270063334510
 	NighthavenLabs    Map = 378595635123
 	Consulate         Map = 379218689149
+	Lair              Map = 388073319671
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
@@ -188,6 +190,7 @@ const (
 	Clash       Operator = 104189662280
 	Fenrir      Operator = 288200867339
 	Ram         Operator = 395943091136
+	Tubarao     Operator = 288200867549
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
@@ -264,6 +267,19 @@ func (h Header) RecordingPlayer() Player {
 		}
 	}
 	return Player{}
+}
+
+func testFileCompression(in *bufio.Reader) (chunkedCompression bool, err error) {
+	magic, err := in.Peek(4)
+	if err != nil {
+		return false, err
+	}
+	if bytes.Equal(magic, []byte{0x28, 0xB5, 0x2F, 0xFD}) {
+		return false, nil
+	} else if bytes.Equal(magic, []byte{0x64, 0x69, 0x73, 0x73}) {
+		return true, nil
+	}
+	return false, ErrInvalidFile
 }
 
 // readHeaderMagic reads the header magic of the reader
