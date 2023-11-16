@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (r *Reader) readPlayer() error {
+func readPlayer(r *Reader) error {
 	idIndicator := []byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}
 	if r.Header.CodeVersion <= Y7S2 {
 		idIndicator = []byte{0xE6, 0xF9, 0x7D, 0x86}
@@ -51,6 +51,7 @@ func (r *Reader) readPlayer() error {
 		return err
 	}
 	if op == 0 { // Empty player slot
+		log.Debug().Msg("empty player slot?")
 		return nil
 	}
 	validPlayer, err := r.Bytes(1)
@@ -119,7 +120,7 @@ func (r *Reader) readPlayer() error {
 		TeamIndex: teamIndex,
 		Operator:  Operator(op),
 		Spawn:     spawn,
-		id:        id,
+		DissectID: id,
 	}
 	if p.Operator != Recruit && p.Operator.Role() == Defense {
 		p.Spawn = "" // We cannot detect the spawn here on defense
@@ -128,14 +129,14 @@ func (r *Reader) readPlayer() error {
 		Int("teamIndex", teamIndex).
 		Interface("op", p.Operator).
 		Str("profileID", profileID).
-		Hex("id", id).
+		Hex("DissectID", id).
 		Uint64("ID", p.ID).
 		Str("spawn", spawn).Send()
 	found := false
 	for i, existing := range r.Header.Players {
 		if existing.Username == p.Username ||
 			(r.Header.CodeVersion < Y8S2 && existing.ID == p.ID && p.ID != 0) ||
-			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.id, p.id)) ||
+			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.DissectID, p.DissectID)) ||
 			(r.Header.CodeVersion <= Y7S2 && strings.HasPrefix(p.Username, existing.Username)) {
 			r.Header.Players[i].ID = p.ID
 			r.Header.Players[i].ProfileID = p.ProfileID
@@ -143,7 +144,7 @@ func (r *Reader) readPlayer() error {
 			r.Header.Players[i].TeamIndex = p.TeamIndex
 			r.Header.Players[i].Operator = p.Operator
 			r.Header.Players[i].Spawn = p.Spawn
-			r.Header.Players[i].id = p.id
+			r.Header.Players[i].DissectID = p.DissectID
 			found = true
 			break
 		}
@@ -158,7 +159,7 @@ func (r *Reader) readPlayer() error {
 	return err
 }
 
-func (r *Reader) readAtkOpSwap() error {
+func readAtkOpSwap(r *Reader) error {
 	op, err := r.Uint64()
 	if err != nil {
 		return err

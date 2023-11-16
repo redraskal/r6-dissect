@@ -35,11 +35,11 @@ func (r *Reader) Dump(w io.StringWriter) error {
 			if timeIndex == 4 {
 				timeIndex = 0
 				if r.Header.CodeVersion >= Y8S1 {
-					if err := r.readTime(); err != nil {
+					if err := readTime(r); err != nil {
 						return err
 					}
 				} else {
-					if err := r.readY7Time(); err != nil {
+					if err := readY7Time(r); err != nil {
 						return err
 					}
 				}
@@ -61,6 +61,10 @@ func (r *Reader) Dump(w io.StringWriter) error {
 				u, err := r.String()
 				if err != nil {
 					return err
+				}
+				if u == "" {
+					usernameIndex = 0
+					continue
 				}
 				idIndicator := []byte{0x33, 0xD8, 0x3D, 0x4F, 0x23}
 				if err := r.Seek(idIndicator); err != nil {

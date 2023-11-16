@@ -1,6 +1,7 @@
 package dissect
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/rs/zerolog/log"
@@ -14,10 +15,13 @@ type MatchReader struct {
 	Root   string
 	paths  []string
 	rounds []*Reader
+
+	queries   [][]byte
+	listeners [][]func(r *Reader) error
 }
 
 func NewMatchReader(root string) (m *MatchReader, err error) {
-	paths, err := listReplayFiles(root)
+	paths, err := ListReplayFiles(root)
 	if err != nil {
 		return
 	}
@@ -27,6 +31,20 @@ func NewMatchReader(root string) (m *MatchReader, err error) {
 		rounds: make([]*Reader, len(paths)),
 	}
 	return
+}
+
+// Listen registers a callback to be run during round Read whenever
+// the pattern is found.
+func (m *MatchReader) Listen(pattern []byte, callback func(r *Reader) error) {
+	var i int
+	for i = 0; i < len(m.queries); i++ {
+		if bytes.Equal(m.queries[i], pattern) {
+			m.listeners[i] = append(m.listeners[i], callback)
+			break
+		}
+	}
+	m.queries = append(m.queries, pattern)
+	m.listeners = append(m.listeners, []func(reader *Reader) error{callback})
 }
 
 func (m *MatchReader) read(i int) error {
@@ -46,6 +64,11 @@ func (m *MatchReader) read(i int) error {
 		return err
 	}
 	m.rounds[i] = r
+	for i = 0; i < len(m.queries); i++ {
+		for _, listener := range m.listeners[i] {
+			r.Listen(m.queries[i], listener)
+		}
+	}
 	return r.Read()
 }
 
@@ -53,7 +76,9 @@ func (m *MatchReader) Read() error {
 	total := m.NumRounds()
 	for i := range m.paths {
 		log.Info().Msgf("Reading round %d/%d...", i+1, total)
-		m.read(i)
+		if err := m.read(i); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -246,7 +271,7 @@ func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
 	return encoder.Encode(m.Data())
 }
 
-func listReplayFiles(root string) ([]string, error) {
+func ListReplayFiles(root string) ([]string, error) {
 	files, err := os.ReadDir(root)
 	if err != nil {
 		return nil, err

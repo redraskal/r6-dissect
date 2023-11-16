@@ -3,6 +3,7 @@ package dissect
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"io"
 	"math"
 	"runtime"
@@ -21,7 +22,7 @@ type Reader struct {
 	b                      []byte
 	offset                 int
 	queries                [][]byte
-	listeners              [][]func() error
+	listeners              [][]func(r *Reader) error
 	time                   float64 // in seconds
 	timeRaw                string  // raw dissect format
 	lastDefuserPlayerIndex int
@@ -45,7 +46,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		readPartial: false,
 	}
 	b, err := io.ReadAll(r.compressed)
-	if err != nil && !(len(b) > 0 && err == zstd.ErrMagicMismatch) {
+	if err != nil && !(len(b) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
 		return
 	}
 	r.b = b
@@ -59,16 +60,16 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		return
 	}
 	log.Debug().Str("season", r.Header.GameVersion).Int("code", r.Header.CodeVersion).Send()
-	r.Listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, r.readPlayer)
-	r.Listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, r.readAtkOpSwap)
-	r.Listen([]byte{0xAF, 0x98, 0x99, 0xCA}, r.readSpawn)
+	r.Listen([]byte{0x22, 0x07, 0x94, 0x9B, 0xDC}, readPlayer)
+	r.Listen([]byte{0x22, 0xA9, 0x26, 0x0B, 0xE4}, readAtkOpSwap)
+	r.Listen([]byte{0xAF, 0x98, 0x99, 0xCA}, readSpawn)
 	if h.CodeVersion >= Y8S1 {
-		r.Listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, r.readTime)
+		r.Listen([]byte{0x1F, 0x07, 0xEF, 0xC9}, readTime)
 	} else {
-		r.Listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, r.readY7Time)
+		r.Listen([]byte{0x1E, 0xF1, 0x11, 0xAB}, readY7Time)
 	}
-	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, r.readMatchFeedback)
-	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, r.readDefuserTimer)
+	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, readMatchFeedback)
+	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
 	return
 }
 
@@ -135,7 +136,7 @@ func (r *Reader) Read() (err error) {
 	for _, entry := range matches {
 		for _, listener := range r.listeners[entry.listenerIndex] {
 			r.offset = entry.offset + 1
-			if err = listener(); err != nil {
+			if err = listener(r); err != nil {
 				return
 			}
 		}
@@ -160,7 +161,7 @@ func (r *Reader) ReadPartial() error {
 
 // Listen registers a callback to be run during Read whenever
 // the pattern is found.
-func (r *Reader) Listen(pattern []byte, callback func() error) {
+func (r *Reader) Listen(pattern []byte, callback func(r *Reader) error) {
 	var i int
 	for i = 0; i < len(r.queries); i++ {
 		if bytes.Equal(r.queries[i], pattern) {
@@ -169,7 +170,7 @@ func (r *Reader) Listen(pattern []byte, callback func() error) {
 		}
 	}
 	r.queries = append(r.queries, pattern)
-	r.listeners = append(r.listeners, []func() error{callback})
+	r.listeners = append(r.listeners, []func(reader *Reader) error{callback})
 }
 
 // Seek skips through the replay until the pattern is found.

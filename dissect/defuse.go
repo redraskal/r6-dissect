@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (r *Reader) readDefuserTimer() error {
+func readDefuserTimer(r *Reader) error {
 	timer, err := r.String()
 	if err != nil {
 		return err

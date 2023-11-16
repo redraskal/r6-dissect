@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (r *Reader) readSpawn() error {
+func readSpawn(r *Reader) error {
 	log.Debug().Msg("site found")
 	location, err := r.String()
 	if err != nil {

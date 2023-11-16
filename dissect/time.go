@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (r *Reader) readTime() error {
+func readTime(r *Reader) error {
 	time, err := r.Uint32()
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func (r *Reader) readTime() error {
 	return nil
 }
 
-func (r *Reader) readY7Time() error {
+func readY7Time(r *Reader) error {
 	time, err := r.String()
 	parts := strings.Split(time, ":")
 	if len(parts) == 1 {
