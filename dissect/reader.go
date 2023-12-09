@@ -46,12 +46,12 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	}
 	if chunkedCompression {
 		log.Debug().Msg("creating header buffer")
-		headerBuffer := make([]byte, 2000)
+		headerBuffer := make([]byte, 4000)
 		n, err := internalReader.Read(headerBuffer)
 		if err != nil {
 			return nil, err
 		}
-		if n != 2000 {
+		if n != 4000 {
 			return nil, ErrInvalidFile
 		}
 		r.b = headerBuffer
