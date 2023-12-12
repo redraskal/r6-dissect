@@ -46,13 +46,9 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	}
 	if chunkedCompression {
 		log.Debug().Msg("creating header buffer")
-		headerBuffer := make([]byte, 2000)
-		n, err := internalReader.Read(headerBuffer)
+		headerBuffer, err := internalReader.Peek(4000)
 		if err != nil {
 			return nil, err
-		}
-		if n != 2000 {
-			return nil, ErrInvalidFile
 		}
 		r.b = headerBuffer
 		log.Debug().Msg("reading header magic")
@@ -68,7 +64,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 		pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
 		i := 0
 		r.b = []byte{}
-		zstdReader, _ := zstd.NewReader(internalReader)
+		zstdReader, _ := zstd.NewReader(bytes.NewReader([]byte{}))
 		for !errors.Is(err, io.EOF) {
 			log.Debug().Msg("scanning for dissect frame")
 			for i != 8 {
