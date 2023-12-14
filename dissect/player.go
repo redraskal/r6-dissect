@@ -138,7 +138,6 @@ func readPlayer(r *Reader) error {
 			(r.Header.CodeVersion < Y8S2 && existing.ID == p.ID && p.ID != 0) ||
 			(r.Header.CodeVersion >= Y8S2 && bytes.Equal(existing.DissectID, p.DissectID)) ||
 			(r.Header.CodeVersion <= Y7S2 && strings.HasPrefix(p.Username, existing.Username)) {
-			r.Header.Players[i].ID = p.ID
 			r.Header.Players[i].ProfileID = p.ProfileID
 			r.Header.Players[i].Username = p.Username
 			r.Header.Players[i].TeamIndex = p.TeamIndex
