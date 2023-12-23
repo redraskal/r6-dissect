@@ -75,9 +75,9 @@ type Operator uint64
 const (
 	QuickMatch       MatchType = 1
 	Ranked           MatchType = 2
-	CustomGameLocal  MatchType = 7
-	CustomGameOnline MatchType = 8
-	Standard         MatchType = 12
+	CustomGameLocal  MatchType = 3
+	CustomGameOnline MatchType = 4
+	Standard         MatchType = 8
 
 	Bomb       GameMode = 327933806
 	SecureArea GameMode = 1983085217

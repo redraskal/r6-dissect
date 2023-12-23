@@ -10,32 +10,27 @@ func _() {
 	var x [1]struct{}
 	_ = x[QuickMatch-1]
 	_ = x[Ranked-2]
-	_ = x[CustomGameLocal-7]
-	_ = x[CustomGameOnline-8]
-	_ = x[Standard-12]
+	_ = x[CustomGameLocal-3]
+	_ = x[CustomGameOnline-4]
+	_ = x[Standard-8]
 }
 
 const (
-	_MatchType_name_0 = "QuickMatchRanked"
-	_MatchType_name_1 = "CustomGameLocalCustomGameOnline"
-	_MatchType_name_2 = "Standard"
+	_MatchType_name_0 = "QuickMatchRankedCustomGameLocalCustomGameOnline"
+	_MatchType_name_1 = "Standard"
 )
 
 var (
-	_MatchType_index_0 = [...]uint8{0, 10, 16}
-	_MatchType_index_1 = [...]uint8{0, 15, 31}
+	_MatchType_index_0 = [...]uint8{0, 10, 16, 31, 47}
 )
 
 func (i MatchType) String() string {
 	switch {
-	case 1 <= i && i <= 2:
+	case 1 <= i && i <= 4:
 		i -= 1
 		return _MatchType_name_0[_MatchType_index_0[i]:_MatchType_index_0[i+1]]
-	case 7 <= i && i <= 8:
-		i -= 7
-		return _MatchType_name_1[_MatchType_index_1[i]:_MatchType_index_1[i+1]]
-	case i == 12:
-		return _MatchType_name_2
+	case i == 8:
+		return _MatchType_name_1
 	default:
 		return "MatchType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
