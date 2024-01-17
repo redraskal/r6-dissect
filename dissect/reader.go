@@ -35,91 +35,22 @@ type Reader struct {
 // NewReader decompresses in using zstd and
 // validates the dissect header.
 func NewReader(in io.Reader) (r *Reader, err error) {
-	internalReader := bufio.NewReader(in)
-	chunkedCompression, err := testFileCompression(internalReader)
+	br := bufio.NewReader(in)
+	chunkedCompression, err := testFileCompression(br)
 	if err != nil {
-		return nil, err
+		return r, err
 	}
 	log.Debug().Bool("chunkedCompression (>=Y8S4)", chunkedCompression).Send()
 	r = &Reader{
 		readPartial: false,
 	}
 	if chunkedCompression {
-		log.Debug().Msg("creating header buffer")
-		headerBuffer, err := internalReader.Peek(4000)
-		if err != nil {
-			return nil, err
-		}
-		r.b = headerBuffer
-		log.Debug().Msg("reading header magic")
-		if err = r.readHeaderMagic(); err != nil {
-			return nil, err
-		}
-		log.Debug().Msg("reading header")
-		h, err := r.readHeader()
-		r.Header = h
-		if err != nil {
-			return nil, err
-		}
-		pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
-		i := 0
-		r.b = []byte{}
-		zstdReader, _ := zstd.NewReader(bytes.NewReader([]byte{}))
-		for !errors.Is(err, io.EOF) {
-			log.Debug().Msg("scanning for dissect frame")
-			for i != 8 {
-				b, scanErr := internalReader.ReadByte()
-				if errors.Is(scanErr, io.EOF) {
-					err = scanErr
-					break
-				}
-				if scanErr != nil {
-					return nil, scanErr
-				}
-				if b == pattern[i] {
-					i++
-				} else {
-					i = 0
-				}
-			}
-			if errors.Is(err, io.EOF) {
-				break
-			}
-			i = 0
-			_, err := internalReader.Discard(8)
-			if err != nil {
-				return nil, err
-			}
-			log.Debug().Msg("reading zstd frame")
-			if err = zstdReader.Reset(internalReader); err != nil {
-				return nil, err
-			}
-			decompressed, err := io.ReadAll(zstdReader)
-			if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
-				return nil, err
-			}
-			log.Debug().Msg("writing decompressed frame")
-			for _, b := range decompressed {
-				r.b = append(r.b, b)
-			}
+		if err = r.readChunkedData(br); err != nil {
+			return r, err
 		}
 	} else {
-		zstdReader, err := zstd.NewReader(internalReader)
-		if err != nil {
-			return nil, err
-		}
-		decompressed, err := io.ReadAll(zstdReader)
-		if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
-			return nil, err
-		}
-		r.b = decompressed
-		if err = r.readHeaderMagic(); err != nil {
-			return nil, err
-		}
-		h, err := r.readHeader()
-		r.Header = h
-		if err != nil {
-			return nil, err
+		if err = r.readUnchunkedData(br); err != nil {
+			return r, err
 		}
 	}
 	log.Debug().Int("size", len(r.b)).Send()
@@ -135,6 +66,90 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, readMatchFeedback)
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
 	return r, err
+}
+
+func (r *Reader) readChunkedData(br *bufio.Reader) error {
+	log.Debug().Msg("creating header buffer")
+	r.b = make([]byte, 0)
+	buf := make([]byte, 4096)
+	for i := 0; i < 5; i++ {
+		_, err := br.Read(buf)
+		if err != nil {
+			return err
+		}
+		r.b = append(r.b, buf...)
+	}
+	log.Debug().Msg("reading header magic")
+	if err := r.readHeaderMagic(); err != nil {
+		return err
+	}
+	log.Debug().Msg("reading header")
+	h, err := r.readHeader()
+	r.Header = h
+	if err != nil {
+		return err
+	}
+	pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
+	i := 0
+	r.b = []byte{}
+	zstdReader, _ := zstd.NewReader(bytes.NewReader([]byte{}))
+	for !errors.Is(err, io.EOF) {
+		log.Debug().Msg("scanning for dissect frame")
+		for i != 8 {
+			b, scanErr := br.ReadByte()
+			if errors.Is(scanErr, io.EOF) {
+				err = scanErr
+				break
+			}
+			if scanErr != nil {
+				return scanErr
+			}
+			if b == pattern[i] {
+				i++
+			} else {
+				i = 0
+			}
+		}
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		i = 0
+		_, err := br.Discard(8)
+		if err != nil {
+			return err
+		}
+		log.Debug().Msg("reading zstd frame")
+		if err = zstdReader.Reset(br); err != nil {
+			return err
+		}
+		decompressed, err := io.ReadAll(zstdReader)
+		if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
+			return err
+		}
+		log.Debug().Msg("writing decompressed frame")
+		for _, b := range decompressed {
+			r.b = append(r.b, b)
+		}
+	}
+	return nil
+}
+
+func (r *Reader) readUnchunkedData(br *bufio.Reader) error {
+	zstdReader, err := zstd.NewReader(br)
+	if err != nil {
+		return err
+	}
+	decompressed, err := io.ReadAll(zstdReader)
+	if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
+		return err
+	}
+	r.b = decompressed
+	if err = r.readHeaderMagic(); err != nil {
+		return err
+	}
+	h, err := r.readHeader()
+	r.Header = h
+	return err
 }
 
 type match struct {
