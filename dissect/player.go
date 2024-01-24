@@ -151,10 +151,6 @@ func readPlayer(r *Reader) error {
 	if !found && len(username) > 0 {
 		r.Header.Players = append(r.Header.Players, p)
 	}
-	//if err := r.seek(unknownIndicator); err != nil {
-	//	return err
-	//}
-	//_, err = r.read(30) // unknown data, see above
 	return err
 }
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"github.com/xuri/excelize/v2"
+	"io"
 	"strings"
 )
 
@@ -29,6 +30,17 @@ func (r *Reader) PlayerIndexByUsername(username string) int {
 	}
 	log.Debug().Str("username", username).Msg("warn: could not index player by username")
 	return -1
+}
+
+type countedReader struct {
+	io.Reader
+	n int
+}
+
+func (r *countedReader) Read(p []byte) (int, error) {
+	n, err := r.Reader.Read(p)
+	r.n += n
+	return n, err
 }
 
 // hexEventComparison - Debugging tool

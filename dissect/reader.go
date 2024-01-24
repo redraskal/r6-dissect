@@ -68,17 +68,13 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	return r, err
 }
 
-func (r *Reader) readChunkedData(br *bufio.Reader) error {
-	log.Debug().Msg("creating header buffer")
-	r.b = make([]byte, 0)
-	buf := make([]byte, 4096)
-	for i := 0; i < 5; i++ {
-		_, err := br.Read(buf)
-		if err != nil {
-			return err
-		}
-		r.b = append(r.b, buf...)
+func (r *Reader) readChunkedData(genericReader io.Reader) error {
+	log.Debug().Msg("reading data")
+	temp, err := io.ReadAll(genericReader)
+	if err != nil {
+		return err
 	}
+	r.b = temp
 	log.Debug().Msg("reading header magic")
 	if err := r.readHeaderMagic(); err != nil {
 		return err
@@ -89,13 +85,16 @@ func (r *Reader) readChunkedData(br *bufio.Reader) error {
 	if err != nil {
 		return err
 	}
-	pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
-	i := 0
-	zstdReader, _ := zstd.NewReader(bytes.NewReader([]byte{}))
+	log.Debug().Msg("decompressing data")
+	zstdMagic := []byte{0x28, 0xB5, 0x2F, 0xFD}
+	zstdReader, _ := zstd.NewReader(nil)
+	memoryReader := bytes.NewReader(nil)
+	patternIndex := 0
+	sections := 0
+	data := make([]byte, 0)
 	for !errors.Is(err, io.EOF) {
-		log.Debug().Msg("scanning for dissect frame")
-		for i != 8 {
-			b, scanErr := br.ReadByte()
+		for patternIndex != 4 {
+			b, scanErr := r.Bytes(1)
 			if errors.Is(scanErr, io.EOF) {
 				err = scanErr
 				break
@@ -103,38 +102,39 @@ func (r *Reader) readChunkedData(br *bufio.Reader) error {
 			if scanErr != nil {
 				return scanErr
 			}
-			if b == pattern[i] {
-				i++
+			if b[0] == zstdMagic[patternIndex] {
+				patternIndex++
 			} else {
-				i = 0
+				patternIndex = 0
 			}
 		}
 		if errors.Is(err, io.EOF) {
 			break
 		}
-		i = 0
-		_, err := br.Discard(8)
-		if err != nil {
-			return err
-		}
-		log.Debug().Msg("reading zstd frame")
-		if err = zstdReader.Reset(br); err != nil {
+		sections++
+		patternIndex = 0
+		memoryReader.Reset(r.b[r.offset-4:])
+		tempReader := countedReader{memoryReader, 0}
+		if err = zstdReader.Reset(&tempReader); err != nil {
 			return err
 		}
 		decompressed, err := io.ReadAll(zstdReader)
 		if err != nil && !(len(decompressed) > 0 && errors.Is(err, zstd.ErrMagicMismatch)) {
 			return err
 		}
-		log.Debug().Msg("writing decompressed frame")
 		for _, b := range decompressed {
-			r.b = append(r.b, b)
+			data = append(data, b)
 		}
+		r.offset += tempReader.n
 	}
+	r.b = data
+	r.offset = 0
+	log.Debug().Int("zstd_sections", sections).Send()
 	return nil
 }
 
-func (r *Reader) readUnchunkedData(br *bufio.Reader) error {
-	zstdReader, err := zstd.NewReader(br)
+func (r *Reader) readUnchunkedData(genericReader io.Reader) error {
+	zstdReader, err := zstd.NewReader(genericReader)
 	if err != nil {
 		return err
 	}
@@ -179,7 +179,7 @@ func (r *Reader) worker(start int, end int, wg *sync.WaitGroup, matches chan<- m
 func (r *Reader) Read() (err error) {
 	numWorkers := 5
 	var wg sync.WaitGroup
-	channel := make(chan match)
+	channel := make(chan match, 300)
 	start := r.offset
 	end := len(r.b)
 	if r.readPartial {
@@ -187,8 +187,8 @@ func (r *Reader) Read() (err error) {
 	}
 	blockSize := int(math.Floor(float64(end-start) / float64(numWorkers)))
 	log.Debug().Int("workers", numWorkers).Int("blockSize", blockSize).Send()
+	wg.Add(numWorkers)
 	for i := 0; i < numWorkers; i++ {
-		wg.Add(1)
 		blockStart := r.offset + (i * blockSize)
 		blockEnd := blockStart + blockSize
 		if i > 0 {
@@ -285,7 +285,7 @@ func (r *Reader) Seek(pattern []byte) error {
 func (r *Reader) Skip(n int) error {
 	r.offset += n
 	if r.offset >= len(r.b) {
-		return ErrInvalidLength
+		return io.EOF
 	}
 	return nil
 }
