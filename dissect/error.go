@@ -9,7 +9,6 @@ import (
 
 var ErrInvalidFile = errors.New("dissect: not a dissect file")
 var ErrInvalidFolder = errors.New("dissect: not a match folder")
-var ErrInvalidLength = errors.New("dissect: received an invalid length of bytes")
 var ErrInvalidStringSep = errors.New("dissect: invalid string separator")
 
 // Ok returns true if err only pertains to EOF (read was successful).
