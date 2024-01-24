@@ -188,7 +188,15 @@ func dumpRound(input string, output string) error {
 	if err != nil {
 		return err
 	}
+	binOut, err := os.OpenFile(output+".bin", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
+	if err != nil {
+		return err
+	}
 	defer out.Close()
+	defer binOut.Close()
+	if _, err := r.Write(binOut); err != nil {
+		return err
+	}
 	if err := r.Dump(out); !dissect.Ok(err) {
 		return err
 	}

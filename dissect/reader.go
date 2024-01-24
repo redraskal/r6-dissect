@@ -91,7 +91,6 @@ func (r *Reader) readChunkedData(br *bufio.Reader) error {
 	}
 	pattern := []byte{0x32, 0x30, 0x30, 0x56, 0x52, 0x50, 0x4D, 0x43}
 	i := 0
-	r.b = []byte{}
 	zstdReader, _ := zstd.NewReader(bytes.NewReader([]byte{}))
 	for !errors.Is(err, io.EOF) {
 		log.Debug().Msg("scanning for dissect frame")
@@ -160,6 +159,7 @@ type match struct {
 func (r *Reader) worker(start int, end int, wg *sync.WaitGroup, matches chan<- match) {
 	defer wg.Done()
 	indexes := make([]int, len(r.queries))
+	log.Debug().Int("start", start).Int("end", end).Msg("worker")
 	for i := start; i <= end; i++ {
 		for j, query := range r.queries {
 			if r.b[i] == query[indexes[j]] {
@@ -337,4 +337,8 @@ func (r *Reader) Uint64() (uint64, error) {
 		return 0, err
 	}
 	return binary.LittleEndian.Uint64(b), nil
+}
+
+func (r *Reader) Write(w io.Writer) (n int, err error) {
+	return w.Write(r.b)
 }
