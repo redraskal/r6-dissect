@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"github.com/xuri/excelize/v2"
+	"io"
 	"os"
 	"path"
 	"strings"
 )
 
 type MatchReader struct {
-	Root   string
+	Root   *os.File
 	paths  []string
 	rounds []*Reader
 
@@ -20,13 +21,13 @@ type MatchReader struct {
 	listeners [][]func(r *Reader) error
 }
 
-func NewMatchReader(root string) (m *MatchReader, err error) {
-	paths, err := ListReplayFiles(root)
+func NewMatchReader(in *os.File) (m *MatchReader, err error) {
+	paths, err := ListReplayFiles(in)
 	if err != nil {
 		return
 	}
 	m = &MatchReader{
-		Root:   root,
+		Root:   in,
 		paths:  paths,
 		rounds: make([]*Reader, len(paths)),
 	}
@@ -73,9 +74,7 @@ func (m *MatchReader) read(i int) error {
 }
 
 func (m *MatchReader) Read() error {
-	total := m.NumRounds()
 	for i := range m.paths {
-		log.Info().Msgf("Reading round %d/%d...", i+1, total)
 		if err := m.read(i); err != nil {
 			return err
 		}
@@ -104,9 +103,10 @@ func (m *MatchReader) NumRounds() int {
 	return len(m.paths)
 }
 
-func (m *MatchReader) Export(path string) error {
+func (m *MatchReader) WriteExcel(out io.Writer) error {
 	f := excelize.NewFile()
 	defer f.Close()
+
 	first, err := f.NewSheet("Match")
 	if err := f.DeleteSheet("Sheet1"); err != nil {
 		return err
@@ -114,6 +114,7 @@ func (m *MatchReader) Export(path string) error {
 	if err != nil {
 		return err
 	}
+
 	c := newExcelCompass(f, "Match")
 
 	for i, r := range m.rounds {
@@ -263,22 +264,13 @@ func (m *MatchReader) Export(path string) error {
 	}
 
 	f.SetActiveSheet(first)
-	return f.SaveAs(path)
+
+	return f.Write(out)
 }
 
-func (m *MatchReader) ExportJSON(path string) error {
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	encoder := json.NewEncoder(f)
-	return m.exportJSON(encoder)
-}
-
-func (m *MatchReader) ExportStdout() error {
-	encoder := json.NewEncoder(os.Stdout)
-	return m.exportJSON(encoder)
+func (m *MatchReader) WriteJSON(out io.Writer) error {
+	encoder := json.NewEncoder(out)
+	return encoder.Encode(m.Data())
 }
 
 func (m *MatchReader) Data() any {
@@ -305,12 +297,8 @@ func (m *MatchReader) Data() any {
 	}
 }
 
-func (m *MatchReader) exportJSON(encoder *json.Encoder) error {
-	return encoder.Encode(m.Data())
-}
-
-func ListReplayFiles(root string) ([]string, error) {
-	files, err := os.ReadDir(root)
+func ListReplayFiles(root *os.File) ([]string, error) {
+	files, err := root.ReadDir(0)
 	if err != nil {
 		return nil, err
 	}
@@ -320,7 +308,7 @@ func ListReplayFiles(root string) ([]string, error) {
 		if file.Type().IsDir() || !strings.HasSuffix(name, ".rec") {
 			continue
 		}
-		paths = append(paths, path.Join(root, name))
+		paths = append(paths, path.Join(root.Name(), name))
 	}
 	if len(paths) == 0 {
 		return paths, ErrInvalidFolder

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/redraskal/r6-dissect/dissect"
+	"io"
 	"os"
 	"strings"
 
@@ -14,53 +15,72 @@ import (
 
 var Version = "dev"
 
+type OutputFormat = string
+
+const (
+	JSON  OutputFormat = "json"
+	Excel OutputFormat = "excel"
+)
+
 func main() {
 	setup()
-	input := viper.GetString("input")
-	s, err := os.Stat(input)
+	format := viper.GetString("format")
+	in, err := viperFileOrDefault("input", os.Stdin, os.O_RDONLY)
 	if err != nil {
 		log.Fatal().Err(err).Send()
 	}
-	export := viper.GetString("export")
-	dump := viper.GetString("dump")
-	// Prints match info to console
-	if export == "" {
-		if len(dump) > 0 {
-			if err := dumpRound(input, dump); err != nil {
-				log.Fatal().Err(err).Send()
-			}
-			log.Info().Msgf("Dump saved to %s.", dump)
-			return
-		}
-		if err := head(input, s.IsDir()); err != nil {
+	defer in.Close()
+	out, err := viperFileOrDefault("output", os.Stdout, os.O_CREATE|os.O_TRUNC|os.O_WRONLY)
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+	defer out.Close()
+	stat, err := in.Stat()
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+	if viper.GetBool("info") {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		if err := printHead(in); err != nil {
 			log.Fatal().Err(err).Send()
 		}
 		return
 	}
-	// Exports match data to file or stdout (with json)
-	if s.IsDir() {
-		if err := exportMatch(input, export); err != nil {
+	if viper.GetBool("dump") && stat.IsDir() {
+		log.Fatal().Msg("dump requires a replay file input.")
+	}
+	if viper.GetBool("dump") {
+		outBin, err := os.OpenFile(out.Name()+".bin", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
+		if err != nil {
 			log.Fatal().Err(err).Send()
 		}
-		log.Info().Msg("Output saved.")
+		defer outBin.Close()
+		if err := writeRoundDump(in, out, outBin); err != nil {
+			log.Fatal().Err(err).Send()
+		}
 		return
 	}
-	if strings.HasSuffix(export, ".xlsx") {
+	if stat.IsDir() {
+		if err := writeMatch(in, format, out); err != nil {
+			log.Fatal().Err(err).Send()
+		}
+		return
+	}
+	if format == Excel {
 		log.Fatal().Msg("Dissect will only export a match folder to Excel.")
 	}
-	// Exports round data to file or stdout
-	err = exportRound(input, export)
-	if err != nil {
+	if err = writeRound(in, out); err != nil {
 		log.Fatal().Err(err).Send()
 	}
-	log.Info().Msg("Output saved.")
 }
 
 func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	pflag.StringP("export", "x", "", "specifies the output path (*.json, *.xlsx, stdout)")
+	pflag.StringP("format", "f", "", "specifies the output format (json, excel)")
+	pflag.StringP("output", "o", "", "specifies the output path")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
-	pflag.StringP("dump", "p", "", "dumps packets to specified file")
+	pflag.BoolP("dump", "p", false, "dumps packets to the output")
+	pflag.Bool("info", false, "prints the replay header")
 	pflag.BoolP("version", "v", false, "prints the version")
 	pflag.Parse()
 	if err := viper.BindPFlags(pflag.CommandLine); err != nil {
@@ -69,30 +89,40 @@ func setup() {
 	if viper.GetBool("debug") {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	} else {
-		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 	if viper.GetBool("version") {
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 		log.Info().Msgf("r6-dissect version: %s", Version)
 		log.Info().Msg("https://github.com/redraskal/r6-dissect")
 		os.Exit(0)
 	}
 	extra := len(pflag.Args())
-	if extra < 1 {
+	if extra < 1 && !piped(os.Stdin) {
 		log.Fatal().Msg("Specify a valid match replay file/folder path (*.rec files)")
+	} else if extra > 0 {
+		viper.Set("input", pflag.Args()[0])
+		if strings.HasSuffix(pflag.Args()[0], ".xlsx") {
+			viper.Set("format", "excel")
+		} else if strings.HasSuffix(pflag.Args()[0], ".json") {
+			viper.Set("format", "json")
+		}
 	}
-	viper.Set("input", pflag.Args()[0])
-	export := viper.GetString("export")
-	if len(export) > 0 && !(strings.HasSuffix(export, ".json") || strings.HasSuffix(export, ".xlsx") || export == "stdout") {
-		log.Fatal().Msg("Specify a valid output path (*.json, *.xlsx, stdout)")
-	}
-	if export == "stdout" {
-		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	format := strings.ToLower(viper.GetString("format"))
+	if len(format) > 0 && !(format == "json" || format == "excel") {
+		log.Fatal().Msg("Specify a valid output format (json, excel)")
+	} else if len(format) == 0 {
+		viper.Set("format", "json")
 	}
 }
 
-func head(input string, dir bool) (err error) {
-	if dir {
-		m, err := dissect.NewMatchReader(input)
+func printHead(in *os.File) error {
+	stat, err := in.Stat()
+	if err != nil {
+		return err
+	}
+	if stat.IsDir() {
+		m, err := dissect.NewMatchReader(in)
 		if err != nil {
 			return err
 		}
@@ -103,49 +133,35 @@ func head(input string, dir bool) (err error) {
 		r.Head()
 		return nil
 	}
-	f, err := os.Open(input)
+	r, err := dissect.NewReader(in)
 	if err != nil {
-		return
-	}
-	defer f.Close()
-	r, err := dissect.NewReader(f)
-	if err != nil {
-		return
+		return err
 	}
 	if err := r.ReadPartial(); !dissect.Ok(err) {
 		return err
 	}
 	r.Head()
-	return
+	return nil
 }
 
-func exportMatch(input, export string) (err error) {
-	m, err := dissect.NewMatchReader(input)
+func writeMatch(in *os.File, format OutputFormat, out io.Writer) error {
+	m, err := dissect.NewMatchReader(in)
 	if err != nil {
-		return
+		return err
 	}
 	if err := m.Read(); !dissect.Ok(err) {
 		return err
 	}
-	if strings.HasSuffix(export, ".xlsx") {
-		err = m.Export(export)
-	} else if strings.HasSuffix(export, ".json") {
-		err = m.ExportJSON(export)
-	} else {
-		err = m.ExportStdout()
+	if format == Excel {
+		return m.WriteExcel(out)
 	}
-	return
+	return m.WriteJSON(out)
 }
 
-func exportRound(input, export string) (err error) {
-	f, err := os.Open(input)
+func writeRound(in io.Reader, out io.Writer) error {
+	r, err := dissect.NewReader(in)
 	if err != nil {
-		return
-	}
-	defer f.Close()
-	r, err := dissect.NewReader(f)
-	if err != nil {
-		log.Fatal().Err(err).Send()
+		return err
 	}
 	type output struct {
 		dissect.Header
@@ -155,50 +171,40 @@ func exportRound(input, export string) (err error) {
 	if err := r.Read(); !dissect.Ok(err) {
 		return err
 	}
-	var encoder *json.Encoder = nil
-	if export == "stdout" {
-		encoder = json.NewEncoder(os.Stdout)
-	} else {
-		file, err := os.OpenFile(export, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-		encoder = json.NewEncoder(file)
-	}
-	err = encoder.Encode(output{
+	encoder := json.NewEncoder(out)
+	return encoder.Encode(output{
 		r.Header,
 		r.MatchFeedback,
 		r.PlayerStats(),
 	})
-	return
 }
 
-func dumpRound(input string, output string) error {
-	f, err := os.Open(input)
+func writeRoundDump(in io.Reader, out *os.File, outBin *os.File) error {
+	r, err := dissect.NewReader(in)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	r, err := dissect.NewReader(f)
-	if err != nil {
-		return err
-	}
-	out, err := os.OpenFile(output, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	binOut, err := os.OpenFile(output+".bin", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-	defer binOut.Close()
-	if _, err := r.Write(binOut); err != nil {
+	if _, err := r.Write(outBin); err != nil {
 		return err
 	}
 	if err := r.Dump(out); !dissect.Ok(err) {
 		return err
 	}
 	return nil
+}
+
+func piped(f *os.File) bool {
+	stat, err := f.Stat()
+	if err != nil {
+		return false
+	}
+	return stat.Mode()&os.ModeNamedPipe != 0
+}
+
+func viperFileOrDefault(key string, def *os.File, flag int) (*os.File, error) {
+	val := viper.GetString(key)
+	if len(val) > 0 {
+		return os.OpenFile(val, flag, os.ModePerm)
+	}
+	return def, nil
 }

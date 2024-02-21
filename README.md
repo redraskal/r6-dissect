@@ -9,7 +9,7 @@ Match Replay API/CLI for Rainbow Six: Siege's Dissect (.rec) format.
 ## Current Features
 - Match Info (Game version, map, gamemode, match type, teams, players)
 - Match Feedback (Kills, headshots, objective locates, defuser plants/disables, BattlEye bans, DCs)
-- Exporting to JSON, Excel, or stdout (in JSON)
+- JSON or Excel output
 
 ## Planned Features
 - UI alternative
@@ -22,9 +22,9 @@ Match Replay API/CLI for Rainbow Six: Siege's Dissect (.rec) format.
 ## CLI Usage
 Print a match overview by specifying a match folder or .rec file:
 ```bash
-r6-dissect Match-2023-03-13_23-23-58-199/
+r6-dissect --info Match-2023-03-13_23-23-58-199
 # or
-r6-dissect Match-2023-03-13_23-23-58-199-R01.rec
+r6-dissect --info Match-2023-03-13_23-23-58-199-R01.rec
 ```
 ```
 5:20PM INF Version:          Y8S1/7422506
@@ -37,7 +37,7 @@ r6-dissect Match-2023-03-13_23-23-58-199-R01.rec
 ```
 You can export round stats to a JSON file:
 ```bash
-r6-dissect Match-2023-03-13_23-23-58-199-R01.rec -x round.json
+r6-dissect Match-2023-03-13_23-23-58-199-R01.rec -o round.json
 ```
 Example:
 ```json
@@ -113,18 +113,18 @@ Example:
 ```
 Or the entire match:
 ```bash
-r6-dissect Match-2023-03-13_23-23-58-199/ -x match.json
+r6-dissect Match-2023-03-13_23-23-58-199 -o match.json
 ```
 Export an Excel spreadsheet by swapping .json with .xlsx.
 ```bash
-r6-dissect Match-2023-03-13_23-23-58-199-R01/ -x match.xlsx
+r6-dissect Match-2023-03-13_23-23-58-199-R01 -o match.xlsx
 ```
 Output JSON to the console (stdout) with the following syntax:
 ```bash
 # entire match
-r6-dissect Match-2023-03-13_23-23-58-199-R01/ -x stdout
+r6-dissect Match-2023-03-13_23-23-58-199-R01
 # or single round
-r6-dissect Match-2023-03-13_23-23-58-199-R01/Match-2023-03-13_23-23-58-199-R01.rec -x stdout
+r6-dissect Match-2023-03-13_23-23-58-199-R01/Match-2023-03-13_23-23-58-199-R01.rec
 ```
 
 See example outputs in [/examples](https://github.com/redraskal/r6-dissect/tree/main/examples).
@@ -156,33 +156,6 @@ func main() {
 		log.Fatal(err)
 	}
 	print(r.Header.GameVersion) // Y8S1
-}
-```
-
-## Exporting match statistics
-```go
-package main
-
-import (
-	"log"
-
-	"github.com/redraskal/r6-dissect/dissect"
-)
-
-func main() {
-	m, err := dissect.NewMatchReader("MatchReplay/Match-2023-03-13_23-23-58-199/")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer m.Close()
-	// dissect.Ok(err) returns true if the error only pertains to EOF (read was successful)
-	if err := m.Read(); !dissect.Ok(err) {
-		log.Fatal(err)
-	}
-	// You may also try ExportJSON(path string)
-	if err := m.Export("match.xlsx"); err != nil {
-		log.Fatal(err)
-	}
 }
 ```
 
