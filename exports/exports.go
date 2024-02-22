@@ -39,13 +39,19 @@ func convertErrorForExport(err error) string {
 func dissect_read(input *C.char) *C.char {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 	path := C.GoString(input)
-	s, err := os.Stat(path)
+	f, err := os.Open(path)
+	if err != nil {
+		res := convertErrorForExport(err)
+		return C.CString(res)
+	}
+	defer f.Close()
+	s, err := f.Stat()
 	if err != nil {
 		res := convertErrorForExport(err)
 		return C.CString(res)
 	}
 	if s.IsDir() {
-		m, err := dissect.NewMatchReader(path)
+		m, err := dissect.NewMatchReader(f)
 		if err != nil {
 			res := convertErrorForExport(err)
 			return C.CString(res)
@@ -62,12 +68,6 @@ func dissect_read(input *C.char) *C.char {
 		res := convertForExport(j)
 		return C.CString(res)
 	} else {
-		f, err := os.Open(path)
-		if err != nil {
-			res := convertErrorForExport(err)
-			return C.CString(res)
-		}
-		defer f.Close()
 		r, err := dissect.NewReader(f)
 		if err != nil {
 			res := convertErrorForExport(err)
