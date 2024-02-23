@@ -28,8 +28,11 @@ func readScoreboardAssists(r *Reader) error {
 		return err
 	}
 	idx := r.PlayerIndexByID(id)
-	username := r.Header.Players[idx].Username
-	r.Scoreboard.Players[idx].Assists = assists
+	username := "N/A"
+	if idx != -1 {
+		username = r.Header.Players[idx].Username
+		r.Scoreboard.Players[idx].Assists = assists
+	}
 	log.Debug().
 		Uint32("assists", assists).
 		Str("username", username).
