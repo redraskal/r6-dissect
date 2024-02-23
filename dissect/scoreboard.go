@@ -7,9 +7,10 @@ type Scoreboard struct {
 }
 
 type ScoreboardPlayer struct {
-	ID      []byte
-	Score   uint32
-	Assists uint32
+	ID               []byte
+	Score            uint32
+	Assists          uint32
+	AssistsFromRound uint32
 }
 
 func readScoreboardAssists(r *Reader) error {
@@ -31,7 +32,8 @@ func readScoreboardAssists(r *Reader) error {
 	username := "N/A"
 	if idx != -1 {
 		username = r.Header.Players[idx].Username
-		r.Scoreboard.Players[idx].Assists++
+		r.Scoreboard.Players[idx].Assists = assists
+		r.Scoreboard.Players[idx].AssistsFromRound++
 	}
 	log.Debug().
 		Uint32("assists", assists).
