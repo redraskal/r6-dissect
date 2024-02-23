@@ -31,7 +31,7 @@ func readScoreboardAssists(r *Reader) error {
 	username := "N/A"
 	if idx != -1 {
 		username = r.Header.Players[idx].Username
-		r.Scoreboard.Players[idx].Assists = assists
+		r.Scoreboard.Players[idx].Assists++
 	}
 	log.Debug().
 		Uint32("assists", assists).
