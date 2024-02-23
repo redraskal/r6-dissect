@@ -3,6 +3,7 @@ package dissect
 type PlayerRoundStats struct {
 	Username           string  `json:"username"`
 	TeamIndex          int     `json:"-"`
+	Score              int     `json:"score"`
 	Operator           string  `json:"-"`
 	Kills              int     `json:"kills"`
 	Died               bool    `json:"died"`
@@ -83,10 +84,13 @@ func (r *Reader) PlayerStats() []PlayerRoundStats {
 		winningTeamIndex = 1
 	}
 	for i, p := range r.Header.Players {
+		scorePlayer := r.Scoreboard.Players[i]
 		stats = append(stats, PlayerRoundStats{
 			Username:  p.Username,
 			TeamIndex: p.TeamIndex,
 			Operator:  p.Operator.String(),
+			Assists:   int(scorePlayer.Assists),
+			Score:     int(scorePlayer.Score),
 		})
 		index[p.Username] = i
 	}
