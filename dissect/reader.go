@@ -30,6 +30,7 @@ type Reader struct {
 	playersRead            int
 	Header                 Header        `json:"header"`
 	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
+	Scoreboard             Scoreboard
 }
 
 // NewReader decompresses in using zstd and
@@ -49,7 +50,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 			return r, err
 		}
 	} else {
-		if err = r.readUnchunkedData(br); err != nil {
+		if err = r.readNonChunkedData(br); err != nil {
 			return r, err
 		}
 	}
@@ -65,6 +66,8 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	}
 	r.Listen([]byte{0x59, 0x34, 0xE5, 0x8B, 0x04}, readMatchFeedback)
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
+	r.Listen([]byte{0xEC, 0xDA, 0x4F, 0x80}, readScoreboardScore)
+	r.Listen([]byte{0x4D, 0x73, 0x7F, 0x9E}, readScoreboardAssists)
 	return r, err
 }
 
@@ -133,7 +136,7 @@ func (r *Reader) readChunkedData(genericReader io.Reader) error {
 	return nil
 }
 
-func (r *Reader) readUnchunkedData(genericReader io.Reader) error {
+func (r *Reader) readNonChunkedData(genericReader io.Reader) error {
 	zstdReader, err := zstd.NewReader(genericReader)
 	if err != nil {
 		return err

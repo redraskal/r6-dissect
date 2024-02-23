@@ -139,7 +139,7 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 		c.Right(1).Str("Team Index")
 		c.Right(1).Str("Kills")
 		c.Right(1).Str("Died")
-		c.Right(1).Str("Assists (TODO)")
+		c.Right(1).Str("Assists")
 		c.Right(1).Str("Hs%")
 		c.Right(1).Str("Headshots")
 		c.Right(1).Str("1vX")
@@ -247,7 +247,7 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 	c.Right(1).Str("Rounds")
 	c.Right(1).Str("Kills")
 	c.Right(1).Str("Deaths")
-	c.Right(1).Str("Assists (TODO)")
+	c.Right(1).Str("Assists")
 	c.Right(1).Str("Hs%")
 	c.Right(1).Str("Headshots")
 

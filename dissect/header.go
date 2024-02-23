@@ -512,6 +512,9 @@ func (r *Reader) deriveTeamRoles() {
 		log.Debug().Interface("player", p).Send()
 		if p.Operator != 0 {
 			players = append(players, p)
+			r.Scoreboard.Players = append(r.Scoreboard.Players, ScoreboardPlayer{
+				ID: p.DissectID,
+			})
 		} else {
 			log.Warn().Str("username", p.Username).Msg("operator id was 0, removing from list")
 		}
