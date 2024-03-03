@@ -191,6 +191,7 @@ const (
 	Fenrir      Operator = 288200867339
 	Ram         Operator = 395943091136
 	Tubarao     Operator = 288200867549
+	Deimos      Operator = 374667787816
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
