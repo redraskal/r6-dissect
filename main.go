@@ -102,9 +102,12 @@ func setup() {
 		log.Fatal().Msg("Specify a valid match replay file/folder path (*.rec files)")
 	} else if extra > 0 {
 		viper.Set("input", pflag.Args()[0])
-		if strings.HasSuffix(pflag.Args()[0], ".xlsx") {
+	}
+	if !viper.IsSet("format") {
+		output := viper.GetString("output")
+		if strings.HasSuffix(output, ".xlsx") {
 			viper.Set("format", "excel")
-		} else if strings.HasSuffix(pflag.Args()[0], ".json") {
+		} else if strings.HasSuffix(output, ".json") {
 			viper.Set("format", "json")
 		}
 	}
