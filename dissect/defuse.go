@@ -1,8 +1,9 @@
 package dissect
 
 import (
-	"github.com/rs/zerolog/log"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 func readDefuserTimer(r *Reader) error {

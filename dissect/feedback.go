@@ -56,14 +56,24 @@ var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
 func readMatchFeedback(r *Reader) error {
-	bombIndicator, err := r.Bytes(1)
-	if err != nil {
-		return err
-	}
-	_ = bytes.Equal(bombIndicator, []byte{0x01}) // TODO, figure out meaning
-	err = r.Seek(activity2)
-	if err != nil {
-		return err
+	if r.Header.CodeVersion < Y9S1 {
+		if err := r.Skip(1); err != nil {
+			return err
+		}
+		if err := r.Seek(activity2); err != nil {
+			return err
+		}
+	} else {
+		if err := r.Skip(9); err != nil {
+			return err
+		}
+		valid, err := r.Int()
+		if err != nil || valid != 4 {
+			return err
+		}
+		if err := r.Skip(24); err != nil {
+			return err
+		}
 	}
 	size, err := r.Int()
 	if err != nil {
@@ -135,6 +145,10 @@ func readMatchFeedback(r *Reader) error {
 		}
 		r.MatchFeedback = append(r.MatchFeedback, u)
 		log.Debug().Interface("match_update", u).Send()
+		return nil
+	}
+	// TODO: Y9S1 may have removed or modified other match feedback options
+	if r.Header.CodeVersion >= Y9S1 {
 		return nil
 	}
 	b, err := r.Bytes(size)

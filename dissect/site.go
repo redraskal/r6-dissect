@@ -1,12 +1,12 @@
 package dissect
 
 import (
-	"github.com/rs/zerolog/log"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 func readSpawn(r *Reader) error {
-	log.Debug().Msg("site found")
 	location, err := r.String()
 	if err != nil {
 		return err
