@@ -3,6 +3,7 @@ package dissect
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -56,22 +57,29 @@ var activity2 = []byte{0x00, 0x00, 0x00, 0x22, 0xe3, 0x09, 0x00, 0x79}
 var killIndicator = []byte{0x22, 0xd9, 0x13, 0x3c, 0xba}
 
 func readMatchFeedback(r *Reader) error {
-	if r.Header.CodeVersion < Y9S1 {
-		if err := r.Skip(1); err != nil {
+	if r.Header.CodeVersion >= Y9S1Update3 {
+		if err := r.Skip(38); err != nil {
 			return err
 		}
-		if err := r.Seek(activity2); err != nil {
-			return err
-		}
-	} else {
+	} else if r.Header.CodeVersion >= Y9S1 {
 		if err := r.Skip(9); err != nil {
 			return err
 		}
 		valid, err := r.Int()
-		if err != nil || valid != 4 {
+		if err != nil {
 			return err
 		}
+		if valid != 4 {
+			return errors.New("match feedback failed valid check")
+		}
 		if err := r.Skip(24); err != nil {
+			return err
+		}
+	} else {
+		if err := r.Skip(1); err != nil {
+			return err
+		}
+		if err := r.Seek(activity2); err != nil {
 			return err
 		}
 	}
