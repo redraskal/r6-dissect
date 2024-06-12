@@ -192,6 +192,8 @@ const (
 	Ram         Operator = 395943091136
 	Tubarao     Operator = 288200867549
 	Deimos      Operator = 374667787816
+	Striker     Operator = 409899350463
+	Sentry      Operator = 409899350403
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
