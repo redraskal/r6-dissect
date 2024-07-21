@@ -79,9 +79,10 @@ const (
 	CustomGameOnline MatchType = 4
 	Standard         MatchType = 8
 
-	Bomb       GameMode = 327933806
-	SecureArea GameMode = 1983085217
-	Hostage    GameMode = 2838806006
+	Bomb           GameMode = 327933806
+	SecureArea     GameMode = 1983085217
+	Hostage        GameMode = 2838806006
+	QuickMatchBomb GameMode = 400168582901
 
 	ClubHouse         Map = 837214085
 	KafeDostoyevsky   Map = 1378191338
