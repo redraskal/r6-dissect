@@ -34,9 +34,10 @@ func _() {
 	_ = x[NighthavenLabs-378595635123]
 	_ = x[Consulate-379218689149]
 	_ = x[Lair-388073319671]
+	_ = x[Stadium2020-405306299908]
 }
 
-const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateY7BartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabsConsulateLair"
+const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateY7BartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabsConsulateLairStadium2020"
 
 var _Map_map = map[Map]string{
 	837214085:    _Map_name[0:9],
@@ -65,6 +66,7 @@ var _Map_map = map[Map]string{
 	378595635123: _Map_name[194:208],
 	379218689149: _Map_name[208:217],
 	388073319671: _Map_name[217:221],
+	405306299908: _Map_name[221:232],
 }
 
 func (i Map) String() string {

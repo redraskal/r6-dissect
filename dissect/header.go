@@ -109,6 +109,7 @@ const (
 	NighthavenLabs    Map = 378595635123
 	Consulate         Map = 379218689149
 	Lair              Map = 388073319671
+	Stadium2020       Map = 405306299908
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
