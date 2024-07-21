@@ -52,7 +52,8 @@
 				"alliance": 4,
 				"roleImage": 39149215373,
 				"roleName": "ECHO",
-				"rolePortrait": 39149215397
+				"rolePortrait": 39149215397,
+				"spawn": "1º Salão de reuniões, 1º Cozinha"
 			},
 			{
 				"id": 12246689978983031096,
@@ -67,7 +68,8 @@
 				"alliance": 4,
 				"roleImage": 32822532305,
 				"roleName": "VALKYRIE",
-				"rolePortrait": 27880747293
+				"rolePortrait": 27880747293,
+				"spawn": "1º Salão de reuniões, 1º Cozinha"
 			},
 			{
 				"id": 15299134193977100767,
@@ -82,7 +84,8 @@
 				"alliance": 4,
 				"roleImage": 104189664208,
 				"roleName": "MELUSI",
-				"rolePortrait": 104189664234
+				"rolePortrait": 104189664234,
+				"spawn": "1º Salão de reuniões, 1º Cozinha"
 			},
 			{
 				"id": 214508485753035926,
@@ -97,7 +100,8 @@
 				"alliance": 4,
 				"roleImage": 104189664090,
 				"roleName": "ORYX",
-				"rolePortrait": 258649622576
+				"rolePortrait": 258649622576,
+				"spawn": "1º Salão de reuniões, 1º Cozinha"
 			},
 			{
 				"id": 423059609487334073,
@@ -112,7 +116,8 @@
 				"alliance": 4,
 				"roleImage": 104189664639,
 				"roleName": "ARUNI",
-				"rolePortrait": 104189664665
+				"rolePortrait": 104189664665,
+				"spawn": "1º Salão de reuniões, 1º Cozinha"
 			},
 			{
 				"id": 8068966686555883115,

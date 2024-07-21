@@ -52,7 +52,8 @@
 				"alliance": 4,
 				"roleImage": 39149215445,
 				"roleName": "MIRA",
-				"rolePortrait": 39149215469
+				"rolePortrait": 39149215469,
+				"spawn": "B Wine Cellar, B Snowmobile Garage"
 			},
 			{
 				"id": 6515507923820359514,
@@ -67,7 +68,8 @@
 				"alliance": 4,
 				"roleImage": 104189664208,
 				"roleName": "MELUSI",
-				"rolePortrait": 104189664234
+				"rolePortrait": 104189664234,
+				"spawn": "B Wine Cellar, B Snowmobile Garage"
 			},
 			{
 				"id": 10701406544402263943,
@@ -82,7 +84,8 @@
 				"alliance": 4,
 				"roleImage": 375628889901,
 				"roleName": "AZAMI",
-				"rolePortrait": 378305072064
+				"rolePortrait": 378305072064,
+				"spawn": "B Wine Cellar, B Snowmobile Garage"
 			},
 			{
 				"id": 4534930452375727316,
@@ -97,7 +100,8 @@
 				"alliance": 4,
 				"roleImage": 104189664639,
 				"roleName": "ARUNI",
-				"rolePortrait": 104189664665
+				"rolePortrait": 104189664665,
+				"spawn": "B Wine Cellar, B Snowmobile Garage"
 			},
 			{
 				"id": 340082302850986973,
@@ -112,7 +116,8 @@
 				"alliance": 4,
 				"roleImage": 39149215589,
 				"roleName": "ELA",
-				"rolePortrait": 39149215613
+				"rolePortrait": 39149215613,
+				"spawn": "B Wine Cellar, B Snowmobile Garage"
 			},
 			{
 				"id": 5031908513475985408,

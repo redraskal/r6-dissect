@@ -123,7 +123,7 @@ func readPlayer(r *Reader) error {
 		DissectID: id,
 	}
 	if p.Operator != Recruit && p.Operator.Role() == Defense {
-		p.Spawn = "" // We cannot detect the spawn here on defense
+		p.Spawn = r.Header.Site // We cannot detect the spawn here on defense
 	}
 	log.Debug().Str("username", username).
 		Int("teamIndex", teamIndex).
@@ -141,11 +141,7 @@ func readPlayer(r *Reader) error {
 			r.Header.Players[i].ProfileID = p.ProfileID
 			r.Header.Players[i].Username = p.Username
 			r.Header.Players[i].Operator = p.Operator
-
-			if p.Operator == Recruit || p.Operator.Role() != Defense {
-				r.Header.Players[i].Spawn = p.Spawn
-			}
-
+			r.Header.Players[i].Spawn = p.Spawn
 			r.Header.Players[i].DissectID = p.DissectID
 			found = true
 			break
