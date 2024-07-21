@@ -123,7 +123,7 @@ func readPlayer(r *Reader) error {
 		DissectID: id,
 	}
 	if p.Operator != Recruit && p.Operator.Role() == Defense {
-		p.Spawn = "" // We cannot detect the spawn here on defense
+		p.Spawn = r.Header.Site // We cannot detect the spawn here on defense
 	}
 	log.Debug().Str("username", username).
 		Int("teamIndex", teamIndex).

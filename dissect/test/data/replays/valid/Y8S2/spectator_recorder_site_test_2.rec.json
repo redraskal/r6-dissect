@@ -52,7 +52,8 @@
 				"alliance": 4,
 				"roleImage": 39149215445,
 				"roleName": "MIRA",
-				"rolePortrait": 39149215469
+				"rolePortrait": 39149215469,
+				"spawn": "2F Gym, 2F Bedroom"
 			},
 			{
 				"id": 14046042538542621139,
@@ -67,7 +68,8 @@
 				"alliance": 4,
 				"roleImage": 375628889901,
 				"roleName": "AZAMI",
-				"rolePortrait": 378305072064
+				"rolePortrait": 378305072064,
+				"spawn": "2F Gym, 2F Bedroom"
 			},
 			{
 				"id": 2361232417239798636,
@@ -82,7 +84,8 @@
 				"alliance": 4,
 				"roleImage": 161289666176,
 				"roleName": "KAID",
-				"rolePortrait": 161289666206
+				"rolePortrait": 161289666206,
+				"spawn": "2F Gym, 2F Bedroom"
 			},
 			{
 				"id": 16099508879547952222,
@@ -97,7 +100,8 @@
 				"alliance": 4,
 				"roleImage": 1494825824,
 				"roleName": "CASTLE",
-				"rolePortrait": 27880706756
+				"rolePortrait": 27880706756,
+				"spawn": "2F Gym, 2F Bedroom"
 			},
 			{
 				"id": 3628344668562828488,
@@ -112,7 +116,8 @@
 				"alliance": 4,
 				"roleImage": 104189663738,
 				"roleName": "WAMAI",
-				"rolePortrait": 104189663764
+				"rolePortrait": 104189663764,
+				"spawn": "2F Gym, 2F Bedroom"
 			},
 			{
 				"id": 5031908513475985408,

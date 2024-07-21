@@ -52,7 +52,8 @@
 				"alliance": 4,
 				"roleImage": 1494825824,
 				"roleName": "CASTLE",
-				"rolePortrait": 27880706756
+				"rolePortrait": 27880706756,
+				"spawn": "1F Staff Room, 1F Open Area"
 			},
 			{
 				"id": 17668758393748689036,
@@ -67,7 +68,8 @@
 				"alliance": 4,
 				"roleImage": 183220539138,
 				"roleName": "MOZZIE",
-				"rolePortrait": 174977498152
+				"rolePortrait": 174977498152,
+				"spawn": "1F Staff Room, 1F Open Area"
 			},
 			{
 				"id": 1228046118657654424,
@@ -82,7 +84,8 @@
 				"alliance": 4,
 				"roleImage": 104189664208,
 				"roleName": "MELUSI",
-				"rolePortrait": 104189664234
+				"rolePortrait": 104189664234,
+				"spawn": "1F Staff Room, 1F Open Area"
 			},
 			{
 				"id": 11184268148855488270,
@@ -97,7 +100,8 @@
 				"alliance": 4,
 				"roleImage": 1494825836,
 				"roleName": "ROOK",
-				"rolePortrait": 27880706877
+				"rolePortrait": 27880706877,
+				"spawn": "1F Staff Room, 1F Open Area"
 			},
 			{
 				"id": 7237043221017403435,
@@ -112,7 +116,8 @@
 				"alliance": 4,
 				"roleImage": 104189664639,
 				"roleName": "ARUNI",
-				"rolePortrait": 104189664665
+				"rolePortrait": 104189664665,
+				"spawn": "1F Staff Room, 1F Open Area"
 			},
 			{
 				"id": 17135695547652681161,
