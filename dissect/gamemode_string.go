@@ -11,12 +11,14 @@ func _() {
 	_ = x[Bomb-327933806]
 	_ = x[SecureArea-1983085217]
 	_ = x[Hostage-2838806006]
+	_ = x[QuickMatchBomb-400168582901]
 }
 
 const (
 	_GameMode_name_0 = "Bomb"
 	_GameMode_name_1 = "SecureArea"
 	_GameMode_name_2 = "Hostage"
+	_GameMode_name_3 = "QuickMatchBomb"
 )
 
 func (i GameMode) String() string {
@@ -27,6 +29,8 @@ func (i GameMode) String() string {
 		return _GameMode_name_1
 	case i == 2838806006:
 		return _GameMode_name_2
+	case i == 400168582901:
+		return _GameMode_name_3
 	default:
 		return "GameMode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
