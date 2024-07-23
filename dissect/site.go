@@ -29,7 +29,9 @@ func readSpawn(r *Reader) error {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
-			if r.Header.Teams[p.TeamIndex].Role == Defense || (p.Operator != Recruit && p.Operator.Role() == Defense) {
+			defenseTeam := r.Header.Teams[p.TeamIndex].Role == Defense
+			defenseRole := p.Operator != Recruit && p.Operator != 0 && p.Operator.Role() == Defense
+			if defenseTeam || defenseRole {
 				r.Header.Players[i].Spawn = formatted
 			}
 		}
