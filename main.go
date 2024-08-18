@@ -74,6 +74,8 @@ func setup() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	pflag.StringP("format", "f", "", "specifies the output format (json, excel)")
 	pflag.StringP("output", "o", "", "specifies the output path")
+	// TODO: implement this flag
+	pflag.StringP("show", "s", "", "optionally provide additional data (movement)")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
 	pflag.BoolP("dump", "p", false, "dumps decompressed replay to the output")
 	pflag.Bool("info", false, "prints the replay header")
@@ -166,6 +168,7 @@ func writeRound(in io.Reader, out io.Writer) error {
 		dissect.Header
 		MatchFeedback []dissect.MatchUpdate      `json:"matchFeedback"`
 		PlayerStats   []dissect.PlayerRoundStats `json:"stats"`
+		Movement      []dissect.MovementUpdates  `json:"movement,omitempty"`
 	}
 	if err := r.Read(); !dissect.Ok(err) {
 		return err
@@ -175,6 +178,7 @@ func writeRound(in io.Reader, out io.Writer) error {
 		r.Header,
 		r.MatchFeedback,
 		r.PlayerStats(),
+		r.Movement,
 	})
 }
 
