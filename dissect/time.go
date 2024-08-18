@@ -2,9 +2,10 @@ package dissect
 
 import (
 	"fmt"
-	"github.com/rs/zerolog/log"
 	"strconv"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 func readTime(r *Reader) error {
@@ -57,6 +58,10 @@ func (r *Reader) roundEnd() {
 		case Kill:
 			i := r.Header.Players[r.PlayerIndexByUsername(u.Target)].TeamIndex
 			deaths[i] = deaths[i] + 1
+			// fix killer username
+			if len(u.usernameFromScoreboard) > 0 {
+				u.Username = u.usernameFromScoreboard
+			}
 			break
 		case Death:
 			i := r.Header.Players[r.PlayerIndexByUsername(u.Username)].TeamIndex

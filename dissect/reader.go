@@ -18,19 +18,20 @@ import (
 var strSep = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 
 type Reader struct {
-	b                      []byte
-	offset                 int
-	queries                [][]byte
-	listeners              [][]func(r *Reader) error
-	time                   float64 // in seconds
-	timeRaw                string  // raw dissect format
-	lastDefuserPlayerIndex int
-	planted                bool
-	readPartial            bool // reads up to the player info packets
-	playersRead            int
-	Header                 Header        `json:"header"`
-	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
-	Scoreboard             Scoreboard
+	b                        []byte
+	offset                   int
+	queries                  [][]byte
+	listeners                [][]func(r *Reader) error
+	time                     float64 // in seconds
+	timeRaw                  string  // raw dissect format
+	lastDefuserPlayerIndex   int
+	planted                  bool
+	readPartial              bool // reads up to the player info packets
+	playersRead              int
+	lastKillerFromScoreboard string
+	Header                   Header        `json:"header"`
+	MatchFeedback            []MatchUpdate `json:"matchFeedback"`
+	Scoreboard               Scoreboard
 }
 
 // NewReader decompresses in using zstd and
@@ -68,6 +69,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
 	r.Listen([]byte{0xEC, 0xDA, 0x4F, 0x80}, readScoreboardScore)
 	r.Listen([]byte{0x4D, 0x73, 0x7F, 0x9E}, readScoreboardAssists)
+	r.Listen([]byte{0x1C, 0xD2, 0xB1, 0x9D}, readScoreboardKills)
 	return r, err
 }
 

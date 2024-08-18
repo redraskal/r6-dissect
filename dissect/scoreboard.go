@@ -13,6 +13,31 @@ type ScoreboardPlayer struct {
 	AssistsFromRound uint32
 }
 
+// this function fixes kills that were previously recorded as elims
+func readScoreboardKills(r *Reader) error {
+	kills, err := r.Uint32()
+	if err != nil {
+		return err
+	}
+	if err := r.Skip(30); err != nil {
+		return err
+	}
+	id, err := r.Bytes(4)
+	if err != nil {
+		return err
+	}
+	idx := r.PlayerIndexByID(id)
+	if idx != -1 {
+		username := r.Header.Players[idx].Username
+		r.lastKillerFromScoreboard = username
+		log.Warn().
+			Str("username", username).
+			Uint32("kills", kills).
+			Msg("scoreboard_kill")
+	}
+	return nil
+}
+
 func readScoreboardAssists(r *Reader) error {
 	assists, err := r.Uint32()
 	if err != nil {
