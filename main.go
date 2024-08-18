@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/redraskal/r6-dissect/dissect"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/redraskal/r6-dissect/dissect"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -50,12 +51,7 @@ func main() {
 		log.Fatal().Msg("dump requires a replay file input.")
 	}
 	if viper.GetBool("dump") {
-		outBin, err := os.OpenFile(out.Name()+".bin", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, os.ModePerm)
-		if err != nil {
-			log.Fatal().Err(err).Send()
-		}
-		defer outBin.Close()
-		if err := writeRoundDump(in, out, outBin); err != nil {
+		if err := writeRoundDump(in, out); err != nil {
 			log.Fatal().Err(err).Send()
 		}
 		return
@@ -79,7 +75,7 @@ func setup() {
 	pflag.StringP("format", "f", "", "specifies the output format (json, excel)")
 	pflag.StringP("output", "o", "", "specifies the output path")
 	pflag.BoolP("debug", "d", false, "sets log level to debug")
-	pflag.BoolP("dump", "p", false, "dumps packets to the output")
+	pflag.BoolP("dump", "p", false, "dumps decompressed replay to the output")
 	pflag.Bool("info", false, "prints the replay header")
 	pflag.BoolP("version", "v", false, "prints the version")
 	pflag.Parse()
@@ -182,18 +178,13 @@ func writeRound(in io.Reader, out io.Writer) error {
 	})
 }
 
-func writeRoundDump(in io.Reader, out *os.File, outBin *os.File) error {
+func writeRoundDump(in io.Reader, out *os.File) error {
 	r, err := dissect.NewReader(in)
 	if err != nil {
 		return err
 	}
-	if _, err := r.Write(outBin); err != nil {
-		return err
-	}
-	if err := r.Dump(out); !dissect.Ok(err) {
-		return err
-	}
-	return nil
+	_, err = r.Write(out)
+	return err
 }
 
 func piped(f *os.File) bool {
