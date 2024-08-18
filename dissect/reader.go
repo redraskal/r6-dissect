@@ -28,8 +28,9 @@ type Reader struct {
 	planted                bool
 	readPartial            bool // reads up to the player info packets
 	playersRead            int
-	Header                 Header        `json:"header"`
-	MatchFeedback          []MatchUpdate `json:"matchFeedback"`
+	Header                 Header            `json:"header"`
+	MatchFeedback          []MatchUpdate     `json:"matchFeedback"`
+	Movement               []MovementUpdates `json:"movement,omitempty"`
 	Scoreboard             Scoreboard
 }
 
@@ -68,6 +69,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	r.Listen([]byte{0x22, 0xA9, 0xC8, 0x58, 0xD9}, readDefuserTimer)
 	r.Listen([]byte{0xEC, 0xDA, 0x4F, 0x80}, readScoreboardScore)
 	r.Listen([]byte{0x4D, 0x73, 0x7F, 0x9E}, readScoreboardAssists)
+	r.Listen([]byte{0x60, 0x73, 0x85, 0xFE}, readMovement)
 	return r, err
 }
 
@@ -340,6 +342,15 @@ func (r *Reader) Uint64() (uint64, error) {
 		return 0, err
 	}
 	return binary.LittleEndian.Uint64(b), nil
+}
+
+func (r *Reader) Float32() (float32, error) {
+	b, err := r.Bytes(4)
+	if err != nil {
+		return 0, err
+	}
+	u := binary.LittleEndian.Uint32(b)
+	return math.Float32frombits(u), nil
 }
 
 func (r *Reader) Write(w io.Writer) (n int, err error) {
