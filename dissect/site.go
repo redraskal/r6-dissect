@@ -1,20 +1,23 @@
 package dissect
 
 import (
+	"bytes"
 	"strings"
 
 	"github.com/rs/zerolog/log"
 )
+
+var currentSitePattern = []byte{0xFC, 0xC6, 0xA8, 0x60, 0x01}
 
 func readSpawn(r *Reader) error {
 	location, err := r.String()
 	if err != nil {
 		return err
 	}
-	if err = r.Skip(37); err != nil {
+	if err = r.Skip(150); err != nil {
 		return err
 	}
-	flag, err := r.Int()
+	pattern, err := r.Bytes(5)
 	if err != nil {
 		return err
 	}
@@ -22,10 +25,9 @@ func readSpawn(r *Reader) error {
 		return nil
 	}
 	log.Debug().
-		Int("flag", flag).
 		Str("site", location).
-		Msg("site")
-	if r.Header.Site == "" && (flag == 1 || flag == 164) {
+		Send()
+	if r.Header.Site == "" || bytes.Equal(pattern, currentSitePattern) {
 		formatted := strings.Replace(location, "<br/>", ", ", 1)
 		log.Debug().Str("site", formatted).Msg("defense site")
 		for i, p := range r.Header.Players {
