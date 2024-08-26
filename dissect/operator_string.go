@@ -82,9 +82,10 @@ func _() {
 	_ = x[Deimos-374667787816]
 	_ = x[Striker-409899350463]
 	_ = x[Sentry-409899350403]
+	_ = x[Skopos-386098331713]
 }
 
-const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaTubaraoZeroTachankaFloresRecruitThornDeimosGrimAzamiSensSolisRamSentryStriker"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaTubaraoZeroTachankaFloresRecruitThornDeimosGrimAzamiSensSkoposSolisRamSentryStriker"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
@@ -157,10 +158,11 @@ var _Operator_map = map[Operator]string{
 	374667788042: _Operator_name[365:369],
 	378305069945: _Operator_name[369:374],
 	384797789346: _Operator_name[374:378],
-	391752120891: _Operator_name[378:383],
-	395943091136: _Operator_name[383:386],
-	409899350403: _Operator_name[386:392],
-	409899350463: _Operator_name[392:399],
+	386098331713: _Operator_name[378:384],
+	391752120891: _Operator_name[384:389],
+	395943091136: _Operator_name[389:392],
+	409899350403: _Operator_name[392:398],
+	409899350463: _Operator_name[398:405],
 }
 
 func (i Operator) String() string {
