@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/rs/zerolog/log"
-	"github.com/xuri/excelize/v2"
 	"io"
 	"os"
 	"path"
+	"slices"
 	"strings"
+
+	"github.com/rs/zerolog/log"
+	"github.com/xuri/excelize/v2"
 )
 
 type MatchReader struct {
@@ -313,5 +315,6 @@ func ListReplayFiles(root *os.File) ([]string, error) {
 	if len(paths) == 0 {
 		return paths, ErrInvalidFolder
 	}
+	slices.Sort(paths)
 	return paths, nil
 }
