@@ -24,7 +24,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
-          goversion: "1.22.2"
+          goversion: "1.23"
           pre_command: "go build -o libr6dissect.${{ env.ext }} -buildmode=c-shared exports/exports.go"
           extra_files: "LICENSE README.md libr6dissect.h libr6dissect.${{ env.ext }}"
           ldflags: "-X 'main.Version=${{ env.version }}'"
