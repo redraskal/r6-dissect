@@ -45,14 +45,23 @@ func readY7Time(r *Reader) error {
 
 func (r *Reader) roundEnd() {
 	log.Debug().Msg("round_end")
+
 	planter := -1
 	deaths := make(map[int]int)
 	sizes := make(map[int]int)
 	roles := make(map[int]TeamRole)
+
 	for _, p := range r.Header.Players {
 		sizes[p.TeamIndex] += 1
 		roles[p.TeamIndex] = r.Header.Teams[p.TeamIndex].Role
 	}
+
+	if r.Header.CodeVersion >= Y9S4 {
+		team0Won := r.Header.Teams[0].StartingScore < r.Header.Teams[0].Score
+		r.Header.Teams[0].Won = team0Won
+		r.Header.Teams[1].Won = !team0Won
+	}
+
 	for _, u := range r.MatchFeedback {
 		switch u.Type {
 		case Kill:
@@ -77,11 +86,19 @@ func (r *Reader) roundEnd() {
 			return
 		}
 	}
+
 	if planter > -1 {
 		r.Header.Teams[r.Header.Players[planter].TeamIndex].Won = true
 		r.Header.Teams[r.Header.Players[planter].TeamIndex].WinCondition = DefusedBomb
 		return
 	}
+
+	// skip for now until we have a more reliable way of determining the win condition
+	// Y9S4 at least tells us who won now in the header with StartingScore
+	if r.Header.CodeVersion >= Y9S4 {
+		return
+	}
+
 	if deaths[0] == sizes[0] {
 		if planter > -1 && roles[0] == Attack { // ignore attackers killed post-plant
 			return
@@ -98,10 +115,12 @@ func (r *Reader) roundEnd() {
 		r.Header.Teams[0].WinCondition = KilledOpponents
 		return
 	}
+
 	i := 0
 	if roles[1] == Defense {
 		i = 1
 	}
+
 	r.Header.Teams[i].Won = true
 	r.Header.Teams[i].WinCondition = Time
 }
