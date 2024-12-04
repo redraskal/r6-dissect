@@ -406,6 +406,8 @@ func (r *Reader) readHeader() (Header, error) {
 					return Header{}, err
 				}
 				currentPlayer.RolePortrait = n
+			default:
+				props[k] = v
 			}
 		}
 		_, lastProp = props["teamscore1"]
