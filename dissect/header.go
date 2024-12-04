@@ -33,11 +33,12 @@ type Header struct {
 }
 
 type Team struct {
-	Name         string       `json:"name"`
-	Score        int          `json:"score"`
-	Won          bool         `json:"won"`
-	WinCondition WinCondition `json:"winCondition,omitempty"`
-	Role         TeamRole     `json:"role,omitempty"`
+	Name          string       `json:"name"`
+	StartingScore int          `json:"startingScore"`
+	Score         int          `json:"score"`
+	Won           bool         `json:"won"`
+	WinCondition  WinCondition `json:"winCondition,omitempty"`
+	Role          TeamRole     `json:"role,omitempty"`
 }
 
 type Player struct {
@@ -53,6 +54,7 @@ type Player struct {
 	RolePortrait int      `json:"rolePortrait,omitempty"`
 	Spawn        string   `json:"spawn,omitempty"`
 	DissectID    []byte   `json:"-" deep:"-"` // dissect player id at end of packet (4 bytes)
+	uiID         uint64   `json:"-" deep:"-"`
 }
 
 type stringerIntMarshal struct {
@@ -404,6 +406,8 @@ func (r *Reader) readHeader() (Header, error) {
 					return Header{}, err
 				}
 				currentPlayer.RolePortrait = n
+			default:
+				props[k] = v
 			}
 		}
 		_, lastProp = props["teamscore1"]
@@ -502,6 +506,19 @@ func (r *Reader) readHeader() (Header, error) {
 		return h, err
 	}
 	h.Teams[1].Score = n
+	// Parse starting team scores
+	if h.CodeVersion >= Y9S4 {
+		n, err = strconv.Atoi(props["startingteamscore0"])
+		if err != nil {
+			return h, err
+		}
+		h.Teams[0].StartingScore = n
+		n, err = strconv.Atoi(props["startingteamscore1"])
+		if err != nil {
+			return h, err
+		}
+		h.Teams[1].StartingScore = n
+	}
 
 	return h, nil
 }

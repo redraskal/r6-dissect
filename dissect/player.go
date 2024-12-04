@@ -92,6 +92,20 @@ func readPlayer(r *Reader) error {
 	if r.playersRead > 5 {
 		teamIndex = 1
 	}
+	// ui id (y9s3+?)
+	// there seems to be more to this, but its a quick fix for atk op swaps for now
+	var uiID uint64
+	if r.Header.CodeVersion >= Y9S3 {
+		if err = r.Seek([]byte{0x38, 0xDF, 0xEE, 0x88}); err != nil {
+			return err
+		}
+		if err = r.Skip(13); err != nil {
+			return err
+		}
+		if uiID, err = r.Uint64(); err != nil {
+			return err
+		}
+	}
 	// Older versions of siege did not include profile ids
 	profileID := ""
 	var unknownId uint64
@@ -121,6 +135,7 @@ func readPlayer(r *Reader) error {
 		Operator:  Operator(op),
 		Spawn:     spawn,
 		DissectID: id,
+		uiID:      uiID,
 	}
 	if p.Operator != Recruit && p.Operator.Role() == Defense {
 		p.Spawn = r.Header.Site // We cannot detect the spawn here on defense
@@ -131,6 +146,7 @@ func readPlayer(r *Reader) error {
 		Str("profileID", profileID).
 		Hex("DissectID", id).
 		Uint64("ID", p.ID).
+		Uint64("uiID", p.uiID).
 		Str("spawn", spawn).Send()
 	found := false
 	for i, existing := range r.Header.Players {
@@ -143,6 +159,7 @@ func readPlayer(r *Reader) error {
 			r.Header.Players[i].Operator = p.Operator
 			r.Header.Players[i].Spawn = p.Spawn
 			r.Header.Players[i].DissectID = p.DissectID
+			r.Header.Players[i].uiID = p.uiID
 			found = true
 			break
 		}
@@ -158,27 +175,55 @@ func readAtkOpSwap(r *Reader) error {
 	if err != nil {
 		return err
 	}
-	if err = r.Skip(5); err != nil {
+	o := Operator(op)
+	// before Y9S3 caster view overhaul
+	if r.Header.CodeVersion < Y9S3 {
+		if err = r.Skip(5); err != nil {
+			return err
+		}
+		id, err := r.Bytes(4)
+		if err != nil {
+			return err
+		}
+		i := r.PlayerIndexByID(id)
+		log.Debug().Hex("id", id).Interface("op", op).Msg("atk_op_swap")
+		if i > -1 {
+			r.Header.Players[i].Operator = o
+			u := MatchUpdate{
+				Type:          OperatorSwap,
+				Username:      r.Header.Players[i].Username,
+				Time:          r.timeRaw,
+				TimeInSeconds: r.time,
+				Operator:      o,
+			}
+			r.MatchFeedback = append(r.MatchFeedback, u)
+			log.Debug().Interface("match_update", u).Send()
+		}
+		return nil
+	}
+	// after Y9S3 caster view overhaul
+	if err = r.Skip(402); err != nil {
 		return err
 	}
-	id, err := r.Bytes(4)
+	// id shows up in player data and in op swaps afaik
+	id, err := r.Uint64()
 	if err != nil {
 		return err
 	}
-	i := r.PlayerIndexByID(id)
-	o := Operator(op)
-	log.Debug().Hex("id", id).Interface("op", op).Msg("atk_op_swap")
-	if i > -1 {
-		r.Header.Players[i].Operator = o
-		u := MatchUpdate{
-			Type:          OperatorSwap,
-			Username:      r.Header.Players[i].Username,
-			Time:          r.timeRaw,
-			TimeInSeconds: r.time,
-			Operator:      o,
+	for i, p := range r.Header.Players {
+		if p.uiID == id {
+			r.Header.Players[i].Operator = o
+			u := MatchUpdate{
+				Type:          OperatorSwap,
+				Username:      p.Username,
+				Time:          r.timeRaw,
+				TimeInSeconds: r.time,
+				Operator:      o,
+			}
+			r.MatchFeedback = append(r.MatchFeedback, u)
+			log.Debug().Interface("match_update", u).Send()
+			break
 		}
-		r.MatchFeedback = append(r.MatchFeedback, u)
-		log.Debug().Interface("match_update", u).Send()
 	}
 	return nil
 }

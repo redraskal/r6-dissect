@@ -19,12 +19,12 @@ jobs:
         run: |
           c=$(git rev-parse --short HEAD); b=$(git name-rev --name-only "$c"); echo "version=$c ($b branch)" >> $GITHUB_ENV
           echo "ext=$( if [ '${{ matrix.goos }}' = 'windows' ]; then echo 'dll'; elif [ '${{ matrix.goos }}' = 'darwin' ]; then echo 'dylib'; elif [ '${{ matrix.goos }}' = 'linux' ]; then echo 'so'; fi )" >> $GITHUB_ENV
-      - uses: wangyoucao577/go-release-action@v1.38
+      - uses: wangyoucao577/go-release-action@v1.52
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
-          goversion: "1.23.0"
+          goversion: "1.23.3"
           pre_command: "go build -o libr6dissect.${{ env.ext }} -buildmode=c-shared exports/exports.go"
           extra_files: "LICENSE README.md libr6dissect.h libr6dissect.${{ env.ext }}"
           ldflags: "-X 'main.Version=${{ env.version }}'"
