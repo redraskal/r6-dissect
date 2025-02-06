@@ -236,9 +236,9 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 		trades := r.Trades()
 
 		for _, trade := range trades {
-			c.Down(1).Left(3).Str(trade[0].Username)
+			c.Down(1).Left(2).Str(trade[0].Username)
 			c.Right(1).Str(trade[0].Target)
-			c.Right(1).Str(trade[0].Time)
+			c.Right(1).Str(trade[1].Time)
 		}
 	}
 
