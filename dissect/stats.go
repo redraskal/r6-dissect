@@ -49,9 +49,12 @@ func (r *Reader) Trades() [][]MatchUpdate {
 	trades := make([][]MatchUpdate, 0)
 	var previous = MatchUpdate{}
 	for _, a := range r.MatchFeedback {
-		if a.Type == Kill && previous.Target == a.Username {
+		var samePlayers = (previous.Target == a.Username || previous.Username == a.Target)
+		var withinThreshold = (previous.TimeInSeconds - a.TimeInSeconds) <= 3
+		if a.Type == Kill && samePlayers && withinThreshold {
 			trades = append(trades, []MatchUpdate{previous, a})
 		}
+		previous = a
 	}
 	return trades
 }
