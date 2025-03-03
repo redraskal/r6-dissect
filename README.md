@@ -6,6 +6,8 @@ Match Replay API/CLI for Rainbow Six: Siege's Dissect (.rec) format.
 
 **This is a work in progress. The data format is subject to change until a stable version is released.**
 
+Download the latest version here: https://github.com/redraskal/r6-dissect/releases
+
 ## Current Features
 - Match Info (Game version, map, gamemode, match type, teams, players)
 - Match Feedback (Kills, headshots, objective locates, defuser plants/disables, BattlEye bans, DCs)
