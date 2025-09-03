@@ -200,6 +200,7 @@ const (
 	Sentry      Operator = 409899350403
 	Skopos      Operator = 386098331713
 	Rauora      Operator = 386098331923
+	Denari		Operator = 374667787937
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
