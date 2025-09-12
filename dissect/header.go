@@ -79,7 +79,8 @@ const (
 	Ranked           MatchType = 2
 	CustomGameLocal  MatchType = 3
 	CustomGameOnline MatchType = 4
-	Standard         MatchType = 8
+	Standard         MatchType = 8 // Y8S3~Y10S1
+	Unranked		 MatchType = 9 // Y10S2~
 
 	Bomb           GameMode = 327933806
 	SecureArea     GameMode = 1983085217

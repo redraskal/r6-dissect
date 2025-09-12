@@ -13,15 +13,17 @@ func _() {
 	_ = x[CustomGameLocal-3]
 	_ = x[CustomGameOnline-4]
 	_ = x[Standard-8]
+	_ = x[Unranked-9]
 }
 
 const (
 	_MatchType_name_0 = "QuickMatchRankedCustomGameLocalCustomGameOnline"
-	_MatchType_name_1 = "Standard"
+	_MatchType_name_1 = "StandardUnranked"
 )
 
 var (
 	_MatchType_index_0 = [...]uint8{0, 10, 16, 31, 47}
+	_MatchType_index_1 = [...]uint8{0, 8, 16}
 )
 
 func (i MatchType) String() string {
@@ -29,8 +31,9 @@ func (i MatchType) String() string {
 	case 1 <= i && i <= 4:
 		i -= 1
 		return _MatchType_name_0[_MatchType_index_0[i]:_MatchType_index_0[i+1]]
-	case i == 8:
-		return _MatchType_name_1
+	case 8 <= i && i <= 9:
+		i -= 8
+		return _MatchType_name_1[_MatchType_index_1[i]:_MatchType_index_1[i+1]]
 	default:
 		return "MatchType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
