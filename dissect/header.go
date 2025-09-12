@@ -118,6 +118,9 @@ const (
 	ChaletY10           Map = 407558616688
 	ClubHouseY10        Map = 407193663917
 	KafeDostoyevskyY10  Map = 413845419788
+	LairY10             Map = 417890697769
+	NighthavenLabsY10   Map = 418119057546
+	ConsulateY10           Map = 418126004176
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO

@@ -40,9 +40,12 @@ func _() {
 	_ = x[ChaletY10-407558616688]
 	_ = x[ClubHouseY10-407193663917]
 	_ = x[KafeDostoyevskyY10-413845419788]
+	_ = x[LairY10-417890697769]
+	_ = x[NighthavenLabsY10-418119057546]
+	_ = x[ConsulateY10-418126004176]
 }
 
-const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateY7BartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabsConsulateLairStadium2020ClubHouseY10ChaletY10BorderY10BankY10KafeDostoyevskyY10"
+const _Map_name = "ClubHouseKafeDostoyevskyKanalYachtPresidentialPlaneConsulateY7BartlettUCoastlineTowerVillaFortressHerefordBaseThemeParkOregonHouseChaletStadiumBravoSkyscraperBorderFavelaBankOutbackEmeraldPlainsNighthavenLabsConsulateLairStadium2020ClubHouseY10ChaletY10BorderY10BankY10KafeDostoyevskyY10LairY10NighthavenLabsY10ConsulateY10"
 
 var _Map_map = map[Map]string{
 	837214085:    _Map_name[0:9],
@@ -77,6 +80,9 @@ var _Map_map = map[Map]string{
 	407987100456: _Map_name[253:262],
 	413779563590: _Map_name[262:269],
 	413845419788: _Map_name[269:287],
+	417890697769: _Map_name[287:294],
+	418119057546: _Map_name[294:311],
+	418126004176: _Map_name[311:323],
 }
 
 func (i Map) String() string {
