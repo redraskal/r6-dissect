@@ -79,7 +79,8 @@ const (
 	Ranked           MatchType = 2
 	CustomGameLocal  MatchType = 3
 	CustomGameOnline MatchType = 4
-	Standard         MatchType = 8
+	Standard         MatchType = 8 // Y8S3~Y10S1
+	Unranked		 MatchType = 9 // Y10S2~
 
 	Bomb           GameMode = 327933806
 	SecureArea     GameMode = 1983085217
@@ -118,6 +119,9 @@ const (
 	ChaletY10           Map = 407558616688
 	ClubHouseY10        Map = 407193663917
 	KafeDostoyevskyY10  Map = 413845419788
+	LairY10             Map = 417890697769
+	NighthavenLabsY10   Map = 418119057546
+	ConsulateY10           Map = 418126004176
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
@@ -205,6 +209,7 @@ const (
 	Sentry      Operator = 409899350403
 	Skopos      Operator = 386098331713
 	Rauora      Operator = 386098331923
+	Denari      Operator = 374667787937
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
