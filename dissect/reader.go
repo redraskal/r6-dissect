@@ -26,6 +26,8 @@ type Reader struct {
 	timeRaw                  string  // raw dissect format
 	lastDefuserPlayerIndex   int
 	planted                  bool
+	defuserDisabling         bool
+	lastDefuserTimer         float64
 	readPartial              bool // reads up to the player info packets
 	playersRead              int
 	lastKillerFromScoreboard string

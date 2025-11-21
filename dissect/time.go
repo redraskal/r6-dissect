@@ -81,21 +81,71 @@ func (r *Reader) roundEnd() {
 			break
 		case DefuserDisableComplete:
 			i := r.Header.Players[r.PlayerIndexByUsername(u.Username)].TeamIndex
-			r.Header.Teams[i].Won = true
-			r.Header.Teams[i].WinCondition = DisabledDefuser
+			winningTeam := i
+			if r.Header.CodeVersion >= Y9S4 {
+				winningTeam = 0
+				if r.Header.Teams[1].Won {
+					winningTeam = 1
+				}
+			}
+
+			r.Header.Teams[winningTeam].Won = true
+			if r.Header.CodeVersion >= Y9S4 {
+				r.Header.Teams[winningTeam^1].Won = false
+			}
+			r.Header.Teams[winningTeam].WinCondition = DisabledDefuser
 			return
 		}
 	}
 
 	if planter > -1 {
-		r.Header.Teams[r.Header.Players[planter].TeamIndex].Won = true
-		r.Header.Teams[r.Header.Players[planter].TeamIndex].WinCondition = DefusedBomb
+		planterTeam := r.Header.Players[planter].TeamIndex
+		if r.Header.CodeVersion >= Y9S4 {
+			winningTeamIndex := 0
+			if r.Header.Teams[1].Won {
+				winningTeamIndex = 1
+			}
+			r.Header.Teams[winningTeamIndex].Won = true
+			r.Header.Teams[winningTeamIndex^1].Won = false
+			r.Header.Teams[winningTeamIndex].WinCondition = DefusedBomb
+		} else {
+			r.Header.Teams[planterTeam].Won = true
+			r.Header.Teams[planterTeam].WinCondition = DefusedBomb
+		}
 		return
 	}
 
-	// skip for now until we have a more reliable way of determining the win condition
-	// Y9S4 at least tells us who won now in the header with StartingScore
 	if r.Header.CodeVersion >= Y9S4 {
+		winningTeamIndex := 0
+		if r.Header.Teams[1].Won {
+			winningTeamIndex = 1
+		}
+
+		if deaths[0] == sizes[0] && winningTeamIndex == 1 {
+			r.Header.Teams[1].Won = true
+			r.Header.Teams[0].Won = false
+			r.Header.Teams[1].WinCondition = KilledOpponents
+			return
+		}
+		if deaths[1] == sizes[1] && winningTeamIndex == 0 {
+			r.Header.Teams[0].Won = true
+			r.Header.Teams[1].Won = false
+			r.Header.Teams[0].WinCondition = KilledOpponents
+			return
+		}
+
+		defenseTeamIndex := 0
+		if roles[1] == Defense {
+			defenseTeamIndex = 1
+		}
+
+		r.Header.Teams[winningTeamIndex].Won = true
+		r.Header.Teams[winningTeamIndex^1].Won = false
+		if winningTeamIndex == defenseTeamIndex {
+			r.Header.Teams[winningTeamIndex].WinCondition = Time
+		} else {
+			r.Header.Teams[winningTeamIndex].WinCondition = KilledOpponents
+		}
 		return
 	}
 
