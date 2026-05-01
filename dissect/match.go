@@ -140,6 +140,8 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 		c.Down(1).Str("Player")
 		c.Right(1).Str("Team Index")
 		c.Right(1).Str("Kills")
+		c.Right(1).Str("DBNOs")
+		c.Right(1).Str("Revives")
 		c.Right(1).Str("Died")
 		c.Right(1).Str("Assists")
 		c.Right(1).Str("Hs%")
@@ -153,9 +155,11 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 		}
 
 		for _, s := range r.PlayerStats() {
-			c.Down(1).Left(8).Str(s.Username)
+			c.Down(1).Left(10).Str(s.Username)
 			c.Right(1).Int(s.TeamIndex)
 			c.Right(1).Int(s.Kills)
+			c.Right(1).Int(s.DBNOs)
+			c.Right(1).Int(s.Revives)
 			c.Right(1).Bool(s.Died)
 			c.Right(1).Int(s.Assists)
 			c.Right(1).Float(s.HeadshotPercentage, 3)
@@ -165,7 +169,7 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 			log.Debug().Interface("round_player_stats", s).Send()
 		}
 
-		c.Down(2).Left(8).Heading("Round info")
+		c.Down(2).Left(10).Heading("Round info")
 		c.Down(1).Str("Name")
 		c.Right(1).Str("Value")
 		c.Right(1).Str("Time")
@@ -248,16 +252,20 @@ func (m *MatchReader) WriteExcel(out io.Writer) error {
 	c.Right(1).Str("Team Index")
 	c.Right(1).Str("Rounds")
 	c.Right(1).Str("Kills")
+	c.Right(1).Str("DBNOs")
+	c.Right(1).Str("Revives")
 	c.Right(1).Str("Deaths")
 	c.Right(1).Str("Assists")
 	c.Right(1).Str("Hs%")
 	c.Right(1).Str("Headshots")
 
 	for _, s := range m.PlayerStats() {
-		c.Down(1).Left(8).Str(s.Username)
+		c.Down(1).Left(10).Str(s.Username)
 		c.Right(1).Int(s.TeamIndex)
 		c.Right(1).Int(s.Rounds)
 		c.Right(1).Int(s.Kills)
+		c.Right(1).Int(s.DBNOs)
+		c.Right(1).Int(s.Revives)
 		c.Right(1).Int(s.Deaths)
 		c.Right(1).Int(s.Assists)
 		c.Right(1).Float(s.HeadshotPercentage, 3)
@@ -275,11 +283,62 @@ func (m *MatchReader) WriteJSON(out io.Writer) error {
 	return encoder.Encode(m.Data())
 }
 
+func (m *MatchReader) WriteJSONWithAnalysis(out io.Writer) error {
+	type round struct {
+		Header
+		MatchFeedback      []MatchUpdate       `json:"matchFeedback"`
+		PlayerStats        []PlayerRoundStats  `json:"stats"`
+		UtilityEvents      []UtilityEvent      `json:"utilityEvents,omitempty"`
+		CameraDestructions []CameraDestruction `json:"cameraDestructions,omitempty"`
+		DroneDestructions  []DroneDestruction  `json:"droneDestructions,omitempty"`
+		Reinforcements     []Reinforcement     `json:"reinforcements,omitempty"`
+		Barricades         []BarricadePlace    `json:"barricades,omitempty"`
+		GadgetDeployments  []GadgetDeployment  `json:"gadgetDeployments,omitempty"`
+		Movements          []EntityPositions   `json:"movements,omitempty"`
+		LocationEvents     []LocationEvent     `json:"locationEvents,omitempty"`
+	}
+	type output struct {
+		Rounds      []round            `json:"rounds"`
+		PlayerStats []PlayerMatchStats `json:"stats"`
+		Analysis    *MatchAnalysis     `json:"analysis,omitempty"`
+	}
+	rounds := make([]round, 0)
+	for _, r := range m.rounds {
+		rounds = append(rounds, round{
+			Header:             r.Header,
+			MatchFeedback:      r.MatchFeedback,
+			PlayerStats:        r.PlayerStats(),
+			UtilityEvents:      r.UtilityEvents,
+			CameraDestructions: r.CameraDestructions,
+			DroneDestructions:  r.DroneDestructions,
+			Reinforcements:     r.Reinforcements,
+			Barricades:         r.Barricades,
+			GadgetDeployments:  r.GadgetDeployments,
+			Movements:          r.Movements,
+			LocationEvents:     r.LocationEvents,
+		})
+	}
+	encoder := json.NewEncoder(out)
+	return encoder.Encode(output{
+		Rounds:      rounds,
+		PlayerStats: m.PlayerStats(),
+		Analysis:    AnalyzeMatch(m),
+	})
+}
+
 func (m *MatchReader) Data() any {
 	type round struct {
 		Header
-		MatchFeedback []MatchUpdate      `json:"matchFeedback"`
-		PlayerStats   []PlayerRoundStats `json:"stats"`
+		MatchFeedback      []MatchUpdate       `json:"matchFeedback"`
+		PlayerStats        []PlayerRoundStats  `json:"stats"`
+		UtilityEvents      []UtilityEvent      `json:"utilityEvents,omitempty"`
+		CameraDestructions []CameraDestruction `json:"cameraDestructions,omitempty"`
+		DroneDestructions  []DroneDestruction  `json:"droneDestructions,omitempty"`
+		Reinforcements     []Reinforcement     `json:"reinforcements,omitempty"`
+		Barricades         []BarricadePlace    `json:"barricades,omitempty"`
+		GadgetDeployments  []GadgetDeployment  `json:"gadgetDeployments,omitempty"`
+		Movements          []EntityPositions   `json:"movements,omitempty"`
+		LocationEvents     []LocationEvent     `json:"locationEvents,omitempty"`
 	}
 	type output struct {
 		Rounds      []round            `json:"rounds"`
@@ -288,9 +347,17 @@ func (m *MatchReader) Data() any {
 	rounds := make([]round, 0)
 	for _, r := range m.rounds {
 		rounds = append(rounds, round{
-			Header:        r.Header,
-			MatchFeedback: r.MatchFeedback,
-			PlayerStats:   r.PlayerStats(),
+			Header:             r.Header,
+			MatchFeedback:      r.MatchFeedback,
+			PlayerStats:        r.PlayerStats(),
+			UtilityEvents:      r.UtilityEvents,
+			CameraDestructions: r.CameraDestructions,
+			DroneDestructions:  r.DroneDestructions,
+			Reinforcements:     r.Reinforcements,
+			Barricades:         r.Barricades,
+			GadgetDeployments:  r.GadgetDeployments,
+			Movements:          r.Movements,
+			LocationEvents:     r.LocationEvents,
 		})
 	}
 	return output{

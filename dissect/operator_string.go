@@ -85,9 +85,10 @@ func _() {
 	_ = x[Skopos-386098331713]
 	_ = x[Rauora-386098331923]
 	_ = x[Denari-374667787937]
+	_ = x[SolidSnake-444310693746]
 }
 
-const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaTubaraoZeroTachankaFloresRecruitThornDeimosDenariGrimAzamiSensSkoposRauoraSolisRamSentryStriker"
+const _Operator_name = "KapkanFuzeGlazBlackbeardValkyrieEchoHibanaLesionYingMuteSledgeSmokeThatcherBuckFrostBanditBlitzIQJagerAshCastlePulseThermiteDocMontagneRookTwitchElaZofiaCapitaoCaveiraDokkaebiVigilMiraJackalLionFinkaAlibiMaestroClashMaverickWardenNokkAmaruGoyoWamaiKaliIanaOryxMelusiAceAruniKaidNomadGridlockMozzieBravaFenrirThunderbirdOsaTubaraoZeroTachankaFloresRecruitThornDeimosDenariGrimAzamiSensSkoposRauoraSolisRamSentryStrikerSolidSnake"
 
 var _Operator_map = map[Operator]string{
 	92270641980:  _Operator_name[0:6],
@@ -167,6 +168,7 @@ var _Operator_map = map[Operator]string{
 	395943091136: _Operator_name[401:404],
 	409899350403: _Operator_name[404:410],
 	409899350463: _Operator_name[410:417],
+	444310693746: _Operator_name[417:427],
 }
 
 func (i Operator) String() string {

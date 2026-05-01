@@ -149,6 +149,7 @@ func readPlayer(r *Reader) error {
 		Uint64("uiID", p.uiID).
 		Str("spawn", spawn).Send()
 	found := false
+	foundIndex := -1
 	for i, existing := range r.Header.Players {
 		if existing.Username == p.Username ||
 			(r.Header.CodeVersion < Y8S2 && existing.ID == p.ID && p.ID != 0) ||
@@ -161,11 +162,16 @@ func readPlayer(r *Reader) error {
 			r.Header.Players[i].DissectID = p.DissectID
 			r.Header.Players[i].uiID = p.uiID
 			found = true
+			foundIndex = i
 			break
 		}
 	}
 	if !found && len(username) > 0 {
 		r.Header.Players = append(r.Header.Players, p)
+		foundIndex = len(r.Header.Players) - 1
+	}
+	if foundIndex >= 0 {
+		r.readPlayerOrder = append(r.readPlayerOrder, foundIndex)
 	}
 	return err
 }

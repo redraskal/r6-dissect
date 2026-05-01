@@ -80,48 +80,49 @@ const (
 	CustomGameLocal  MatchType = 3
 	CustomGameOnline MatchType = 4
 	Standard         MatchType = 8 // Y8S3~Y10S1
-	Unranked		 MatchType = 9 // Y10S2~
+	Unranked         MatchType = 9 // Y10S2~
 
 	Bomb           GameMode = 327933806
 	SecureArea     GameMode = 1983085217
 	Hostage        GameMode = 2838806006
 	QuickMatchBomb GameMode = 400168582901
 
-	ClubHouse           Map = 837214085
-	KafeDostoyevsky     Map = 1378191338
-	Kanal               Map = 1460220617
-	Yacht               Map = 1767965020
-	PresidentialPlane   Map = 2609218856
-	ConsulateY7         Map = 2609221242
-	BartlettU           Map = 2697268122
-	Coastline           Map = 42090092951
-	Tower               Map = 53627213396
-	Villa               Map = 88107330328
-	Fortress            Map = 126196841359
-	HerefordBase        Map = 127951053400
-	ThemePark           Map = 199824623654
-	Oregon              Map = 231702797556
-	House               Map = 237873412352
-	Chalet              Map = 259816839773
-	Skyscraper          Map = 276279025182
-	Border              Map = 305979357167
-	Favela              Map = 329867321446
-	Bank                Map = 355496559878
-	Outback             Map = 362605108559
-	EmeraldPlains       Map = 365284490964
-	StadiumBravo        Map = 270063334510
-	NighthavenLabs      Map = 378595635123
-	Consulate           Map = 379218689149
-	Lair                Map = 388073319671
-	Stadium2020         Map = 405306299908
-	BankY10             Map = 413779563590
-	BorderY10           Map = 407987100456
-	ChaletY10           Map = 407558616688
-	ClubHouseY10        Map = 407193663917
-	KafeDostoyevskyY10  Map = 413845419788
-	LairY10             Map = 417890697769
-	NighthavenLabsY10   Map = 418119057546
-	ConsulateY10           Map = 418126004176
+	ClubHouse          Map = 837214085
+	KafeDostoyevsky    Map = 1378191338
+	Kanal              Map = 1460220617
+	Yacht              Map = 1767965020
+	PresidentialPlane  Map = 2609218856
+	ConsulateY7        Map = 2609221242
+	BartlettU          Map = 2697268122
+	Coastline          Map = 42090092951
+	Tower              Map = 53627213396
+	Villa              Map = 88107330328
+	Fortress           Map = 126196841359
+	HerefordBase       Map = 127951053400
+	ThemePark          Map = 199824623654
+	Oregon             Map = 231702797556
+	House              Map = 237873412352
+	Chalet             Map = 259816839773
+	Skyscraper         Map = 276279025182
+	Border             Map = 305979357167
+	Favela             Map = 329867321446
+	Bank               Map = 355496559878
+	Outback            Map = 362605108559
+	EmeraldPlains      Map = 365284490964
+	StadiumBravo       Map = 270063334510
+	NighthavenLabs     Map = 378595635123
+	Consulate          Map = 379218689149
+	Lair               Map = 388073319671
+	Stadium2020        Map = 405306299908
+	BankY10            Map = 413779563590
+	BorderY10          Map = 407987100456
+	ChaletY10          Map = 407558616688
+	ClubHouseY10       Map = 407193663917
+	KafeDostoyevskyY10 Map = 413845419788
+	LairY10            Map = 417890697769
+	NighthavenLabsY10  Map = 418119057546
+	ConsulateY10       Map = 418126004176
+	FortressY10        Map = 398899676157
 
 	KilledOpponents  WinCondition = "KilledOpponents"
 	SecuredArea      WinCondition = "SecuredArea" // TODO
@@ -210,10 +211,10 @@ const (
 	Skopos      Operator = 386098331713
 	Rauora      Operator = 386098331923
 	Denari      Operator = 374667787937
+	SolidSnake  Operator = 444310693746
 )
 
 // duplicated code here could be avoided by defining a generic function accepting any Number type.
-// that kind of constraint is still experimental though (as of Go 1.20.2): https://pkg.go.dev/golang.org/x/exp/constraints
 
 func (i MatchType) MarshalJSON() (text []byte, err error) {
 	return json.Marshal(stringerIntMarshal{
@@ -366,14 +367,14 @@ func (r *Reader) readHeader() (Header, error) {
 			playerData = false
 		}
 		if !playerData {
-			if k != "gmsetting" {
-				props[k] = v
-			} else {
+			if k == "gmsetting" {
 				n, err := strconv.Atoi(v)
 				if err != nil {
 					return Header{}, err
 				}
 				gmSettings = append(gmSettings, n)
+			} else {
+				props[k] = v
 			}
 		} else {
 			switch k {

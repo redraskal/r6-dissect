@@ -4,9 +4,10 @@ package main
 import "C"
 import (
 	"encoding/json"
+	"os"
+
 	"github.com/redraskal/r6-dissect/dissect"
 	"github.com/rs/zerolog"
-	"os"
 )
 
 func marshalToString(v any) string {
@@ -61,10 +62,6 @@ func dissect_read(input *C.char) *C.char {
 			return C.CString(res)
 		}
 		j := m.Data()
-		if err != nil {
-			res := convertErrorForExport(err)
-			return C.CString(res)
-		}
 		res := convertForExport(j)
 		return C.CString(res)
 	} else {

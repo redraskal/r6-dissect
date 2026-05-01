@@ -13,13 +13,13 @@ import (
 	"fmt"
 	"go/format"
 	"go/types"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"sort"
 	"strings"
+	"unicode"
 
 	"github.com/redraskal/r6-dissect/dissect/ubi"
 	"golang.org/x/tools/go/packages"
@@ -71,7 +71,7 @@ func main() {
 	// Write to file.
 	baseName := fmt.Sprintf("%s_roles.go", *typeName)
 	outFile := filepath.Join(cwd, strings.ToLower(baseName))
-	if err = ioutil.WriteFile(outFile, src, 0644); err != nil {
+	if err = os.WriteFile(outFile, src, 0644); err != nil {
 		log.Fatalf("writing output: %s", err)
 	}
 }
@@ -199,8 +199,8 @@ func (g *Generator) generate() {
 	log.Println("creating operator role map")
 	g.printf("var _operatorRoles = map[%s]%s{\n", g.operatorTypeName, g.roleTypeName)
 	for _, c := range g.operatorConsts {
-		constNameLower := strings.ToLower(c.Name())
-		op, exists := ops[constNameLower]
+		slug := camelToSlug(c.Name())
+		op, exists := ops[slug]
 		if !exists {
 			log.Printf("WARNING: operator const \"%s\" not present in Ubisoft data\n", c.Name())
 			log.Println("         either add it manually or check the const name")
@@ -240,6 +240,23 @@ func (g *Generator) printGetter() {
 
 func (g *Generator) printf(format string, args ...any) {
 	fmt.Fprintf(&g.buf, format, args...)
+}
+
+// camelToSlug converts a CamelCase Go const name to a lowercase hyphenated slug
+// matching the Ubisoft website format. e.g. "SolidSnake" → "solid-snake"
+func camelToSlug(name string) string {
+	var parts []string
+	start := 0
+	runes := []rune(name)
+	for i := 1; i < len(runes); i++ {
+		if unicode.IsUpper(runes[i]) && (unicode.IsLower(runes[i-1]) ||
+			(i+1 < len(runes) && unicode.IsLower(runes[i+1]))) {
+			parts = append(parts, string(runes[start:i]))
+			start = i
+		}
+	}
+	parts = append(parts, string(runes[start:]))
+	return strings.ToLower(strings.Join(parts, "-"))
 }
 
 // format returns the gofmt-ed contents of the Generator's buffer.

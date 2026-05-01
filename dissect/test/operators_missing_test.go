@@ -63,7 +63,7 @@ func assembleOperatorNames(tt *testing.T) (us []string, ubisoft []string) {
 	ubiOpNames := make([]string, len(ubiOpsMap))
 	i = 0
 	for n := range ubiOpsMap {
-		ubiOpNames[i] = strings.ToLower(n)
+		ubiOpNames[i] = strings.ReplaceAll(strings.ToLower(n), "-", "")
 		i++
 	}
 	return ourOpNames, ubiOpNames

@@ -1,16 +1,26 @@
 package dissect
 
+type ClutchDetail struct {
+	OpponentsAlive int     `json:"opponentsAlive"`
+	TimeStarted    float64 `json:"timeStarted"`
+	Won            bool    `json:"won"`
+	Kills          int     `json:"kills"`
+}
+
 type PlayerRoundStats struct {
-	Username           string  `json:"username"`
-	TeamIndex          int     `json:"-"`
-	Score              int     `json:"score"`
-	Operator           string  `json:"-"`
-	Kills              int     `json:"kills"`
-	Died               bool    `json:"died"`
-	Assists            int     `json:"assists"`
-	Headshots          int     `json:"headshots"`
-	HeadshotPercentage float64 `json:"headshotPercentage"`
-	OneVx              int     `json:"1vX,omitempty"`
+	Username           string        `json:"username"`
+	TeamIndex          int           `json:"-"`
+	Score              int           `json:"score"`
+	Operator           string        `json:"-"`
+	Kills              int           `json:"kills"`
+	DBNOs              int           `json:"dbnos"`
+	Revives            int           `json:"revives"`
+	Died               bool          `json:"died"`
+	Assists            int           `json:"assists"`
+	Headshots          int           `json:"headshots"`
+	HeadshotPercentage float64       `json:"headshotPercentage"`
+	OneVx              int           `json:"1vX,omitempty"`
+	ClutchDetail       *ClutchDetail `json:"clutchDetail,omitempty"`
 }
 
 type PlayerMatchStats struct {
@@ -18,6 +28,8 @@ type PlayerMatchStats struct {
 	TeamIndex          int     `json:"-"`
 	Rounds             int     `json:"rounds"`
 	Kills              int     `json:"kills"`
+	DBNOs              int     `json:"dbnos"`
+	Revives            int     `json:"revives"`
 	Deaths             int     `json:"deaths"`
 	Assists            int     `json:"assists"`
 	Headshots          int     `json:"headshots"`
@@ -102,12 +114,16 @@ func (r *Reader) PlayerStats() []PlayerRoundStats {
 		i := index[a.Username]
 		if a.Type == Kill {
 			stats[i].Kills += 1
-			if *a.Headshot {
+			if a.Headshot != nil && *a.Headshot {
 				stats[i].Headshots += 1
 			}
 			stats[i].HeadshotPercentage = headshotPercentage(stats[i].Headshots, stats[i].Kills)
 			stats[index[a.Target]].Died = true
 			lastDeath = index[a.Target]
+		} else if a.Type == DBNO {
+			stats[i].DBNOs += 1
+		} else if a.Type == Revive {
+			stats[i].Revives += 1
 		} else if a.Type == Death {
 			stats[i].Died = true
 			lastDeath = i
@@ -138,6 +154,7 @@ func (r *Reader) PlayerStats() []PlayerRoundStats {
 		username := stats[lastWinnerStanding].Username
 		teamLeft := r.NumPlayers(winningTeamIndex)
 		oneVx := 0
+		clutchStartTime := float64(0)
 		for _, a := range r.MatchFeedback {
 			if a.Type == Kill && stats[index[a.Target]].TeamIndex == winningTeamIndex {
 				teamLeft--
@@ -145,6 +162,9 @@ func (r *Reader) PlayerStats() []PlayerRoundStats {
 				teamLeft--
 			} else if a.Type == PlayerLeave && stats[index[a.Username]].TeamIndex == winningTeamIndex {
 				teamLeft--
+			}
+			if teamLeft == 1 && clutchStartTime == 0 {
+				clutchStartTime = a.TimeInSeconds
 			}
 			if a.Username != username {
 				continue
@@ -159,6 +179,28 @@ func (r *Reader) PlayerStats() []PlayerRoundStats {
 			}
 		}
 		stats[lastWinnerStanding].OneVx = oneVx
+		if oneVx > 0 {
+			losingTeamIndex := 1 - winningTeamIndex
+			opponentsAlive := r.NumPlayers(losingTeamIndex)
+			for _, a := range r.MatchFeedback {
+				// Time counts down in R6 replays (higher = earlier in round).
+				// Stop once we reach events at or after clutch start time.
+				if a.TimeInSeconds <= clutchStartTime {
+					break
+				}
+				if a.Type == Kill && stats[index[a.Target]].TeamIndex == losingTeamIndex {
+					opponentsAlive--
+				} else if a.Type == Death && stats[index[a.Username]].TeamIndex == losingTeamIndex {
+					opponentsAlive--
+				}
+			}
+			stats[lastWinnerStanding].ClutchDetail = &ClutchDetail{
+				OpponentsAlive: opponentsAlive,
+				TimeStarted:    clutchStartTime,
+				Won:            true,
+				Kills:          oneVx,
+			}
+		}
 	}
 	return stats
 }
@@ -178,6 +220,8 @@ func (m *MatchReader) PlayerStats() []PlayerMatchStats {
 			i = index[p.Username]
 			stats[i].Rounds += 1
 			stats[i].Kills += p.Kills
+			stats[i].DBNOs += p.DBNOs
+			stats[i].Revives += p.Revives
 			if p.Died {
 				stats[i].Deaths += 1
 			}

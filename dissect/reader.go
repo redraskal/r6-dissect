@@ -26,11 +26,34 @@ type Reader struct {
 	timeRaw                  string  // raw dissect format
 	lastDefuserPlayerIndex   int
 	planted                  bool
+	defuserDisabling         bool
+	lastDefuserTimer         float64
 	readPartial              bool // reads up to the player info packets
 	playersRead              int
 	lastKillerFromScoreboard string
-	Header                   Header        `json:"header"`
-	MatchFeedback            []MatchUpdate `json:"matchFeedback"`
+	pendingSBIDs             [][4]byte          // Y10S4+: sbIDs in header-entry order for deferred mapping
+	readPlayerOrder          []int              // Y10S4+: player indices in readPlayer order
+	scoreboardIDToPlayer     map[[4]byte]int    // Y10S4+: maps scoreboard entry ID to player index
+	scoreboardInitialKills   map[[4]byte]uint32 // Y10S4+: cumulative kills at round start per sbID
+	scoreboardFinalKills     map[int]uint32     // Y10S4+: latest cumulative kills seen per player index
+	pendingDefuserPlantIdx   int                // Y10S4+: index into MatchFeedback for DefuserPlantComplete/DisableComplete with unknown player (-1 = none)
+	pendingDefuserIsPlant    bool               // Y10S4+: true if pending event is plant (attacker), false if disable (defender)
+	lastPlayerScores         map[int]uint32     // Y10S4+: last known score per player index (for detecting +100 plant/disable bonus)
+	pendingRevives           []scoreReviveCandidate
+	positionsByEntity        map[byte]*EntityPositions
+	positionRawAfter         map[byte][][]byte   // raw bytes after XYZ per entity for quaternion calibration
+	roomEntityToPlayer       map[byte]int        // maps room entity bytes to player indices for location tracking
+	roomEntityOrder          []byte              // tracks entity bytes in first-appearance order (first 10 = players)
+	Header                   Header              `json:"header"`
+	MatchFeedback            []MatchUpdate       `json:"matchFeedback"`
+	UtilityEvents            []UtilityEvent      `json:"utilityEvents,omitempty"`
+	CameraDestructions       []CameraDestruction `json:"cameraDestructions,omitempty"`
+	DroneDestructions        []DroneDestruction  `json:"droneDestructions,omitempty"`
+	Reinforcements           []Reinforcement     `json:"reinforcements,omitempty"`
+	Barricades               []BarricadePlace    `json:"barricades,omitempty"`
+	GadgetDeployments        []GadgetDeployment  `json:"gadgetDeployments,omitempty"`
+	Movements                []EntityPositions   `json:"movements,omitempty"`
+	LocationEvents           []LocationEvent     `json:"locationEvents,omitempty"`
 	Scoreboard               Scoreboard
 }
 
@@ -44,7 +67,23 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	}
 	log.Debug().Bool("chunkedCompression (>=Y8S4)", chunkedCompression).Send()
 	r = &Reader{
-		readPartial: false,
+		readPartial:            false,
+		lastDefuserPlayerIndex: -1,
+		pendingDefuserPlantIdx: -1,
+		scoreboardIDToPlayer:   make(map[[4]byte]int),
+		scoreboardInitialKills: make(map[[4]byte]uint32),
+		scoreboardFinalKills:   make(map[int]uint32),
+		lastPlayerScores:       make(map[int]uint32),
+		positionsByEntity:      make(map[byte]*EntityPositions),
+		positionRawAfter:       make(map[byte][][]byte),
+		roomEntityToPlayer:     make(map[byte]int),
+		UtilityEvents:          make([]UtilityEvent, 0),
+		CameraDestructions:     make([]CameraDestruction, 0),
+		DroneDestructions:      make([]DroneDestruction, 0),
+		Reinforcements:         make([]Reinforcement, 0),
+		Barricades:             make([]BarricadePlace, 0),
+		GadgetDeployments:      make([]GadgetDeployment, 0),
+		Movements:              make([]EntityPositions, 0),
 	}
 	if chunkedCompression {
 		if err = r.readChunkedData(br); err != nil {
@@ -70,6 +109,7 @@ func NewReader(in io.Reader) (r *Reader, err error) {
 	r.Listen([]byte{0xEC, 0xDA, 0x4F, 0x80}, readScoreboardScore)
 	r.Listen([]byte{0x4D, 0x73, 0x7F, 0x9E}, readScoreboardAssists)
 	r.Listen([]byte{0x1C, 0xD2, 0xB1, 0x9D}, readScoreboardKills)
+	r.Listen([]byte{0x60, 0x73, 0x85, 0xFE}, readPosition)
 	return r, err
 }
 
@@ -227,6 +267,9 @@ func (r *Reader) Read() (err error) {
 	}
 	if !r.readPartial {
 		r.roundEnd()
+		r.detectRevivesFromScore()
+		r.detectBleedouts()
+		r.finalizePositions()
 	}
 	r.b = nil
 	return err
@@ -302,6 +345,14 @@ func (r *Reader) Bytes(n int) ([]byte, error) {
 	return r.b[r.offset-n : r.offset], nil
 }
 
+func (r *Reader) PeekBack(n int) []byte {
+	start := r.offset - n
+	if start < 0 {
+		start = 0
+	}
+	return r.b[start:r.offset]
+}
+
 func (r *Reader) Int() (int, error) {
 	b, err := r.Bytes(1)
 	if err != nil {
@@ -323,7 +374,7 @@ func (r *Reader) String() (string, error) {
 }
 
 func (r *Reader) Uint32() (uint32, error) {
-	if err := r.Skip(1); err != nil { // size- unnecessary since we already know the length
+	if err := r.Skip(1); err != nil {
 		return 0, err
 	}
 	b, err := r.Bytes(4)
@@ -346,4 +397,248 @@ func (r *Reader) Uint64() (uint64, error) {
 
 func (r *Reader) Write(w io.Writer) (n int, err error) {
 	return w.Write(r.b)
+}
+
+func (r *Reader) Float32() (float32, error) {
+	b, err := r.Bytes(4)
+	if err != nil {
+		return 0, err
+	}
+	return math.Float32frombits(binary.LittleEndian.Uint32(b)), nil
+}
+
+func readPosition(r *Reader) error {
+	entityID, err := r.Bytes(1)
+	if err != nil {
+		return err
+	}
+	if err := r.Skip(1); err != nil {
+		return err
+	}
+	x, err := r.Float32()
+	if err != nil {
+		return err
+	}
+	y, err := r.Float32()
+	if err != nil {
+		return err
+	}
+	z, err := r.Float32()
+	if err != nil {
+		return err
+	}
+	if math.IsNaN(float64(x)) || math.IsNaN(float64(y)) || math.IsNaN(float64(z)) {
+		return nil
+	}
+	if math.IsInf(float64(x), 0) || math.IsInf(float64(y), 0) || math.IsInf(float64(z), 0) {
+		return nil
+	}
+	if math.Abs(float64(x)) < 0.01 && math.Abs(float64(y)) < 0.01 {
+		return nil
+	}
+	if x < -500 || x > 500 || y < -500 || y > 500 || z < -100 || z > 100 {
+		return nil
+	}
+	eid := entityID[0]
+	ep, ok := r.positionsByEntity[eid]
+	if !ok {
+		ep = &EntityPositions{EntityID: eid}
+		r.positionsByEntity[eid] = ep
+	}
+	ep.Positions = append(ep.Positions, PlayerPosition{
+		X: x,
+		Y: y,
+		Z: z,
+	})
+	// Read raw bytes after XYZ for quaternion rotation calibration (up to 100 bytes)
+	rawAfter, err := r.Bytes(100)
+	if err == nil {
+		r.positionRawAfter[eid] = append(r.positionRawAfter[eid], rawAfter)
+	}
+	return nil
+}
+
+func (r *Reader) finalizePositions() {
+	candidates := make([]*EntityPositions, 0)
+	for _, ep := range r.positionsByEntity {
+		if len(ep.Positions) < 10 {
+			continue
+		}
+		candidates = append(candidates, ep)
+	}
+
+	// Player entities have the lowest entity IDs, matching header order
+	sort.Slice(candidates, func(i, j int) bool {
+		return candidates[i].EntityID < candidates[j].EntityID
+	})
+
+	playerCount := len(r.Header.Players)
+	if playerCount == 0 {
+		playerCount = 10
+	}
+	if len(candidates) > playerCount {
+		candidates = candidates[:playerCount]
+	}
+
+	for i, ep := range candidates {
+		if i < 5 {
+			ep.Team = string(TeamRole(r.Header.Teams[0].Role))
+		} else {
+			ep.Team = string(TeamRole(r.Header.Teams[1].Role))
+		}
+		if i < len(r.Header.Players) {
+			ep.Username = r.Header.Players[i].Username
+		}
+
+		// Calibrate quaternion offsets for this entity and extract yaw/pitch
+		quatOffsets := r.calibrateQuaternionOffsets(ep.EntityID)
+		if len(quatOffsets) > 0 {
+			r.extractRotations(ep, quatOffsets)
+		}
+
+		log.Debug().
+			Uint8("entityID", ep.EntityID).
+			Str("player", ep.Username).
+			Str("team", ep.Team).
+			Int("positions", len(ep.Positions)).
+			Ints("quatOffsets", quatOffsets).
+			Msg("entity_player_mapping")
+		r.Movements = append(r.Movements, *ep)
+	}
+
+	// Free raw rotation data
+	r.positionRawAfter = nil
+
+	log.Debug().Int("entities", len(r.Movements)).Msg("position_tracking_complete")
+}
+
+// calibrateQuaternionOffsets finds all offsets after position XYZ where
+// a unit quaternion (4 floats with magnitude ≈ 1.0) appears consistently.
+// Returns offsets sorted by priority: view direction (high pitch variance) first,
+// then body rotation offsets. This allows per-position fallback.
+func (r *Reader) calibrateQuaternionOffsets(entityID byte) []int {
+	rawSlices := r.positionRawAfter[entityID]
+	if len(rawSlices) == 0 {
+		return nil
+	}
+
+	type candidate struct {
+		offset   int
+		count    int
+		pitchVar float64
+	}
+	threshold := len(rawSlices) / 10 // 10% minimum for entities with mixed packet formats
+	if threshold < 3 {
+		threshold = 3
+	}
+
+	var candidates []candidate
+
+	for tryOff := 0; tryOff <= 84; tryOff++ {
+		if tryOff+16 > 100 {
+			break
+		}
+		quatCount := 0
+		var pitchSum, pitchSqSum float64
+		for _, raw := range rawSlices {
+			if tryOff+16 > len(raw) {
+				continue
+			}
+			q0 := math.Float32frombits(binary.LittleEndian.Uint32(raw[tryOff : tryOff+4]))
+			q1 := math.Float32frombits(binary.LittleEndian.Uint32(raw[tryOff+4 : tryOff+8]))
+			q2 := math.Float32frombits(binary.LittleEndian.Uint32(raw[tryOff+8 : tryOff+12]))
+			q3 := math.Float32frombits(binary.LittleEndian.Uint32(raw[tryOff+12 : tryOff+16]))
+
+			if math.IsNaN(float64(q0)) || math.IsInf(float64(q0), 0) ||
+				math.IsNaN(float64(q1)) || math.IsInf(float64(q1), 0) ||
+				math.IsNaN(float64(q2)) || math.IsInf(float64(q2), 0) ||
+				math.IsNaN(float64(q3)) || math.IsInf(float64(q3), 0) {
+				continue
+			}
+
+			mag := q0*q0 + q1*q1 + q2*q2 + q3*q3
+			if mag > 0.95 && mag < 1.05 {
+				quatCount++
+				sinP := float64(2 * (q0*q2 - q3*q1))
+				if sinP > 1 {
+					sinP = 1
+				} else if sinP < -1 {
+					sinP = -1
+				}
+				pitch := math.Asin(sinP) * 180 / math.Pi
+				pitchSum += pitch
+				pitchSqSum += pitch * pitch
+			}
+		}
+		if quatCount >= threshold {
+			var pitchVar float64
+			if quatCount > 1 {
+				mean := pitchSum / float64(quatCount)
+				pitchVar = pitchSqSum/float64(quatCount) - mean*mean
+			}
+			candidates = append(candidates, candidate{tryOff, quatCount, pitchVar})
+		}
+	}
+
+	if len(candidates) == 0 {
+		return nil
+	}
+
+	// Sort: high pitch variance first (view direction), then by count
+	sort.Slice(candidates, func(i, j int) bool {
+		ci, cj := candidates[i], candidates[j]
+		if (ci.pitchVar > 1.0) != (cj.pitchVar > 1.0) {
+			return ci.pitchVar > 1.0
+		}
+		return ci.count > cj.count
+	})
+
+	offsets := make([]int, len(candidates))
+	for i, c := range candidates {
+		offsets[i] = c.offset
+	}
+	return offsets
+}
+
+// extractRotations reads quaternion data from stored raw bytes and populates
+// Yaw/Pitch fields on each PlayerPosition. Tries offsets in priority order
+// (view direction first, then body rotation) and uses the first valid quaternion.
+func (r *Reader) extractRotations(ep *EntityPositions, quatOffsets []int) {
+	rawSlices := r.positionRawAfter[ep.EntityID]
+	if len(rawSlices) != len(ep.Positions) {
+		return
+	}
+
+	for i, raw := range rawSlices {
+		for _, quatOffset := range quatOffsets {
+			if quatOffset+16 > len(raw) {
+				continue
+			}
+			q0 := math.Float32frombits(binary.LittleEndian.Uint32(raw[quatOffset : quatOffset+4]))
+			q1 := math.Float32frombits(binary.LittleEndian.Uint32(raw[quatOffset+4 : quatOffset+8]))
+			q2 := math.Float32frombits(binary.LittleEndian.Uint32(raw[quatOffset+8 : quatOffset+12]))
+			q3 := math.Float32frombits(binary.LittleEndian.Uint32(raw[quatOffset+12 : quatOffset+16]))
+
+			mag := q0*q0 + q1*q1 + q2*q2 + q3*q3
+			if mag < 0.95 || mag > 1.05 {
+				continue
+			}
+
+			// Quaternion to Euler: yaw (Z-axis rotation) and pitch (Y-axis rotation)
+			yaw := float32(math.Atan2(float64(2*(q0*q3+q1*q2)), float64(1-2*(q2*q2+q3*q3))) * 180 / math.Pi)
+			sinP := float64(2 * (q0*q2 - q3*q1))
+			if sinP > 1 {
+				sinP = 1
+			} else if sinP < -1 {
+				sinP = -1
+			}
+			pitch := float32(math.Asin(sinP) * 180 / math.Pi)
+
+			if !math.IsNaN(float64(yaw)) && !math.IsNaN(float64(pitch)) {
+				ep.Positions[i].Yaw = yaw
+				ep.Positions[i].Pitch = pitch
+				break // Use first valid quaternion (highest priority offset)
+			}
+		}
+	}
 }

@@ -3,7 +3,7 @@
 //
 // See https://github.com/golang/go/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module
 //
-// go:build tools
+//go:build tools
 
 package dissect
 

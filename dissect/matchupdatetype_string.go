@@ -19,15 +19,18 @@ func _() {
 	_ = x[Battleye-8]
 	_ = x[PlayerLeave-9]
 	_ = x[Other-10]
+	_ = x[DBNO-11]
+	_ = x[Revive-12]
 }
 
-const _MatchUpdateType_name = "KillDeathDefuserPlantStartDefuserPlantCompleteDefuserDisableStartDefuserDisableCompleteLocateObjectiveOperatorSwapBattleyePlayerLeaveOther"
+const _MatchUpdateType_name = "KillDeathDefuserPlantStartDefuserPlantCompleteDefuserDisableStartDefuserDisableCompleteLocateObjectiveOperatorSwapBattleyePlayerLeaveOtherDBNORevive"
 
-var _MatchUpdateType_index = [...]uint8{0, 4, 9, 26, 46, 65, 87, 102, 114, 122, 133, 138}
+var _MatchUpdateType_index = [...]uint8{0, 4, 9, 26, 46, 65, 87, 102, 114, 122, 133, 138, 142, 148}
 
 func (i MatchUpdateType) String() string {
-	if i < 0 || i >= MatchUpdateType(len(_MatchUpdateType_index)-1) {
+	idx := int(i) - 0
+	if i < 0 || idx >= len(_MatchUpdateType_index)-1 {
 		return "MatchUpdateType(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _MatchUpdateType_name[_MatchUpdateType_index[i]:_MatchUpdateType_index[i+1]]
+	return _MatchUpdateType_name[_MatchUpdateType_index[idx]:_MatchUpdateType_index[idx+1]]
 }
